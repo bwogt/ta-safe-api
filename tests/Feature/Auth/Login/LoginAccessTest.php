@@ -16,13 +16,13 @@ class LoginAccessTest extends LoginTestSetUp
             ->assertOk()
             ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
                 ->where('message.text', trans('actions.auth.success.login'))
-                ->where('user.id', $this->user->id)
-                ->where('user.name', $this->user->name)
-                ->where('user.email', fn (string $email) => str($email)->is($this->user->email))
-                ->where('user.cpf', fn (string $cpf) => str($cpf)->is($this->user->cpf))
-                ->where('user.phone', fn (string $phone) => str($phone)->is($this->user->phone))
-                ->has('user.token')
-                ->missing('user.password')
+                ->where('data.user.id', $this->user->id)
+                ->where('data.user.name', $this->user->name)
+                ->where('data.user.email', $this->user->email)
+                ->where('data.user.cpf', $this->user->cpf)
+                ->where('data.user.phone', $this->user->phone)
+                ->has('data.token')
+                ->missing('data.user.password')
             );
     }
 }

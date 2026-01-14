@@ -15,12 +15,12 @@ class RegisterUserAccessTest extends RegisterUserTestSetUp
             ->assertCreated()
             ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
                 ->where('message.text', trans('actions.auth.success.register'))
-                ->where('user.name', $data['name'])
-                ->where('user.email', fn (string $email) => str($email)->is($data['email']))
-                ->where('user.cpf', fn (string $cpf) => str($cpf)->is($data['cpf']))
-                ->where('user.phone', fn (string $phone) => str($phone)->is($data['phone']))
-                ->has('user.token')
-                ->missing('user.password')
+                ->where('data.user.name', $data['name'])
+                ->where('data.user.email', $data['email'])
+                ->where('data.user.cpf', $data['cpf'])
+                ->where('data.user.phone', $data['phone'])
+                ->has('data.token')
+                ->missing('data.user.password')
             );
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Application\ApplicationFailsException;
 use App\Http\Messages\FlashMessage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,6 +30,34 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
+        $this->reportable(function (ApplicationFailsException $e) {
+            $previous = $e->getPrevious();
+
+            Log::error($e->getMessage(), [
+                'context' => $e->context(),
+                'domain' => $e->domain(),
+                'action' => $e->action(),
+                'previous' => $previous ? [
+                    'exception' => class_basename($previous),
+                    'message' => $previous->getMessage(),
+                    'code' => $previous->getCode(),
+                ] : null,
+            ]);
+        });
+
+        $this->renderable(function (ApplicationFailsException $e, $request) {
+            if (config('app.debug')) {
+                return null;
+            }
+
+            if ($request->is('api/*') || $request->wantsJson()) {
+                return response()->json(
+                    FlashMessage::error(trans('actions.' . $e->translationKey())),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+        });
+
         $this->renderable(function (AuthenticationException $e) {
             return response()->json(
                 FlashMessage::error(trans('http_exceptions.unauthenticated')),

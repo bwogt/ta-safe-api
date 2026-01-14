@@ -4,7 +4,7 @@ namespace App\Dto\Auth;
 
 use App\Models\User;
 
-class LoginDto
+final class LoginDTO
 {
     public function __construct(
         public readonly User $user,
