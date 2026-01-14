@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'auth' => [
+        'invalid_credentials' => 'Credenciais inválidas.',
+    ],
     'device' => [
         'user' => [
             'owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',

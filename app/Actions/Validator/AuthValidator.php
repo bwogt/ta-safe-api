@@ -2,50 +2,29 @@
 
 namespace App\Actions\Validator;
 
-use App\Exceptions\HttpJsonResponseException;
+use App\Dto\Auth\CredentialsDTO;
+use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthValidator
 {
     public function __construct(
         private readonly ?User $user,
-        private readonly string $password
+        private readonly CredentialsDTO $data,
     ) {}
 
-    /**
-     * Creates a new instance of AuthValidator for the specified user and password.
-     */
-    public static function for(?User $user, string $password): self
+    public static function for(?User $user, CredentialsDTO $data): self
     {
-        return new self($user, $password);
+        return new self($user, $data);
     }
 
-    /**
-     * Validates if the given email exists in the database.
-     */
-    public function userMustBeExists(): self
+    public function credentialsMustBeValid(): self
     {
-        throw_if(is_null($this->user), new HttpJsonResponseException(
-            trans('auth.failed'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
+        $emailMatch = $this->data->email == $this->user?->email;
+        $passwordMatch = Hash::check($this->data->password, $this->user?->password);
 
-        return $this;
-    }
-
-    /**
-     * Validates if the given password matches the user's current password.
-     */
-    public function passwordMustBeTheUser(): self
-    {
-        $isSamePassword = Hash::check($this->password, $this->user?->password);
-
-        throw_unless($isSamePassword, new HttpJsonResponseException(
-            trans('auth.failed'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
+        throw_unless($emailMatch && $passwordMatch, new InvalidCredentialsException);
 
         return $this;
     }

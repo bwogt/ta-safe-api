@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Application\ApplicationFailsException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Http\Messages\FlashMessage;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -54,6 +55,27 @@ class Handler extends ExceptionHandler
                 return response()->json(
                     FlashMessage::error(trans('actions.' . $e->translationKey())),
                     Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+        });
+
+        $this->reportable(function (BusinessRuleException $e) {
+            Log::warning($e->getMessage(), [
+                'context' => $e->context(),
+                'domain' => $e->domain(),
+                'rule_violated' => $e->ruleViolated(),
+            ]);
+        });
+
+        $this->renderable(function (BusinessRuleException $e, $request) {
+            if (config('app.debug')) {
+                return null;
+            }
+
+            if ($request->is('api/*') || $request->wantsJson()) {
+                return response()->json(
+                    FlashMessage::error(trans('validators.' . $e->translationKey())),
+                    Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
         });
