@@ -44,7 +44,7 @@ class LoginAction
 
     private function validateCredentials(?User $user, CredentialsDTO $data): void
     {
-        AuthValidator::for($user, $data)->credentialsMustBeValid();
+        AuthValidator::credentialsMustBeValid($user, $data);
     }
 
     private function deleteAllTokens(User $user): void

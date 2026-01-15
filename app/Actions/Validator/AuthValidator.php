@@ -9,23 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthValidator
 {
-    public function __construct(
-        private readonly ?User $user,
-        private readonly CredentialsDTO $data,
-    ) {}
-
-    public static function for(?User $user, CredentialsDTO $data): self
+    public static function credentialsMustBeValid(?User $user, CredentialsDTO $data): void
     {
-        return new self($user, $data);
-    }
-
-    public function credentialsMustBeValid(): self
-    {
-        $emailMatch = $this->data->email == $this->user?->email;
-        $passwordMatch = Hash::check($this->data->password, $this->user?->password);
+        $emailMatch = $data->email === $user?->email;
+        $passwordMatch = Hash::check($data->password, $user?->password);
 
         throw_unless($emailMatch && $passwordMatch, new InvalidCredentialsException);
-
-        return $this;
     }
 }
