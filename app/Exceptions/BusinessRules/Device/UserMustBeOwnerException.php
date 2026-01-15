@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\Device;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-class DeviceStatusIsNotRejectedException extends BusinessRuleException
+final class UserMustBeOwnerException extends BusinessRuleException
 {
     public function domain(): string
     {
@@ -13,11 +13,12 @@ class DeviceStatusIsNotRejectedException extends BusinessRuleException
 
     public function ruleViolated(): string
     {
-        return 'status_must_be_rejected';
+        return 'user_must_be_owner';
     }
 
     public function defaultMessage(): string
     {
-        return 'Device status must be rejected.';
+        return 'The user must be the owner of the device.';
     }
+
 }

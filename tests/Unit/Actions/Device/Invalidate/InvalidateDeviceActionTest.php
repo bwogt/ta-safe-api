@@ -4,8 +4,8 @@ namespace Tests\Unit\Actions\Device\Invalidate;
 
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\Application\Device\InvalidateDeviceFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotPendingException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBePendingException;
+use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Models\Device;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
@@ -34,7 +34,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_user_is_not_the_device_owner(): void
     {
-        $this->expectException(DeviceNotOwnedException::class);
+        $this->expectException(UserMustBeOwnerException::class);
 
         $nonOwnerUser = UserFactory::new()->create();
         ($this->action)($nonOwnerUser, $this->device);
@@ -42,7 +42,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusIsNotPendingException::class);
+        $this->expectException(DeviceStatusMustBePendingException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -54,7 +54,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_validated(): void
     {
-        $this->expectException(DeviceStatusIsNotPendingException::class);
+        $this->expectException(DeviceStatusMustBePendingException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -66,7 +66,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_rejected(): void
     {
-        $this->expectException(DeviceStatusIsNotPendingException::class);
+        $this->expectException(DeviceStatusMustBePendingException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

@@ -3,8 +3,8 @@
 namespace Tests\Unit\Actions\Device\Delete;
 
 use App\Exceptions\Application\Device\DeleteDeviceFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotRejectedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeRejectedException;
+use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
 use Exception;
@@ -30,7 +30,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_allow_the_delete_of_a_device_that_does_not_belong_to_the_user(): void
     {
-        $this->expectException(DeviceNotOwnedException::class);
+        $this->expectException(UserMustBeOwnerException::class);
 
         $nonOwnerUser = UserFactory::new()->create();
         ($this->action)($nonOwnerUser, $this->device);
@@ -38,7 +38,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_validated(): void
     {
-        $this->expectException(DeviceStatusIsNotRejectedException::class);
+        $this->expectException(DeviceStatusMustBeRejectedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -50,7 +50,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_pending(): void
     {
-        $this->expectException(DeviceStatusIsNotRejectedException::class);
+        $this->expectException(DeviceStatusMustBeRejectedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -61,7 +61,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusIsNotRejectedException::class);
+        $this->expectException(DeviceStatusMustBeRejectedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

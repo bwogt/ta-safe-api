@@ -3,8 +3,8 @@
 namespace Tests\Unit\Actions\Device\Token;
 
 use App\Exceptions\Application\Device\CreateSharingTokenFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotValidatedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeValidatedException;
+use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Models\DeviceSharingToken;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
@@ -30,7 +30,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function should_thrown_an_exception_when_the_user_is_not_the_device_owner(): void
     {
-        $this->expectException(DeviceNotOwnedException::class);
+        $this->expectException(UserMustBeOwnerException::class);
 
         $nonOwnerUser = UserFactory::new()->create();
         ($this->action)($nonOwnerUser, $this->device);
@@ -38,7 +38,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_pending(): void
     {
-        $this->expectException(DeviceStatusIsNotValidatedException::class);
+        $this->expectException(DeviceStatusMustBeValidatedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -49,7 +49,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusIsNotValidatedException::class);
+        $this->expectException(DeviceStatusMustBeValidatedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -61,7 +61,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_rejected(): void
     {
-        $this->expectException(DeviceStatusIsNotValidatedException::class);
+        $this->expectException(DeviceStatusMustBeValidatedException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\Device;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-class DeviceStatusIsNotPendingException extends BusinessRuleException
+class DeviceStatusMustBePendingException extends BusinessRuleException
 {
     public function domain(): string
     {

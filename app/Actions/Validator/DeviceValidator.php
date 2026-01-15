@@ -2,10 +2,10 @@
 
 namespace App\Actions\Validator;
 
-use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotPendingException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotRejectedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotValidatedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBePendingException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeRejectedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeValidatedException;
+use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
@@ -28,25 +28,25 @@ class DeviceValidator
     public static function mustBeOwner(User $user, Device $device): void
     {
         $isOwner = $user->id === $device->user_id;
-        throw_unless($isOwner, new DeviceNotOwnedException);
+        throw_unless($isOwner, new UserMustBeOwnerException);
     }
 
     public static function statusMustBeRejected(Device $device): void
     {
         $isRejected = $device->validation_status->isRejected();
-        throw_unless($isRejected, new DeviceStatusIsNotRejectedException);
+        throw_unless($isRejected, new DeviceStatusMustBeRejectedException);
     }
 
     public static function statusMustBeValidated(Device $device): void
     {
         $isValidate = $device->validation_status->isValidated();
-        throw_unless($isValidate, new DeviceStatusIsNotValidatedException);
+        throw_unless($isValidate, new DeviceStatusMustBeValidatedException);
     }
 
     public static function statusMustBePending(Device $device): void
     {
         $isPending = $device->validation_status->isPending();
-        throw_unless($isPending, new DeviceStatusIsNotPendingException);
+        throw_unless($isPending, new DeviceStatusMustBePendingException);
     }
 
     /**

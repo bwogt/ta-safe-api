@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\Device;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-class DeviceStatusIsNotValidatedException extends BusinessRuleException
+class DeviceStatusMustBeValidatedException extends BusinessRuleException
 {
     public function domain(): string
     {
@@ -13,11 +13,11 @@ class DeviceStatusIsNotValidatedException extends BusinessRuleException
 
     public function ruleViolated(): string
     {
-        return 'status_is_not_validated';
+        return 'status_must_be_validated';
     }
 
     public function defaultMessage(): string
     {
-        return 'Device register status is not validated';
+        return 'The device status must be validated.';
     }
 }
