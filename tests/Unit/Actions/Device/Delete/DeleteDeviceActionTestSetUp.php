@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Actions\Device\Delete;
 
+use App\Actions\Device\Delete\DeleteDeviceAction;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
@@ -9,12 +10,13 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class DeleteDeviceActionTestSetUp extends TestCase
+abstract class DeleteDeviceActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
     protected User $user;
     protected Device $device;
+    protected DeleteDeviceAction $action;
 
     protected function setUp(): void
     {
@@ -22,6 +24,7 @@ class DeleteDeviceActionTestSetUp extends TestCase
 
         $this->userSetUp();
         $this->deviceSetUp();
+        $this->actionSetUp();
     }
 
     private function userSetUp(): void
@@ -35,6 +38,11 @@ class DeleteDeviceActionTestSetUp extends TestCase
             ->for($this->user)
             ->rejected()
             ->create();
+    }
+
+    private function actionSetUp(): void
+    {
+        $this->action = new DeleteDeviceAction;
     }
 
 }

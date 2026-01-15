@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Actions\Device\Delete\DeleteDeviceAction;
 use App\Actions\Device\Invalidate\InvalidateDeviceAction;
 use App\Actions\Device\Register\RegisterDeviceAction;
 use App\Http\Controllers\Controller;
@@ -41,13 +42,11 @@ class DeviceController extends Controller
     /**
      * Delete a device with rejected validation.
      */
-    public function delete(Device $device): Response
+    public function delete(Device $device, DeleteDeviceAction $action): Response
     {
         $this->authorize('accessAsOwner', $device);
 
-        request()->user()
-            ->deviceService()
-            ->delete($device);
+        $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.delete')),

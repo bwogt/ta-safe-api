@@ -4,6 +4,7 @@ namespace App\Actions\Validator;
 
 use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
 use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotPendingException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotRejectedException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
@@ -29,19 +30,10 @@ class DeviceValidator
         throw_unless($isOwner, new DeviceNotOwnedException);
     }
 
-    /**
-     * Validate if the device status is 'rejected'.
-     */
-    public function statusMustBeRejected(): self
+    public static function statusMustBeRejected(Device $device): void
     {
-        $isRejected = $this->device->validation_status->isRejected();
-
-        throw_unless($isRejected, new HttpJsonResponseException(
-            trans('validators.device.status.rejected'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        $isRejected = $device->validation_status->isRejected();
+        throw_unless($isRejected, new DeviceStatusIsNotRejectedException);
     }
 
     /**
