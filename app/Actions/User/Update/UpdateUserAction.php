@@ -2,74 +2,48 @@
 
 namespace App\Actions\User\Update;
 
-use App\Dto\User\UpdateUserDto;
-use App\Exceptions\HttpJsonResponseException;
+use App\Dto\User\UpdateUserDTO;
+use App\Exceptions\Application\User\UpdateUserFailedException;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class UpdateUserAction
 {
-    public function __construct(
-        private readonly User $user,
-        private readonly UpdateUserDto $data
-    ) {}
-
-    public function execute(): User
+    public function __invoke(User $user, UpdateUserDTO $data): User
     {
         try {
-            return DB::transaction(function () {
-                $this->updateUser();
-                $this->logSuccess();
+            return DB::transaction(function () use ($user, $data) {
+                $this->updateUserData($user, $data);
+                $this->logSuccess($user);
 
-                return $this->user;
+                return $user;
             });
-        } catch (Exception $e) {
-            $this->handleException($e);
+        } catch (Throwable $e) {
+            $this->handleFailure($e, $user);
         }
     }
 
-    private function updateUser(): void
+    private function updateUserData(User $user, UpdateUserDTO $data): void
     {
-        $this->user->update([
-            'name' => $this->data->name,
-            'email' => $this->data->email,
-            'phone' => $this->data->phone,
+        $user->update([
+            'name' => $data->name,
+            'email' => $data->email,
+            'phone' => $data->phone,
         ]);
     }
 
-    private function logSuccess(): void
+    private function logSuccess(User $user): void
     {
-        Log::info("The user {$this->user->name} successfully updated your profile.", [
-            'user_id' => $this->user->id,
-            'email' => $this->user->email,
-        ]);
+        Log::info('User profile updated successfully.', ['user_id' => $user->id]);
     }
 
-    private function handleException(Exception $e): never
+    private function handleFailure(Throwable $e, User $user): never
     {
-        $this->logError($e);
-        $this->throwException();
-    }
-
-    private function logError(Exception $e): void
-    {
-        Log::error("The user {$this->user->name} failed to update your profile.", [
-            'user_id' => $this->user->id,
-            'context' => [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ],
-        ]);
-    }
-
-    private function throwException(): never
-    {
-        throw new HttpJsonResponseException(
-            trans('actions.user.errors.update'),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+        throw new UpdateUserFailedException(
+            previous: $e,
+            context: ['user_id' => $user->id]
         );
     }
 }

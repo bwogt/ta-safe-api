@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\User\Update\UpdateUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\User\SearchUserRequest;
@@ -19,11 +20,9 @@ class UserController extends Controller
     /**
      * Update user profile.
      */
-    public function update(UpdateUserRequest $request): Response
+    public function update(UpdateUserRequest $request, UpdateUserAction $action): Response
     {
-        $request->user()
-            ->userService()
-            ->update($request->toDto());
+        $action($request->user(), $request->toDto());
 
         return response()->json(FlashMessage::success(
             trans('actions.user.success.update')),

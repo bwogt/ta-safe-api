@@ -2,7 +2,7 @@
 
 namespace App\Dto\User;
 
-class UpdateUserDto
+final class UpdateUserDTO
 {
     public function __construct(
         public readonly string $name,

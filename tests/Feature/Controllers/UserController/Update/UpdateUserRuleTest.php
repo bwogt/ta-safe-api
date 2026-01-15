@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class UpdateUserRuleTest extends UpdateUserTestSetUp
+final class UpdateUserRuleTest extends UpdateUserTestSetUp
 {
     protected function setUp(): void
     {
