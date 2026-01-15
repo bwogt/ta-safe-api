@@ -5,13 +5,11 @@ return [
         'invalid_credentials' => 'Credenciais inválidas.',
     ],
     'device' => [
-        'user' => [
-            'owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
-        ],
+        'user_must_be_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
+        'status_must_be_pending' => 'O status de validação do dispositivo precisa estar pendente.',
         'status' => [
             'rejected' => 'O registro de validação do dispositivo precisa estar com status rejeitado.',
             'validated' => 'O registro de validação do dispositivo precisa estar com status validado.',
-            'pending' => 'O registro de validação do dispositivo precisa estar com status pendente.',
             'in_analysis' => 'O registro de validação do dispositivo precisa estar com status em análise.',
         ],
         'transfer' => [

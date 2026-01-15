@@ -2,6 +2,8 @@
 
 namespace App\Actions\Validator;
 
+use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotPendingException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
@@ -21,19 +23,10 @@ class DeviceValidator
         return new self($device);
     }
 
-    /**
-     * Validate if the given user is the owner of the device.
-     */
-    public function mustBeOwner(User $user): self
+    public static function mustBeOwner(User $user, Device $device): void
     {
-        $isOwner = $user->id === $this->device->user_id;
-
-        throw_unless($isOwner, new HttpJsonResponseException(
-            trans('validators.device.user.owner'),
-            Response::HTTP_FORBIDDEN
-        ));
-
-        return $this;
+        $isOwner = $user->id === $device->user_id;
+        throw_unless($isOwner, new DeviceNotOwnedException);
     }
 
     /**
@@ -66,19 +59,10 @@ class DeviceValidator
         return $this;
     }
 
-    /**
-     * Validate if the device status is 'pending'.
-     */
-    public function statusMustBePending(): self
+    public static function statusMustBePending(Device $device): void
     {
-        $isPending = $this->device->validation_status->isPending();
-
-        throw_unless($isPending, new HttpJsonResponseException(
-            trans('validators.device.status.pending'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        $isPending = $device->validation_status->isPending();
+        throw_unless($isPending, new DeviceStatusIsNotPendingException);
     }
 
     /**

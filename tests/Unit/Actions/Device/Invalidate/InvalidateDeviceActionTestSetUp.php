@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Actions\Device\Invalidate;
 
+use App\Actions\Device\Invalidate\InvalidateDeviceAction;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
@@ -9,12 +10,13 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class InvalidateDeviceActionTestSetUp extends TestCase
+abstract class InvalidateDeviceActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
     protected User $user;
     protected Device $device;
+    protected InvalidateDeviceAction $action;
 
     protected function setUp(): void
     {
@@ -22,6 +24,7 @@ class InvalidateDeviceActionTestSetUp extends TestCase
 
         $this->userSetUp();
         $this->deviceSetUp();
+        $this->actionSetUp();
     }
 
     private function userSetUp(): void
@@ -35,4 +38,10 @@ class InvalidateDeviceActionTestSetUp extends TestCase
             ->for($this->user)
             ->create();
     }
+
+    private function actionSetUp(): void
+    {
+        $this->action = new InvalidateDeviceAction;
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Actions\Device\Invalidate\InvalidateDeviceAction;
 use App\Actions\Device\Register\RegisterDeviceAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
@@ -73,13 +74,11 @@ class DeviceController extends Controller
     /**
      * Invalidate a device's registration.
      */
-    public function invalidation(Device $device): JsonResponse
+    public function invalidation(Device $device, InvalidateDeviceAction $action): JsonResponse
     {
         $this->authorize('accessAsOwner', $device);
 
-        request()->user()
-            ->deviceService()
-            ->invalidate($device);
+        $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.invalidate'))->merge([
