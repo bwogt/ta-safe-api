@@ -5,6 +5,7 @@ namespace App\Actions\Validator;
 use App\Exceptions\BusinessRules\Device\DeviceNotOwnedException;
 use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotPendingException;
 use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotRejectedException;
+use App\Exceptions\BusinessRules\Device\DeviceStatusIsNotValidatedException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
@@ -36,19 +37,10 @@ class DeviceValidator
         throw_unless($isRejected, new DeviceStatusIsNotRejectedException);
     }
 
-    /**
-     * Validate if the device status is 'validated'.
-     */
-    public function statusMustBeValidated(): self
+    public static function statusMustBeValidated(Device $device): void
     {
-        $isValidate = $this->device->validation_status->isValidated();
-
-        throw_unless($isValidate, new HttpJsonResponseException(
-            trans('validators.device.status.validated'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        $isValidate = $device->validation_status->isValidated();
+        throw_unless($isValidate, new DeviceStatusIsNotValidatedException);
     }
 
     public static function statusMustBePending(Device $device): void

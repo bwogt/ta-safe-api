@@ -2,12 +2,10 @@
 
 namespace App\Services\Device;
 
-use App\Actions\Device\Token\CreateSharingTokenAction;
 use App\Actions\Device\Validate\StartDeviceValidationAction;
 use App\Dto\Device\Invoice\DeviceInvoiceDto;
 use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
-use App\Models\DeviceSharingToken;
 use App\Models\User;
 
 class DeviceService
@@ -25,13 +23,5 @@ class DeviceService
         ValidateDeviceRegistrationJob::dispatchAfterResponse($device);
 
         return $device;
-    }
-
-    /**
-     * Creates a sharing token for the given device.
-     */
-    public function createSharingToken(Device $device): DeviceSharingToken
-    {
-        return (new CreateSharingTokenAction($this->user, $device))->execute();
     }
 }
