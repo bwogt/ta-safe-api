@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class StartValidateDeviceTestSetUp extends TestCase
+abstract class StartValidateDeviceTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RandomNumberGenerator;

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Device\DeviceService;
 use App\Services\DeviceTransfer\DeviceTransferService;
 use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -130,14 +129,6 @@ class User extends Authenticatable
     public function userService(): UserService
     {
         return new UserService($this);
-    }
-
-    /**
-     * Get the device service.
-     */
-    public function deviceService(): DeviceService
-    {
-        return new DeviceService($this);
     }
 
     /**

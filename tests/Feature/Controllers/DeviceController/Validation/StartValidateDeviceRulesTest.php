@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
+final class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
 {
     protected function setUp(): void
     {

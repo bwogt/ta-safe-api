@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto\Device\Invoice;
+namespace App\Dto\Device;
 
-class DeviceInvoiceDto
+final class DeviceInvoiceDTO
 {
     public function __construct(
         public readonly string $cpf,
