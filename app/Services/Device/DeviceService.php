@@ -4,11 +4,9 @@ namespace App\Services\Device;
 
 use App\Actions\Device\Delete\DeleteDeviceAction;
 use App\Actions\Device\Invalidate\InvalidateDeviceAction;
-use App\Actions\Device\Register\RegisterDeviceAction;
 use App\Actions\Device\Token\CreateSharingTokenAction;
 use App\Actions\Device\Validate\StartDeviceValidationAction;
 use App\Dto\Device\Invoice\DeviceInvoiceDto;
-use App\Dto\Device\RegisterDeviceDto;
 use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
 use App\Models\DeviceSharingToken;
@@ -19,14 +17,6 @@ class DeviceService
     public function __construct(
         private readonly User $user
     ) {}
-
-    /**
-     * Registers a device for the given user.
-     */
-    public function register(RegisterDeviceDto $data): Device
-    {
-        return (new RegisterDeviceAction($this->user, $data))->execute();
-    }
 
     /**
      * Deletes a device for the given user.

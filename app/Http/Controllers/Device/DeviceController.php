@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
-use App\Dto\Device\RegisterDeviceDto;
+use App\Actions\Device\Register\RegisterDeviceAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\RegisterDeviceRequest;
@@ -15,9 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeviceController extends Controller
 {
-    /**
-     * View device data.
-     */
     public function view(Device $device): JsonResource
     {
         $this->authorize('accessAsOwner', $device);
@@ -30,14 +27,9 @@ class DeviceController extends Controller
         return new DeviceResource($device);
     }
 
-    /**
-     * Register a new device.
-     */
-    public function register(RegisterDeviceRequest $request): JsonResponse
+    public function register(RegisterDeviceRequest $request, RegisterDeviceAction $action): JsonResponse
     {
-        $request->user()
-            ->deviceService()
-            ->register(RegisterDeviceDto::fromRequest($request));
+        $action(($request->user()), $request->toDto());
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.register')),
