@@ -5,7 +5,7 @@ namespace App\Actions\Auth\Login;
 use App\Actions\Validator\AuthValidator;
 use App\Dto\Auth\CredentialsDTO;
 use App\Dto\Auth\LoginDTO;
-use App\Exceptions\Application\Auth\LoginFailsException;
+use App\Exceptions\Application\Auth\LoginFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ class LoginAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            throw new LoginFailsException(
+            throw new LoginFailedException(
                 previous: $e,
                 context: ['email' => $data->email]
             );

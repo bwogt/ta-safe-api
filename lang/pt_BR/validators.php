@@ -6,9 +6,7 @@ return [
     ],
     'device' => [
         'user_must_be_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
-        'status_must_be_pending' => 'O status de validação do dispositivo precisa estar pendente.',
-        'status_must_be_rejected' => 'O registro de validação do dispositivo precisa estar com status rejeitado.',
-        'status_must_be_validated' => 'O registro de validação do dispositivo precisa estar com status validado.',
+        'invalid_device_state' => 'Este dispositivo está em um estado inválido para realizar esta operação.',
         'status' => [
             'in_analysis' => 'O registro de validação do dispositivo precisa estar com status em análise.',
         ],

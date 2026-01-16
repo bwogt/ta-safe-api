@@ -3,7 +3,7 @@
 namespace Tests\Unit\Actions\Device\Delete;
 
 use App\Exceptions\Application\Device\DeleteDeviceFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeRejectedException;
+use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
@@ -38,7 +38,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_validated(): void
     {
-        $this->expectException(DeviceStatusMustBeRejectedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -50,7 +50,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_pending(): void
     {
-        $this->expectException(DeviceStatusMustBeRejectedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -61,7 +61,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_delete_a_device_when_the_status_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusMustBeRejectedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

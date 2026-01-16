@@ -4,13 +4,8 @@ namespace App\Exceptions\Application\Auth;
 
 use App\Exceptions\Application\ApplicationFailsException;
 
-class LoginFailsException extends ApplicationFailsException
+class LoginFailedException extends ApplicationFailsException
 {
-    public function defaultMessage(): string
-    {
-        return 'Login failed.';
-    }
-
     public function domain(): string
     {
         return 'auth';
@@ -19,5 +14,10 @@ class LoginFailsException extends ApplicationFailsException
     public function action(): string
     {
         return 'login';
+    }
+
+    public function defaultMessage(): string
+    {
+        return 'Login failed.';
     }
 }

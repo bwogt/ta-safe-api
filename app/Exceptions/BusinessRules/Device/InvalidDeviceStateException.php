@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\Device;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-class DeviceStatusMustBeRejectedException extends BusinessRuleException
+class InvalidDeviceStateException extends BusinessRuleException
 {
     public function domain(): string
     {
@@ -13,11 +13,11 @@ class DeviceStatusMustBeRejectedException extends BusinessRuleException
 
     public function ruleViolated(): string
     {
-        return 'status_must_be_rejected';
+        return 'invalid_device_state';
     }
 
     public function defaultMessage(): string
     {
-        return 'Device status must be rejected.';
+        return 'Invalid device state';
     }
 }

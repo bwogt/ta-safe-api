@@ -3,7 +3,7 @@
 namespace Tests\Unit\Actions\Auth\Login;
 
 use App\Dto\Auth\LoginDTO;
-use App\Exceptions\Application\Auth\LoginFailsException;
+use App\Exceptions\Application\Auth\LoginFailedException;
 use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +33,7 @@ class LoginActionTest extends LoginActionTestSetUp
 
     public function test_should_throw_login_failed_exception_on_failure(): void
     {
-        $this->expectException(LoginFailsException::class);
+        $this->expectException(LoginFailedException::class);
 
         DB::shouldReceive('transaction')->once()
             ->andThrow(new Exception('Simulates a transaction error',

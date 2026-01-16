@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->reportable(function (BusinessRuleException $e) {
-            Log::warning($e->getMessage(), [
+            Log::error($e->getMessage(), [
                 'context' => $e->context(),
                 'domain' => $e->domain(),
                 'rule_violated' => $e->ruleViolated(),

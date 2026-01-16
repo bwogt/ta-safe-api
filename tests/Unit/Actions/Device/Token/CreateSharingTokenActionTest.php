@@ -3,7 +3,7 @@
 namespace Tests\Unit\Actions\Device\Token;
 
 use App\Exceptions\Application\Device\CreateSharingTokenFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeValidatedException;
+use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Models\DeviceSharingToken;
 use Database\Factories\DeviceFactory;
@@ -38,7 +38,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_pending(): void
     {
-        $this->expectException(DeviceStatusMustBeValidatedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -49,7 +49,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusMustBeValidatedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -61,7 +61,7 @@ class CreateSharingTokenActionTest extends CreateSharingTokenActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_validation_is_rejected(): void
     {
-        $this->expectException(DeviceStatusMustBeValidatedException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

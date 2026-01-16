@@ -4,7 +4,7 @@ namespace Tests\Unit\Actions\Device\Invalidate;
 
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\Application\Device\InvalidateDeviceFailedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBePendingException;
+use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Models\Device;
 use Database\Factories\DeviceFactory;
@@ -42,7 +42,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_in_analysis(): void
     {
-        $this->expectException(DeviceStatusMustBePendingException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -54,7 +54,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_validated(): void
     {
-        $this->expectException(DeviceStatusMustBePendingException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)
@@ -66,7 +66,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_device_status_is_rejected(): void
     {
-        $this->expectException(DeviceStatusMustBePendingException::class);
+        $this->expectException(InvalidDeviceStateException::class);
 
         $device = DeviceFactory::new()
             ->for($this->user)

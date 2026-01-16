@@ -2,9 +2,8 @@
 
 namespace App\Actions\Validator;
 
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBePendingException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeRejectedException;
-use App\Exceptions\BusinessRules\Device\DeviceStatusMustBeValidatedException;
+use App\Enums\Device\DeviceValidationStatus;
+use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
@@ -28,25 +27,44 @@ class DeviceValidator
     public static function mustBeOwner(User $user, Device $device): void
     {
         $isOwner = $user->id === $device->user_id;
-        throw_unless($isOwner, new UserMustBeOwnerException);
+
+        throw_unless($isOwner, new UserMustBeOwnerException([
+            'device_id' => $device->id,
+            'user_id' => $user->id,
+        ]));
     }
 
     public static function statusMustBeRejected(Device $device): void
     {
         $isRejected = $device->validation_status->isRejected();
-        throw_unless($isRejected, new DeviceStatusMustBeRejectedException);
+
+        throw_unless($isRejected, new InvalidDeviceStateException([
+            'device_id' => $device->id,
+            'current_status' => $device->validation_status,
+            'expected_status' => DeviceValidationStatus::REJECTED,
+        ]));
     }
 
     public static function statusMustBeValidated(Device $device): void
     {
         $isValidate = $device->validation_status->isValidated();
-        throw_unless($isValidate, new DeviceStatusMustBeValidatedException);
+
+        throw_unless($isValidate, new InvalidDeviceStateException([
+            'device_id' => $device->id,
+            'current_status' => $device->validation_status,
+            'expected_status' => DeviceValidationStatus::VALIDATED,
+        ]));
     }
 
     public static function statusMustBePending(Device $device): void
     {
         $isPending = $device->validation_status->isPending();
-        throw_unless($isPending, new DeviceStatusMustBePendingException);
+
+        throw_unless($isPending, new InvalidDeviceStateException([
+            'device_id' => $device->id,
+            'current_status' => $device->validation_status,
+            'expected_status' => DeviceValidationStatus::PENDING,
+        ]));
     }
 
     /**
