@@ -2,40 +2,30 @@
 
 namespace App\Http\Requests\Device;
 
+use App\Dto\DeviceTransfer\CreateDeviceTransferDTO;
 use App\Http\Requests\ApiFormRequest;
+use App\Models\Device;
 use App\Models\User;
 
 class CreateDeviceTransferRequest extends ApiFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return $this->user()->can('accessAsOwner', $this->device);
     }
 
-    /**
-     * Validates the target_user field and returns an instance of User.
-     */
-    public function targetUser(): User
+    public function toDto(Device $device): CreateDeviceTransferDTO
     {
-        return User::find($this->target_user_id);
+        return new CreateDeviceTransferDTO(
+            device: $device,
+            targetUser: User::findOrFail($this->target_user_id),
+        );
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         return [
-            'target_user_id' => [
-                'required',
-                'integer',
-                'exists:users,id',
-            ],
+            'target_user_id' => ['bail', 'required', 'integer', 'exists:users,id'],
         ];
     }
 }

@@ -18,26 +18,26 @@ class DeviceTransferFactory extends Factory
      */
     public function definition(): array
     {
-        $sourceUser = UserFactory::new()->create();
-        $targetUser = UserFactory::new()->create();
-        $device = DeviceFactory::new()->for($sourceUser)->create();
-
         return [
-            'device_id' => $device->id,
-            'source_user_id' => $sourceUser->id,
-            'target_user_id' => $targetUser->id,
+            'status' => DeviceTransferStatus::PENDING,
+            ...$this->defaultAttributes(),
         ];
     }
 
-    /**
-     * Configure the model factory.
-     */
-    public function configure(): static
+    private function defaultAttributes(): array
     {
-        return $this->afterCreating(function (DeviceTransfer $transfer) {
-            $transfer->device
-                ->update(['user_id' => $transfer->source_user_id]);
-        });
+        $sourceUser = UserFactory::new();
+        $targetUser = UserFactory::new();
+
+        $device = DeviceFactory::new()
+            ->for($sourceUser)
+            ->validated();
+
+        return [
+            'source_user_id' => $sourceUser,
+            'target_user_id' => $targetUser,
+            'device_id' => $device,
+        ];
     }
 
     /**
@@ -61,9 +61,7 @@ class DeviceTransferFactory extends Factory
     public function canceled(): static
     {
         return $this->state(function (array $attributes) {
-            return [
-                'status' => DeviceTransferStatus::CANCELED,
-            ];
+            return ['status' => DeviceTransferStatus::CANCELED];
         });
     }
 
@@ -73,9 +71,7 @@ class DeviceTransferFactory extends Factory
     public function rejected(): static
     {
         return $this->state(function (array $attributes) {
-            return [
-                'status' => DeviceTransferStatus::REJECTED,
-            ];
+            return ['status' => DeviceTransferStatus::REJECTED];
         });
     }
 }

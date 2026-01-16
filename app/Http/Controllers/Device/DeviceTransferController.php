@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Actions\DeviceTransfer\Create\CreateDeviceTransferAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\CreateDeviceTransferRequest;
@@ -17,11 +18,12 @@ class DeviceTransferController extends Controller
     /**
      * Create device transfer.
      */
-    public function create(CreateDeviceTransferRequest $request, Device $device): JsonResponse
-    {
-        $request->user()
-            ->deviceTransferService()
-            ->create($request->targetUser(), $device);
+    public function create(
+        CreateDeviceTransferRequest $request,
+        CreateDeviceTransferAction $action,
+        Device $device
+    ): JsonResponse {
+        $action($request->user(), $request->toDto($device));
 
         return response()->json(
             FlashMessage::success(trans('actions.device_transfer.success.create')),

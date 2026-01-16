@@ -2,6 +2,8 @@
 
 namespace App\Actions\Validator;
 
+use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferException;
+use App\Exceptions\BusinessRules\DeviceTransfer\UserMustNotTransferToSelfException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
@@ -30,34 +32,22 @@ class DeviceTransferValidator
         return new self($transfer);
     }
 
-    /**
-     * Validate that the target user is not the same as the source user.
-     */
-    public function mustNotTransferToSelf(User $sourceUser, User $targetUser): self
+    public static function mustNotTransferToSelf(User $sourceUser, User $targetUser): void
     {
         $isSameUser = $sourceUser->id === $targetUser->id;
 
-        throw_if($isSameUser, new HttpJsonResponseException(
-            trans('validators.device.transfer.same_user'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_if($isSameUser, new UserMustNotTransferToSelfException([
+            'source_user_id' => $sourceUser->id,
+            'target_user_id' => $targetUser->id,
+        ]));
     }
 
-    /**
-     * Validate that there is no pending transfer for the device.
-     */
-    public function mustNotExistPendingTransfer(Device $device): self
+    public static function mustBeAvailableForTransfer(Device $device): void
     {
         $transfer = $device->lastTransfer();
 
-        throw_if($transfer?->status->isPending(), new HttpJsonResponseException(
-            trans('validators.device.transfer.pending'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_if($transfer?->status->isPending(),
+            new DeviceHasPendingTransferException(['device_id' => $device->id]));
     }
 
     /**
