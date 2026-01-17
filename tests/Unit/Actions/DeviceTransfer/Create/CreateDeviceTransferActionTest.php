@@ -5,9 +5,9 @@ namespace Tests\Unit\Actions\DeviceTransfer\Create;
 use App\Enums\Device\DeviceTransferStatus;
 use App\Exceptions\Application\DeviceTransfer\CreateDeviceTransferFailedException;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
-use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
+use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
 use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferException;
-use App\Exceptions\BusinessRules\DeviceTransfer\UserMustNotTransferToSelfException;
+use App\Exceptions\BusinessRules\DeviceTransfer\SelfTransferNotAllowedException;
 use App\Models\DeviceTransfer;
 use Database\Factories\DeviceFactory;
 use Database\Factories\DeviceTransferFactory;
@@ -38,7 +38,7 @@ class CreateDeviceTransferActionTest extends CreateDeviceTransferActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_source_user_is_not_owner_of_the_device(): void
     {
-        $this->expectException(UserMustBeOwnerException::class);
+        $this->expectException(UserNotOwnerException::class);
 
         $data = $this->data(['targetUser' => $this->sourceUser]);
         ($this->action)($this->targetUser, $data);
@@ -46,7 +46,7 @@ class CreateDeviceTransferActionTest extends CreateDeviceTransferActionTestSetUp
 
     public function test_should_thrown_an_exception_when_trying_to_create_a_transfer_for_itself(): void
     {
-        $this->expectException(UserMustNotTransferToSelfException::class);
+        $this->expectException(SelfTransferNotAllowedException::class);
 
         $data = $this->data(['targetUser' => $this->sourceUser]);
         ($this->action)($this->sourceUser, $data);

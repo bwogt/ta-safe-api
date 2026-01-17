@@ -4,7 +4,7 @@ namespace Tests\Unit\Actions\Device\Delete;
 
 use App\Exceptions\Application\Device\DeleteDeviceFailedException;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
-use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
+use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
 use Exception;
@@ -30,7 +30,7 @@ class DeleteDeviceActionTest extends DeleteDeviceActionTestSetUp
 
     public function test_should_not_allow_the_delete_of_a_device_that_does_not_belong_to_the_user(): void
     {
-        $this->expectException(UserMustBeOwnerException::class);
+        $this->expectException(UserNotOwnerException::class);
 
         $nonOwnerUser = UserFactory::new()->create();
         ($this->action)($nonOwnerUser, $this->device);

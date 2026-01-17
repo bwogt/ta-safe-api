@@ -5,7 +5,7 @@ return [
         'invalid_credentials' => 'Credenciais inválidas.',
     ],
     'device' => [
-        'user_must_be_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
+        'user_not_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
         'invalid_device_state' => 'Este dispositivo está em um estado inválido para realizar esta operação.',
         'status' => [
             'in_analysis' => 'O registro de validação do dispositivo precisa estar com status em análise.',
@@ -18,7 +18,7 @@ return [
         ],
     ],
     'device_transfer' => [
-        'must_not_transfer_to_self' => 'Não é possível transferir um dispositivo para si mesmo.',
+        'self_transfer_not_allowed' => 'Não é possível transferir um dispositivo para si mesmo.',
         'has_pending_transfer' => 'O dispositivo possui uma transferência pendente.',
     ],
 ];

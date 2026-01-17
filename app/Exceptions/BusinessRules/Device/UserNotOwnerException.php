@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\Device;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-final class UserMustBeOwnerException extends BusinessRuleException
+final class UserNotOwnerException extends BusinessRuleException
 {
     public function domain(): string
     {
@@ -13,7 +13,7 @@ final class UserMustBeOwnerException extends BusinessRuleException
 
     public function ruleViolated(): string
     {
-        return 'user_must_be_owner';
+        return 'user_not_owner';
     }
 
     public function defaultMessage(): string

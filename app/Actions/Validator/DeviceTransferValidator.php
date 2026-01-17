@@ -3,7 +3,7 @@
 namespace App\Actions\Validator;
 
 use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferException;
-use App\Exceptions\BusinessRules\DeviceTransfer\UserMustNotTransferToSelfException;
+use App\Exceptions\BusinessRules\DeviceTransfer\SelfTransferNotAllowedException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
@@ -34,9 +34,9 @@ class DeviceTransferValidator
 
     public static function mustNotTransferToSelf(User $sourceUser, User $targetUser): void
     {
-        $isSameUser = $sourceUser->id === $targetUser->id;
+        $isSelfTransfer = $sourceUser->id === $targetUser->id;
 
-        throw_if($isSameUser, new UserMustNotTransferToSelfException([
+        throw_if($isSelfTransfer, new SelfTransferNotAllowedException([
             'source_user_id' => $sourceUser->id,
             'target_user_id' => $targetUser->id,
         ]));

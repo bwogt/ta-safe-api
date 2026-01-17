@@ -4,7 +4,7 @@ namespace App\Actions\Validator;
 
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
-use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
+use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
@@ -28,7 +28,7 @@ class DeviceValidator
     {
         $isOwner = $user->id === $device->user_id;
 
-        throw_unless($isOwner, new UserMustBeOwnerException([
+        throw_unless($isOwner, new UserNotOwnerException([
             'device_id' => $device->id,
             'user_id' => $user->id,
         ]));

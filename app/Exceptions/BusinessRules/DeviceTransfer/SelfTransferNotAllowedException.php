@@ -4,7 +4,7 @@ namespace App\Exceptions\BusinessRules\DeviceTransfer;
 
 use App\Exceptions\BusinessRules\BusinessRuleException;
 
-class UserMustNotTransferToSelfException extends BusinessRuleException
+class SelfTransferNotAllowedException extends BusinessRuleException
 {
     public function domain(): string
     {
@@ -13,7 +13,7 @@ class UserMustNotTransferToSelfException extends BusinessRuleException
 
     public function ruleViolated(): string
     {
-        return 'must_not_transfer_to_self';
+        return 'self_transfer_not_allowed';
     }
 
     public function defaultMessage(): string

@@ -5,7 +5,7 @@ namespace Tests\Unit\Actions\Device\Invalidate;
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\Application\Device\InvalidateDeviceFailedException;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
-use App\Exceptions\BusinessRules\Device\UserMustBeOwnerException;
+use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
 use App\Models\Device;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
@@ -34,7 +34,7 @@ class InvalidateDeviceActionTest extends InvalidateDeviceActionTestSetUp
 
     public function test_should_thrown_an_exception_when_the_user_is_not_the_device_owner(): void
     {
-        $this->expectException(UserMustBeOwnerException::class);
+        $this->expectException(UserNotOwnerException::class);
 
         $nonOwnerUser = UserFactory::new()->create();
         ($this->action)($nonOwnerUser, $this->device);

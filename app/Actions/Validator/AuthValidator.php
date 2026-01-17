@@ -14,6 +14,8 @@ class AuthValidator
         $emailMatch = $data->email === $user?->email;
         $passwordMatch = Hash::check($data->password, $user?->password);
 
-        throw_unless($emailMatch && $passwordMatch, new InvalidCredentialsException);
+        throw_unless($emailMatch && $passwordMatch, new InvalidCredentialsException([
+            'email' => $data->email,
+        ]));
     }
 }
