@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Device;
 use App\Actions\DeviceTransfer\Accept\AcceptDeviceTransferAction;
 use App\Actions\DeviceTransfer\Cancel\CancelDeviceTransferAction;
 use App\Actions\DeviceTransfer\Create\CreateDeviceTransferAction;
+use App\Actions\DeviceTransfer\Reject\RejectDeviceTransferAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\CreateDeviceTransferRequest;
@@ -12,7 +13,6 @@ use App\Http\Resources\DeviceTransfer\DeviceTransferResource;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class DeviceTransferController extends Controller
@@ -68,13 +68,11 @@ class DeviceTransferController extends Controller
     /**
      * Reject the device transfer.
      */
-    public function reject(Request $request, DeviceTransfer $deviceTransfer): JsonResponse
+    public function reject(DeviceTransfer $deviceTransfer, RejectDeviceTransferAction $action): JsonResponse
     {
         $this->authorize('accessAsTargetUser', $deviceTransfer);
 
-        $transfer = $request->user()
-            ->deviceTransferService()
-            ->reject($deviceTransfer);
+        $transfer = $action(request()->user(), $deviceTransfer);
 
         return response()->json(FlashMessage::success(
             trans('actions.device_transfer.success.reject'))->merge([

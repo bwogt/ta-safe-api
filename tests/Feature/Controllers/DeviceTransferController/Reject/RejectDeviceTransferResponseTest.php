@@ -7,7 +7,7 @@ use App\Http\Messages\FlashMessage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class RejectDeviceTransferResponseTest extends RejectDeviceTransferTestSetUp
+final class RejectDeviceTransferResponseTest extends RejectDeviceTransferTestSetUp
 {
     public function test_should_return_an_expected_base_data_response(): void
     {

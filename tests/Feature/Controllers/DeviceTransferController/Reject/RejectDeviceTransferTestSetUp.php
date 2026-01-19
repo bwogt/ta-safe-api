@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class RejectDeviceTransferTestSetUp extends TestCase
+abstract class RejectDeviceTransferTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
