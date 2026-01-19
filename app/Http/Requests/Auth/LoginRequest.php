@@ -3,9 +3,9 @@
 namespace App\Http\Requests\Auth;
 
 use App\Dto\Auth\CredentialsDTO;
-use App\Http\Requests\ApiFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends ApiFormRequest
+class LoginRequest extends FormRequest
 {
     public function toDto(): CredentialsDTO
     {

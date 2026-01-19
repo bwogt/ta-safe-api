@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\User;
 
-use App\Http\Requests\ApiFormRequest;
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SearchUserRequest extends ApiFormRequest
+class SearchUserRequest extends FormRequest
 {
     /**
      * Validate the 'email' field and return the user linked to it.

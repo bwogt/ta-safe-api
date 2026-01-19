@@ -4,13 +4,12 @@ namespace App\Exceptions;
 
 use App\Exceptions\Application\ApplicationFailsException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
-use App\Http\Messages\FlashMessage;
-use Illuminate\Auth\AuthenticationException;
+use App\Exceptions\Helpers\ApiExceptionRenderer;
+use App\Exceptions\Helpers\ApplicationExceptionLogger;
+use App\Exceptions\Helpers\BusinessExceptionLogger;
+use App\Exceptions\Helpers\ValidationExceptionRenderer;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -31,83 +30,10 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (ApplicationFailsException $e) {
-            $previous = $e->getPrevious();
+        $this->reportable(fn (ApplicationFailsException $e) => (new ApplicationExceptionLogger)($e));
+        $this->reportable(fn (BusinessRuleException $e) => (new BusinessExceptionLogger)($e));
 
-            Log::error($e->getMessage(), [
-                'context' => $e->context(),
-                'domain' => $e->domain(),
-                'action' => $e->action(),
-                'previous' => $previous ? [
-                    'exception' => class_basename($previous),
-                    'message' => $previous->getMessage(),
-                    'code' => $previous->getCode(),
-                ] : null,
-            ]);
-        });
-
-        $this->renderable(function (ApplicationFailsException $e, $request) {
-            if (config('app.debug')) {
-                return null;
-            }
-
-            if ($request->is('api/*') || $request->wantsJson()) {
-                return response()->json(
-                    FlashMessage::error(trans('actions.' . $e->translationKey())),
-                    Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
-        });
-
-        $this->reportable(function (BusinessRuleException $e) {
-            Log::error($e->getMessage(), [
-                'context' => $e->context(),
-                'domain' => $e->domain(),
-                'rule_violated' => $e->ruleViolated(),
-            ]);
-        });
-
-        $this->renderable(function (BusinessRuleException $e, $request) {
-            if (config('app.debug')) {
-                return null;
-            }
-
-            if ($request->is('api/*') || $request->wantsJson()) {
-                return response()->json(
-                    FlashMessage::error(trans('validators.' . $e->translationKey())),
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
-            }
-        });
-
-        $this->renderable(function (AuthenticationException $e) {
-            return response()->json(
-                FlashMessage::error(trans('http_exceptions.unauthenticated')),
-                Response::HTTP_UNAUTHORIZED
-            );
-        });
-
-        $this->renderable(function (HttpException $e) {
-            if ($e->getStatusCode() === 403) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.unauthorized')),
-                    $e->getStatusCode()
-                );
-            }
-
-            if ($e->getStatusCode() === 404) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.not_found')),
-                    $e->getStatusCode()
-                );
-            }
-
-            if ($e->getStatusCode() === 429) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.too_many_attempts')),
-                    $e->getStatusCode()
-                );
-            }
-        });
+        $this->renderable(fn (ValidationException $e, $request) => (new ValidationExceptionRenderer)($e, $request));
+        $this->renderable(fn (Throwable $e, $request) => (new ApiExceptionRenderer)($e, $request));
     }
 }

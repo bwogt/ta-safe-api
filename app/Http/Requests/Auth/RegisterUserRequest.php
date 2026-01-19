@@ -3,11 +3,11 @@
 namespace App\Http\Requests\Auth;
 
 use App\Dto\Auth\RegisterUserDTO;
-use App\Http\Requests\ApiFormRequest;
 use App\Rules\CpfRule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 
-class RegisterUserRequest extends ApiFormRequest
+class RegisterUserRequest extends FormRequest
 {
     public function toDto(): RegisterUserDTO
     {

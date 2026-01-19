@@ -3,9 +3,9 @@
 namespace App\Http\Requests\Device;
 
 use App\Dto\Device\DeviceInvoiceDTO;
-use App\Http\Requests\ApiFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class StartDeviceValidationRequest extends ApiFormRequest
+class StartDeviceValidationRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +15,9 @@ class StartDeviceValidationRequest extends ApiFormRequest
     public function toDto(): DeviceInvoiceDTO
     {
         return new DeviceInvoiceDTO(
-            cpf: $this->cpf,
-            name: $this->name,
-            products: $this->products
+            cpf: $this->input('cpf'),
+            name: $this->input('name'),
+            products: $this->input('products')
         );
     }
 

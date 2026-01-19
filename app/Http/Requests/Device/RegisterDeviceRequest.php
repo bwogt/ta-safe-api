@@ -3,9 +3,9 @@
 namespace App\Http\Requests\Device;
 
 use App\Dto\Device\RegisterDeviceDTO;
-use App\Http\Requests\ApiFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterDeviceRequest extends ApiFormRequest
+class RegisterDeviceRequest extends FormRequest
 {
     public function toDto(): RegisterDeviceDTO
     {

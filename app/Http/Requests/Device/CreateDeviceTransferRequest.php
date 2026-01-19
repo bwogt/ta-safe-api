@@ -3,11 +3,11 @@
 namespace App\Http\Requests\Device;
 
 use App\Dto\DeviceTransfer\CreateDeviceTransferDTO;
-use App\Http\Requests\ApiFormRequest;
 use App\Models\Device;
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDeviceTransferRequest extends ApiFormRequest
+class CreateDeviceTransferRequest extends FormRequest
 {
     public function authorize(): bool
     {

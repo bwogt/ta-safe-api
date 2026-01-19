@@ -3,10 +3,10 @@
 namespace App\Http\Requests\User;
 
 use App\Dto\User\UpdateUserDTO;
-use App\Http\Requests\ApiFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends ApiFormRequest
+class UpdateUserRequest extends FormRequest
 {
     public function toDto(): UpdateUserDTO
     {
