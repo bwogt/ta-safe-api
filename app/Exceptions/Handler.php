@@ -110,19 +110,4 @@ class Handler extends ExceptionHandler
             }
         });
     }
-
-    /**
-     * Render an exception into an HTTP response.
-     */
-    public function render($request, Throwable $e): JsonResponse
-    {
-        if ($e instanceof HttpJsonResponseException) {
-            return response()->json(
-                FlashMessage::error($e->getMessage()),
-                $e->getCode()
-            );
-        }
-
-        return parent::render($request, $e);
-    }
 }

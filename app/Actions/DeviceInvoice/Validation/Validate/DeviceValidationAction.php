@@ -60,8 +60,7 @@ class DeviceValidationAction
 
     private function validateAttributesBeforeAction(): void
     {
-        DeviceValidator::for($this->device)
-            ->statusMustBeInAnalysis();
+        DeviceValidator::statusMustBeInAnalysis($this->device);
     }
 
     /**

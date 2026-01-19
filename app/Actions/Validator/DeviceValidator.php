@@ -5,25 +5,11 @@ namespace App\Actions\Validator;
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
-use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\User;
-use Symfony\Component\HttpFoundation\Response;
 
 class DeviceValidator
 {
-    public function __construct(
-        private readonly Device $device
-    ) {}
-
-    /**
-     * Create a new DeviceValidator instance for the specified device.
-     */
-    public static function for(Device $device): self
-    {
-        return new self($device);
-    }
-
     public static function mustBeOwner(User $user, Device $device): void
     {
         $isOwner = $user->id === $device->user_id;
@@ -67,18 +53,14 @@ class DeviceValidator
         ]));
     }
 
-    /**
-     * Validate if the device status is 'in_analysis'.
-     */
-    public function statusMustBeInAnalysis(): self
+    public static function statusMustBeInAnalysis(Device $device): void
     {
-        $isInAnalysis = $this->device->validation_status->isInAnalysis();
+        $isInAnalysis = $device->validation_status->isInAnalysis();
 
-        throw_unless($isInAnalysis, new HttpJsonResponseException(
-            trans('validators.device.status.in_analysis'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_unless($isInAnalysis, new InvalidDeviceStateException([
+            'device_id' => $device->id,
+            'current_status' => $device->validation_status,
+            'expected_status' => DeviceValidationStatus::IN_ANALYSIS,
+        ]));
     }
 }
