@@ -2,26 +2,34 @@
 
 namespace Tests\Unit\Actions\DeviceTransfer\Cancel;
 
+use App\Actions\DeviceTransfer\Cancel\CancelDeviceTransferAction;
 use App\Models\DeviceTransfer;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CancelDeviceTransferActionTestSetUp extends TestCase
+abstract class CancelDeviceTransferActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
     protected User $sourceUser;
     protected User $targetUser;
     protected DeviceTransfer $transfer;
+    protected CancelDeviceTransferAction $action;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->actionSetUp();
         $this->userSetUp();
         $this->deviceTransferSetUp();
+    }
+
+    private function actionSetUp(): void
+    {
+        $this->action = new CancelDeviceTransferAction;
     }
 
     private function userSetUp(): void

@@ -21,5 +21,6 @@ return [
         'has_pending_transfer' => 'O dispositivo possui uma transferência pendente.',
         'cannot_be_modified' => 'Esta transferência de dispositivo não pode ser modificada.',
         'recipient_mismatch' => 'Somente o destinatário desta transferência pode realizar esta ação.',
+        'sender_mismatch' => 'Somente o usuário de origem desta transferência pode realizar esta ação.',
     ],
 ];

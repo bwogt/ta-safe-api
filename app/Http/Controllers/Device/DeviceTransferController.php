@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Device;
 
 use App\Actions\DeviceTransfer\Accept\AcceptDeviceTransferAction;
+use App\Actions\DeviceTransfer\Cancel\CancelDeviceTransferAction;
 use App\Actions\DeviceTransfer\Create\CreateDeviceTransferAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
@@ -51,13 +52,11 @@ class DeviceTransferController extends Controller
     /**
      * Cancel the device transfer.
      */
-    public function cancel(Request $request, DeviceTransfer $deviceTransfer): JsonResponse
+    public function cancel(DeviceTransfer $deviceTransfer, CancelDeviceTransferAction $action): JsonResponse
     {
         $this->authorize('accessAsSourceUser', $deviceTransfer);
 
-        $transfer = $request->user()
-            ->deviceTransferService()
-            ->cancel($deviceTransfer);
+        $transfer = $action(request()->user(), $deviceTransfer);
 
         return response()->json(FlashMessage::success(
             trans('actions.device_transfer.success.cancel'))->merge([

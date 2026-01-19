@@ -4,7 +4,7 @@ namespace Tests\Feature\Controllers\DeviceTransferController\Cancel;
 
 use Database\Factories\UserFactory;
 
-class CancelDeviceTransferAccessTest extends CancelDeviceTransferTestSetUp
+final class CancelDeviceTransferAccessTest extends CancelDeviceTransferTestSetUp
 {
     public function test_an_unauthenticated_user_should_not_be_allowed_to_cancel_a_device_transfer(): void
     {

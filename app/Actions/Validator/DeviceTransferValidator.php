@@ -6,34 +6,13 @@ use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferExceptio
 use App\Exceptions\BusinessRules\DeviceTransfer\SelfTransferNotAllowedException;
 use App\Exceptions\BusinessRules\DeviceTransfer\TransferCannotBeModifiedException;
 use App\Exceptions\BusinessRules\DeviceTransfer\TransferRecipientMismatchException;
-use App\Exceptions\HttpJsonResponseException;
+use App\Exceptions\BusinessRules\DeviceTransfer\TransferSenderMismatchException;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
 use App\Models\User;
-use Symfony\Component\HttpFoundation\Response;
 
 class DeviceTransferValidator
 {
-    public function __construct(
-        private readonly ?DeviceTransfer $transfer
-    ) {}
-
-    /**
-     * Creates a new instance for the validator.
-     */
-    public static function create(): self
-    {
-        return new self(null);
-    }
-
-    /**
-     * Create a new instance for the validator with the given device transfer.
-     */
-    public static function for(DeviceTransfer $transfer): self
-    {
-        return new self($transfer);
-    }
-
     public static function mustNotTransferToSelf(User $sourceUser, User $targetUser): void
     {
         $isSelfTransfer = $sourceUser->id === $targetUser->id;
@@ -52,19 +31,14 @@ class DeviceTransferValidator
             new DeviceHasPendingTransferException(['device_id' => $device->id]));
     }
 
-    /**
-     * Validate that the given user is the source user of the transfer.
-     */
-    public function mustBeSourceUser(User $user): self
+    public static function mustBeSender(User $user, DeviceTransfer $transfer): void
     {
-        $isSourceUser = $user->id === $this->transfer?->source_user_id;
+        $isSender = $user->id === $transfer->source_user_id;
 
-        throw_unless($isSourceUser, new HttpJsonResponseException(
-            trans('validators.device.transfer.not_source_user'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_unless($isSender, new TransferSenderMismatchException([
+            'user_id' => $user->id,
+            'transfer_id' => $transfer->id,
+        ]));
     }
 
     public static function mustBeTheRecipient(User $user, DeviceTransfer $transfer): void
