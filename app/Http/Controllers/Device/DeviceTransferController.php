@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Actions\DeviceTransfer\Accept\AcceptDeviceTransferAction;
 use App\Actions\DeviceTransfer\Create\CreateDeviceTransferAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
@@ -34,17 +35,15 @@ class DeviceTransferController extends Controller
     /**
      * Accept the device transfer.
      */
-    public function accept(Request $request, DeviceTransfer $deviceTransfer): JsonResponse
+    public function accept(DeviceTransfer $deviceTransfer, AcceptDeviceTransferAction $action): JsonResponse
     {
         $this->authorize('accessAsTargetUser', $deviceTransfer);
 
-        $result = $request->user()
-            ->deviceTransferService()
-            ->accept($deviceTransfer);
+        $transfer = $action(request()->user(), $deviceTransfer);
 
         return response()->json(FlashMessage::success(
             trans('actions.device_transfer.success.accept'))->merge([
-                'transfer' => new DeviceTransferResource($result),
+                'transfer' => new DeviceTransferResource($transfer),
             ]), Response::HTTP_OK
         );
     }

@@ -4,6 +4,8 @@ namespace App\Actions\Validator;
 
 use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferException;
 use App\Exceptions\BusinessRules\DeviceTransfer\SelfTransferNotAllowedException;
+use App\Exceptions\BusinessRules\DeviceTransfer\TransferCannotBeModifiedException;
+use App\Exceptions\BusinessRules\DeviceTransfer\TransferRecipientMismatchException;
 use App\Exceptions\HttpJsonResponseException;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
@@ -65,33 +67,22 @@ class DeviceTransferValidator
         return $this;
     }
 
-    /**
-     * Validate that the given user is the target user of the transfer.
-     */
-    public function mustBeTargetUser(User $user): self
+    public static function mustBeTheRecipient(User $user, DeviceTransfer $transfer): void
     {
-        $isTargetUser = $user->id === $this->transfer?->target_user_id;
+        $isNotRecipient = $user->id !== $transfer->target_user_id;
 
-        throw_unless($isTargetUser, new HttpJsonResponseException(
-            trans('validators.device.transfer.not_target_user'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_if($isNotRecipient, new TransferRecipientMismatchException([
+            'user_id' => $user->id,
+            'transfer_id' => $transfer->id,
+        ]));
     }
 
-    /**
-     * Validate that the device transfer status is 'pending'.
-     */
-    public function mustBePending(): self
+    public static function mustBePending(DeviceTransfer $transfer): void
     {
-        $isPending = $this->transfer?->status->isPending();
+        $isPending = $transfer->status->isPending();
 
-        throw_unless($isPending, new HttpJsonResponseException(
-            trans('validators.device.transfer.not_pending'),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        ));
-
-        return $this;
+        throw_unless($isPending, new TransferCannotBeModifiedException([
+            'transfer_id' => $transfer->id,
+        ]));
     }
 }
