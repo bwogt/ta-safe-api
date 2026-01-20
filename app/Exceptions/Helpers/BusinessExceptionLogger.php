@@ -10,9 +10,9 @@ class BusinessExceptionLogger
     public function __invoke(BusinessRuleException $e): void
     {
         Log::error($e->getMessage(), [
-            'context' => $e->context(),
             'domain' => $e->domain(),
             'rule_violated' => $e->ruleViolated(),
+            'context' => $e->context(),
         ]);
     }
 }

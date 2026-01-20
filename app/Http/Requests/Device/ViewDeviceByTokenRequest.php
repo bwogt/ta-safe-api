@@ -10,12 +10,14 @@ class ViewDeviceByTokenRequest extends FormRequest
 {
     public function deviceSharingToken(): DeviceSharingToken
     {
+        $token = $this->input('token');
+
         return DeviceSharingToken::with([
             'device.user',
             'device.deviceModel',
             'device.attributeValidationLogs',
             'device.transfers' => fn ($q) => $q->acceptedAndOrdered(),
-        ])->where('token', $this->token)->firstOrFail();
+        ])->where('token', $token)->firstOrFail();
     }
 
     public function rules(): array

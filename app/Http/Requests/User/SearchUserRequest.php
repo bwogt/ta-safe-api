@@ -7,19 +7,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SearchUserRequest extends FormRequest
 {
-    /**
-     * Validate the 'email' field and return the user linked to it.
-     */
     public function userByEmail(): User
     {
-        return User::where('email', $this->email)->firstOrFail();
+        $email = $this->input('email');
+
+        return User::where('email', $email)->firstOrFail();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         return [

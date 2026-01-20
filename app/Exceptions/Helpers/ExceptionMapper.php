@@ -19,6 +19,16 @@ class ExceptionMapper
         ];
     }
 
+    private static function defineCode(Throwable $e): int
+    {
+        return match (true) {
+            $e instanceof BusinessRuleException => Response::HTTP_UNPROCESSABLE_ENTITY,
+            $e instanceof AuthenticationException => Response::HTTP_UNAUTHORIZED,
+            $e instanceof HttpException => $e->getStatusCode(),
+            default => Response::HTTP_INTERNAL_SERVER_ERROR,
+        };
+    }
+
     private static function defineMessage(Throwable $e): string
     {
         return match (true) {
@@ -27,16 +37,6 @@ class ExceptionMapper
             $e instanceof AuthenticationException => trans('http_exceptions.unauthenticated'),
             $e instanceof HttpException => self::mapHttpStatusCode($e->getStatusCode()),
             default => trans('http_exceptions.internal_server_error'),
-        };
-    }
-
-    private static function defineCode(Throwable $e): int
-    {
-        return match (true) {
-            $e instanceof BusinessRuleException => Response::HTTP_UNPROCESSABLE_ENTITY,
-            $e instanceof AuthenticationException => Response::HTTP_UNAUTHORIZED,
-            $e instanceof HttpException => $e->getStatusCode(),
-            default => Response::HTTP_INTERNAL_SERVER_ERROR,
         };
     }
 

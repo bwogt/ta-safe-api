@@ -6,11 +6,6 @@ use App\Exceptions\BusinessRules\BusinessRuleException;
 
 class InvalidCredentialsException extends BusinessRuleException
 {
-    public function defaultMessage(): string
-    {
-        return 'Invalid credentials.';
-    }
-
     public function domain(): string
     {
         return 'auth';
@@ -19,5 +14,10 @@ class InvalidCredentialsException extends BusinessRuleException
     public function ruleViolated(): string
     {
         return 'invalid_credentials';
+    }
+
+    public function defaultMessage(): string
+    {
+        return 'Invalid credentials.';
     }
 }

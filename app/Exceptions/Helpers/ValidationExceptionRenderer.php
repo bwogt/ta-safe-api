@@ -12,7 +12,7 @@ class ValidationExceptionRenderer
     {
         $response = FlashMessage::error(
             trans('flash_messages.errors')
-        )->toArray($request);
+        )->toArray();
 
         $response['errors'] = $e->errors();
 

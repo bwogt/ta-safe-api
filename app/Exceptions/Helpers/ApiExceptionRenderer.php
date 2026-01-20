@@ -10,14 +10,12 @@ class ApiExceptionRenderer
     public function __invoke(Throwable $e, $request)
     {
         if ($request->is('api/*') || $request->wantsJson()) {
-            $result = ExceptionMapper::map($e);
+            $exception = ExceptionMapper::map($e);
 
             return response()->json(
-                FlashMessage::error($result['message']),
-                $result['code']
+                FlashMessage::error($exception['message']),
+                $exception['code']
             );
         }
-
-        return null;
     }
 }

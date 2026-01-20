@@ -16,9 +16,11 @@ class CreateDeviceTransferRequest extends FormRequest
 
     public function toDto(Device $device): CreateDeviceTransferDTO
     {
+        $targetUserId = $this->input('target_user_id');
+
         return new CreateDeviceTransferDTO(
             device: $device,
-            targetUser: User::findOrFail($this->target_user_id),
+            targetUser: User::findOrFail($targetUserId),
         );
     }
 

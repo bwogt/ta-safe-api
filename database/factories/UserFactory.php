@@ -18,16 +18,14 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = \Faker\Factory::create('pt_BR');
-
         return [
-            'name' => mb_convert_case($faker->name(), MB_CASE_TITLE),
-            'email' => strtolower(str_replace(' ', '', $faker->unique()->safeEmail())),
+            'name' => mb_convert_case(fake()->name(), MB_CASE_TITLE),
+            'email' => strtolower(str_replace(' ', '', fake()->unique()->safeEmail())),
             'email_verified_at' => now(),
             'password' =>  Hash::make('password'),
             'remember_token' => Str::random(10),
-            'cpf' => $faker->unique()->cpf(),
-            'phone' => $faker->unique()->cellPhoneNumber()
+            'cpf' => fake()->unique()->cpf(),
+            'phone' => fake()->unique()->cellPhoneNumber()
         ];
     }
 

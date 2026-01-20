@@ -12,9 +12,9 @@ class ApplicationExceptionLogger
         $previous = $e->getPrevious();
 
         Log::error($e->getMessage(), [
-            'context' => $e->context(),
             'domain' => $e->domain(),
             'action' => $e->action(),
+            'context' => $e->context(),
             'previous' => $previous ? [
                 'exception' => class_basename($previous),
                 'message' => $previous->getMessage(),
