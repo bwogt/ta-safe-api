@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceTransferController\Create;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\UserFactory;
@@ -49,7 +49,7 @@ class CreateDeviceTransferTestSetUp extends TestCase
     protected function flashMessage(): array
     {
         return [
-            'type' => FlashMessage::SUCCESS,
+            'type' => FlashMessageType::SUCCESS,
             'msg' => trans('actions.device_transfer.success.create'),
         ];
     }

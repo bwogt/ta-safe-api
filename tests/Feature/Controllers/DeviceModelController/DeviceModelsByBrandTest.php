@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceModelController;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use App\Models\Brand;
 use App\Models\DeviceModel;
 use Database\Factories\BrandFactory;
@@ -36,7 +36,7 @@ class DeviceModelsByBrandTest extends TestCase
         $response = $this->getJson("api/device-models/brands/{$this->brand->id}");
 
         $response->assertUnauthorized()->assertJson(
-            fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+            fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                 ->where('message.text', trans('http_exceptions.unauthenticated'))
         );
     }
@@ -72,7 +72,7 @@ class DeviceModelsByBrandTest extends TestCase
         $response = $this->getJson("api/device-models/brands/{$invalidId}");
 
         $response->assertNotFound()->assertJson(
-            fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+            fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                 ->where('message.text', trans('http_exceptions.not_found'))
         );
     }

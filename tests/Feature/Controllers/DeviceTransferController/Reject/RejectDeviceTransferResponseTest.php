@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controllers\DeviceTransferController\Reject;
 
 use App\Enums\Device\DeviceTransferStatus;
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -16,7 +16,7 @@ final class RejectDeviceTransferResponseTest extends RejectDeviceTransferTestSet
         $this->postJson($this->route())
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
                     ->where('message.text', trans('actions.device_transfer.success.reject'))
                     ->where('transfer.id', $this->transfer->id)
                     ->where('transfer.status', DeviceTransferStatus::REJECTED->value)

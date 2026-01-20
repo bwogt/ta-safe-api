@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceTransferController\Create;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -20,7 +20,7 @@ class CreateDeviceTransferRulesTest extends CreateDeviceTransferTestSetUp
         $this->postJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.target_user_id.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.target_user_id'),
@@ -33,7 +33,7 @@ class CreateDeviceTransferRulesTest extends CreateDeviceTransferTestSetUp
         $this->postJson($this->route(), ['target_user_id' => Str::random(4)])
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.target_user_id.0', trans('validation.integer', [
                         'attribute' => trans('validation.attributes.target_user_id'),
@@ -45,7 +45,7 @@ class CreateDeviceTransferRulesTest extends CreateDeviceTransferTestSetUp
     {
         $this->postJson($this->route(), ['target_user_id' => 0])
             ->assertUnprocessable()
-            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                 ->where('message.text', trans('flash_messages.errors'))
                 ->where('errors.target_user_id.0', trans('validation.exists', [
                     'attribute' => trans('validation.attributes.target_user_id'),

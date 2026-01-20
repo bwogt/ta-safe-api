@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\UserController\Search;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -19,7 +19,7 @@ class SearchUserByEmailRuleTest extends SearchUserByEmailTestSetUp
         $this->getJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.required', [
                         'attribute' => 'email',
@@ -32,7 +32,7 @@ class SearchUserByEmailRuleTest extends SearchUserByEmailTestSetUp
         $this->getJson($this->route(email: 'abc'))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.email', [
                         'attribute' => 'email',
@@ -45,7 +45,7 @@ class SearchUserByEmailRuleTest extends SearchUserByEmailTestSetUp
         $this->getJson($this->route(email: 'abc@abc.com'))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.custom.email.exists', [
                         'attribute' => 'email',

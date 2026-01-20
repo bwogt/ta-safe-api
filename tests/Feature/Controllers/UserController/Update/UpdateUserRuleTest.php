@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\UserController\Update;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -20,7 +20,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.name'),
@@ -39,7 +39,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['name' => Str::random(256)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.name'),
@@ -53,7 +53,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['email' => 'abc']))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.email', [
                         'attribute' => 'email',
@@ -66,7 +66,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['email' => $this->anotherUser->email]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.unique', [
                         'attribute' => 'email',
@@ -79,7 +79,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['phone' => $this->anotherUser->phone]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.phone.0', trans('validation.unique', [
                         'attribute' => trans('validation.attributes.phone'),
@@ -92,7 +92,7 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['phone' => '42999999999']))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.phone.0', trans('validation.regex', [
                         'attribute' => trans('validation.attributes.phone'),

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceSharingController\View;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Database\Factories\DeviceSharingTokenFactory;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -20,7 +20,7 @@ class ViewDeviceByTokenRulesTest extends ViewDeviceByTokenTestSetUp
         $this->getJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.token.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.token'),
@@ -35,7 +35,7 @@ class ViewDeviceByTokenRulesTest extends ViewDeviceByTokenTestSetUp
         $this->getJson($this->route($token))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.token.0', trans('validation.size.string', [
                         'attribute' => trans('validation.attributes.token'),
@@ -51,7 +51,7 @@ class ViewDeviceByTokenRulesTest extends ViewDeviceByTokenTestSetUp
         $this->getJson($this->route($token))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.token.0', trans('validation.custom.token.exists', [
                         'attribute' => trans('validation.attributes.token'),
@@ -66,7 +66,7 @@ class ViewDeviceByTokenRulesTest extends ViewDeviceByTokenTestSetUp
         $this->getJson($this->route($token))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.token.0', trans('validation.custom.token.expired', [
                         'attribute' => trans('validation.attributes.token'),

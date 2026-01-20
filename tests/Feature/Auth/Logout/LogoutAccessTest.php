@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth\Logout;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -15,7 +15,7 @@ class LogoutAccessTest extends LogoutTestSetUp
 
         $this->deleteJson(route('api.auth.logout'))
             ->assertOk()
-            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
+            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
                 ->where('message.text', trans('actions.auth.success.logout'))
             );
 

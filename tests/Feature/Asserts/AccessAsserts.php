@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Asserts;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -18,7 +18,7 @@ trait AccessAsserts
         $this->$method($route, $params)
             ->assertUnauthorized()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('auth.unauthenticated'))
             );
     }
@@ -67,7 +67,7 @@ trait AccessAsserts
             $this->$method($route, $params)
                 ->assertForbidden()
                 ->assertJson(
-                    fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                    fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                         ->where('message.text', trans('auth.unauthorized'))
                 );
         }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth\Login;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 
@@ -13,7 +13,7 @@ class LoginRulesTest extends LoginTestSetUp
         $this->postJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.required', [
                         'attribute' => 'email',
@@ -32,7 +32,7 @@ class LoginRulesTest extends LoginTestSetUp
         ])
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.email', [
                         'attribute' => 'email',
@@ -48,7 +48,7 @@ class LoginRulesTest extends LoginTestSetUp
         ])
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.password.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.password'),
