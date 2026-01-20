@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controllers\DeviceController\Invalidation;
 
 use App\Enums\Device\DeviceValidationStatus;
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -16,7 +16,7 @@ class InvalidateDeviceResponseTest extends InvalidateDeviceTestSetUp
         $this->postJson($this->route())
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
                     ->where('message.text', trans('actions.device.success.invalidate'))
                     ->where('device.id', $this->device->id)
                     ->where('device.color', $this->device->color)

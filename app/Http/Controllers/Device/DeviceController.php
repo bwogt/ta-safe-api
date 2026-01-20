@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Device;
 
-use App\Dto\Device\RegisterDeviceDto;
+use App\Actions\Device\Delete\DeleteDeviceAction;
+use App\Actions\Device\Invalidate\InvalidateDeviceAction;
+use App\Actions\Device\Register\RegisterDeviceAction;
+use App\Actions\Device\Validate\StartDeviceValidationAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\RegisterDeviceRequest;
 use App\Http\Requests\Device\StartDeviceValidationRequest;
 use App\Http\Resources\Device\DeviceResource;
+use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,9 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeviceController extends Controller
 {
-    /**
-     * View device data.
-     */
     public function view(Device $device): JsonResource
     {
         $this->authorize('accessAsOwner', $device);
@@ -30,14 +31,9 @@ class DeviceController extends Controller
         return new DeviceResource($device);
     }
 
-    /**
-     * Register a new device.
-     */
-    public function register(RegisterDeviceRequest $request): JsonResponse
+    public function register(RegisterDeviceRequest $request, RegisterDeviceAction $action): JsonResponse
     {
-        $request->user()
-            ->deviceService()
-            ->register(RegisterDeviceDto::fromRequest($request));
+        $action(($request->user()), $request->toDto());
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.register')),
@@ -48,13 +44,11 @@ class DeviceController extends Controller
     /**
      * Delete a device with rejected validation.
      */
-    public function delete(Device $device): Response
+    public function delete(Device $device, DeleteDeviceAction $action): Response
     {
         $this->authorize('accessAsOwner', $device);
 
-        request()->user()
-            ->deviceService()
-            ->delete($device);
+        $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.delete')),
@@ -65,11 +59,13 @@ class DeviceController extends Controller
     /**
      * Validate a device's registration.
      */
-    public function validation(StartDeviceValidationRequest $request, Device $device): JsonResponse
-    {
-        $request->user()
-            ->deviceService()
-            ->validate($device, $request->invoiceData());
+    public function validation(
+        StartDeviceValidationRequest $request,
+        StartDeviceValidationAction $action,
+        Device $device
+    ): JsonResponse {
+        $action($request->user(), $device, $request->toDto());
+        ValidateDeviceRegistrationJob::dispatchAfterResponse($device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.validate'))->merge([
@@ -81,13 +77,11 @@ class DeviceController extends Controller
     /**
      * Invalidate a device's registration.
      */
-    public function invalidation(Device $device): JsonResponse
+    public function invalidation(Device $device, InvalidateDeviceAction $action): JsonResponse
     {
         $this->authorize('accessAsOwner', $device);
 
-        request()->user()
-            ->deviceService()
-            ->invalidate($device);
+        $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.invalidate'))->merge([

@@ -2,7 +2,8 @@
 
 namespace Tests\Unit\Actions\Device\Register;
 
-use App\Dto\Device\RegisterDeviceDto;
+use App\Actions\Device\Register\RegisterDeviceAction;
+use App\Dto\Device\RegisterDeviceDTO;
 use App\Models\User;
 use App\Traits\RandomNumberGenerator;
 use Database\Factories\DeviceModelFactory;
@@ -10,19 +11,21 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RegisterDeviceActionTestSetUp extends TestCase
+abstract class RegisterDeviceActionTestSetUp extends TestCase
 {
     use RandomNumberGenerator;
     use RefreshDatabase;
 
     protected User $user;
-    protected RegisterDeviceDto $data;
+    protected RegisterDeviceAction $action;
+    protected RegisterDeviceDTO $data;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->userSetUp();
+        $this->actionSetUp();
         $this->deviceDataSetUp();
     }
 
@@ -31,11 +34,16 @@ class RegisterDeviceActionTestSetUp extends TestCase
         $this->user = UserFactory::new()->create();
     }
 
+    private function actionSetUp(): void
+    {
+        $this->action = new RegisterDeviceAction;
+    }
+
     private function deviceDataSetUp(): void
     {
         $deviceModel = DeviceModelFactory::new()->create();
 
-        $this->data = new RegisterDeviceDto(
+        $this->data = new RegisterDeviceDTO(
             deviceModelId: $deviceModel->id,
             accessKey: $this->generateRandomNumber(44),
             color: 'black',

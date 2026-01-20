@@ -2,12 +2,14 @@
 
 namespace App\Exceptions;
 
-use App\Http\Messages\FlashMessage;
-use Illuminate\Auth\AuthenticationException;
+use App\Exceptions\Application\ApplicationFailsException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Exceptions\Helpers\ApiExceptionRenderer;
+use App\Exceptions\Helpers\ApplicationExceptionLogger;
+use App\Exceptions\Helpers\BusinessExceptionLogger;
+use App\Exceptions\Helpers\ValidationExceptionRenderer;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -28,49 +30,10 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->renderable(function (AuthenticationException $e) {
-            return response()->json(
-                FlashMessage::error(trans('http_exceptions.unauthenticated')),
-                Response::HTTP_UNAUTHORIZED
-            );
-        });
+        $this->reportable(fn (ApplicationFailsException $e) => (new ApplicationExceptionLogger)($e));
+        $this->reportable(fn (BusinessRuleException $e) => (new BusinessExceptionLogger)($e));
 
-        $this->renderable(function (HttpException $e) {
-            if ($e->getStatusCode() === 403) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.unauthorized')),
-                    $e->getStatusCode()
-                );
-            }
-
-            if ($e->getStatusCode() === 404) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.not_found')),
-                    $e->getStatusCode()
-                );
-            }
-
-            if ($e->getStatusCode() === 429) {
-                return response()->json(
-                    FlashMessage::error(trans('http_exceptions.too_many_attempts')),
-                    $e->getStatusCode()
-                );
-            }
-        });
-    }
-
-    /**
-     * Render an exception into an HTTP response.
-     */
-    public function render($request, Throwable $e): JsonResponse
-    {
-        if ($e instanceof HttpJsonResponseException) {
-            return response()->json(
-                FlashMessage::error($e->getMessage()),
-                $e->getCode()
-            );
-        }
-
-        return parent::render($request, $e);
+        $this->renderable(fn (ValidationException $e, $request) => (new ValidationExceptionRenderer)($e, $request));
+        $this->renderable(fn (Throwable $e, $request) => (new ApiExceptionRenderer)($e, $request));
     }
 }

@@ -2,35 +2,46 @@
 
 namespace Tests\Unit\Actions\User\Update;
 
-use App\Dto\User\UpdateUserDto;
+use App\Actions\User\Update\UpdateUserAction;
+use App\Dto\User\UpdateUserDTO;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UpdateUserActionTestSetUp extends TestCase
+abstract class UpdateUserActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
     protected User $user;
-    protected UpdateUserDto $data;
+    protected UpdateUserDTO $data;
+    protected UpdateUserAction $action;
 
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->userSetUp();
+        $this->actionSetUp();
+        $this->dataSetUp();
     }
 
     private function userSetUp(): void
     {
-        $faker = \Faker\Factory::create('pt_BR');
-
         $this->user = UserFactory::new()->create();
+    }
 
-        $this->data = new UpdateUserDto(
-            name: $faker->name(),
-            email: $faker->unique()->safeEmail(),
-            phone: $faker->unique()->cellPhoneNumber(),
+    private function actionSetUp(): void
+    {
+        $this->action = new UpdateUserAction;
+    }
+
+    private function dataSetUp(): void
+    {
+        $this->data = new UpdateUserDTO(
+            name: fake()->name(),
+            email: fake()->unique()->safeEmail(),
+            phone: fake()->unique()->cellPhoneNumber(),
         );
     }
 }

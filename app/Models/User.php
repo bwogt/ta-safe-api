@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Device\DeviceService;
-use App\Services\DeviceTransfer\DeviceTransferService;
-use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -118,33 +115,5 @@ class User extends Authenticatable
             ->where('user_id', $this->id)
             ->orderByDesc('updated_at')
             ->get();
-    }
-
-    /*
-    ================= ** Services ** ==========================================================================
-    */
-
-    /**
-     * Get the user service.
-     */
-    public function userService(): UserService
-    {
-        return new UserService($this);
-    }
-
-    /**
-     * Get the device service.
-     */
-    public function deviceService(): DeviceService
-    {
-        return new DeviceService($this);
-    }
-
-    /**
-     * Get the device transfer service.
-     */
-    public function deviceTransferService(): DeviceTransferService
-    {
-        return new DeviceTransferService($this);
     }
 }

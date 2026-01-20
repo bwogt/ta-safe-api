@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class CreateSharingTokenTestSetUp extends TestCase
+abstract class CreateSharingTokenTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;

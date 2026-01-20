@@ -2,40 +2,38 @@
 
 namespace Tests\Unit\Actions\Auth\Register;
 
-use App\Dto\Auth\RegisterUserDto;
-use App\Services\Auth\AuthService;
+use App\Actions\Auth\Register\RegisterUserAction;
+use App\Dto\Auth\RegisterUserDTO;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RegisterUserActionTestSetUp extends TestCase
+abstract class RegisterUserActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
-    protected AuthService $auth;
-    protected RegisterUserDto $data;
+    protected RegisterUserAction $action;
+    protected RegisterUserDTO $data;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->authSetUp();
+        $this->actionSetUp();
         $this->dataSetUp();
     }
 
-    private function authSetUp(): void
+    private function actionSetUp(): void
     {
-        $this->auth = new AuthService;
+        $this->action = new RegisterUserAction;
     }
 
     private function dataSetUp(): void
     {
-        $faker = \Faker\Factory::create('pt_BR');
-
-        $this->data = new RegisterUserDto(
-            name: $faker->name(),
-            email: '7Yr4Q@example.com',
-            cpf: $faker->cpf(),
-            phone: $faker->cellPhoneNumber(),
+        $this->data = new RegisterUserDTO(
+            name: fake()->name(),
+            email: fake()->unique()->safeEmail(),
+            cpf: fake()->unique()->cpf(),
+            phone: fake()->unique()->cellPhoneNumber(),
             password: 'password',
         );
     }

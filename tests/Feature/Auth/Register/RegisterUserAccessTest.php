@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth\Register;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class RegisterUserAccessTest extends RegisterUserTestSetUp
@@ -13,14 +13,14 @@ class RegisterUserAccessTest extends RegisterUserTestSetUp
 
         $this->postJson($this->route(), $data)
             ->assertCreated()
-            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
+            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
                 ->where('message.text', trans('actions.auth.success.register'))
-                ->where('user.name', $data['name'])
-                ->where('user.email', fn (string $email) => str($email)->is($data['email']))
-                ->where('user.cpf', fn (string $cpf) => str($cpf)->is($data['cpf']))
-                ->where('user.phone', fn (string $phone) => str($phone)->is($data['phone']))
-                ->has('user.token')
-                ->missing('user.password')
+                ->where('data.user.name', $data['name'])
+                ->where('data.user.email', $data['email'])
+                ->where('data.user.cpf', $data['cpf'])
+                ->where('data.user.phone', $data['phone'])
+                ->has('data.token')
+                ->missing('data.user.password')
             );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\BrandController;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use App\Models\Brand;
 use Database\Factories\UserFactory;
 use Database\Seeders\BrandSeeder;
@@ -26,7 +26,7 @@ class ViewAllBrandsTest extends TestCase
         $response = $this->getJson('api/brands');
 
         $response->assertUnauthorized()->assertJson(
-            fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+            fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                 ->where('message.text', trans('http_exceptions.unauthenticated'))
         );
     }

@@ -3,62 +3,56 @@
 namespace App\Actions\Device\Token;
 
 use App\Actions\Validator\DeviceValidator;
-use App\Exceptions\HttpJsonResponseException;
+use App\Exceptions\Application\Device\CreateSharingTokenFailedException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\Device;
 use App\Models\DeviceSharingToken;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class CreateSharingTokenAction
 {
-    public function __construct(
-        private readonly User $user,
-        private readonly Device $device
-    ) {}
-
-    public function execute(): DeviceSharingToken
+    public function __invoke(User $user, Device $device): DeviceSharingToken
     {
-        $this->validateAttributesBeforeAction();
-
         try {
-            return DB::transaction(function () {
-                $token = $this->createSharingToken();
-                $this->logSuccess($this->device);
+            $this->validateBusinessRules($user, $device);
+
+            return DB::transaction(function () use ($user, $device) {
+                $this->deleteOldToken($device);
+                $token = $this->createSharingToken($device);
+                $this->logSuccess($user, $device);
 
                 return $token;
             });
-        } catch (Exception $e) {
-            $this->handleException($e);
+        } catch (BusinessRuleException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            $this->handleFailure($e, $user, $device);
         }
     }
 
-    private function validateAttributesBeforeAction(): void
+    private function validateBusinessRules(User $user, Device $device): void
     {
-        DeviceValidator::for($this->device)
-            ->mustBeOwner($this->user)
-            ->statusMustBeValidated();
+        DeviceValidator::mustBeOwner($user, $device);
+        DeviceValidator::statusMustBeValidated($device);
     }
 
-    /**
-     * Create a new device sharing token.
-     */
-    private function createSharingToken(): DeviceSharingToken
+    private function deleteOldToken(Device $device): void
     {
-        $this->device->sharingToken()->delete();
+        $device->sharingToken()->delete();
+    }
 
-        return $this->device->sharingToken()->create([
+    private function createSharingToken(Device $device): DeviceSharingToken
+    {
+        return $device->sharingToken()->create([
             'token' => $this->generateUniqueToken(),
             'expires_at' => now()->addDay(),
         ]);
     }
 
-    /**
-     * Generates a unique, random token that doesn't exist in the database yet.
-     */
     private function generateUniqueToken(int $depth = 0): string
     {
         throw_if($depth > 8, new RuntimeException(
@@ -71,49 +65,22 @@ class CreateSharingTokenAction
         return $isUnique ? $token : $this->generateUniqueToken($depth + 1);
     }
 
-    /**
-     * Log a success message in the event of a successful device sharing token creation.
-     */
-    private function logSuccess(): void
+    private function logSuccess(User $user, Device $device): void
     {
-        Log::info("The user {$this->device->user->name} successfully created a device sharing token.", [
-            'user_id' => $this->device->user->id,
-            'device_id' => $this->device->id,
+        Log::info('Device sharing token successfully created.', [
+            'user_id' => $user->id,
+            'device_id' => $device->id,
         ]);
     }
 
-    /**
-     * Handles an exception that occurred during the action execution.
-     */
-    private function handleException(Exception $e): never
+    private function handleFailure(Throwable $e, User $user, Device $device): never
     {
-        $this->logError($e);
-        $this->throwException();
-    }
-
-    /**
-     * Logs an error message when a device sharing token creation attempt fails.
-     */
-    private function logError(Exception $e): void
-    {
-        Log::error("The user {$this->device->user->name} failed to create a device sharing token.", [
-            'user_id' => $this->device->user->id,
-            'device_id' => $this->device->id,
-            'context' => [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ],
-        ]);
-    }
-
-    /**
-     * Throws an exception when a device sharing token creation attempt fails.
-     */
-    private function throwException(): never
-    {
-        throw new HttpJsonResponseException(
-            trans('actions.device.errors.token'),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+        throw new CreateSharingTokenFailedException(
+            previous: $e,
+            context: [
+                'user_id' => $user->id,
+                'device_id' => $device->id,
+            ]
         );
     }
 }

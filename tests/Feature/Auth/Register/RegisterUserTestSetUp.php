@@ -7,7 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RegisterUserTestSetUp extends TestCase
+abstract class RegisterUserTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
@@ -26,13 +26,11 @@ class RegisterUserTestSetUp extends TestCase
 
     protected function validUserData(array $overrides = []): array
     {
-        $faker = \Faker\Factory::create('pt_BR');
-
         return array_merge([
-            'name' => $faker->name(),
-            'email' => $faker->unique()->email(),
-            'cpf' => $faker->unique()->cpf(),
-            'phone' => $faker->unique()->cellPhoneNumber(),
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'cpf' => fake()->unique()->cpf(),
+            'phone' => fake()->unique()->cellPhoneNumber(),
             'password' => 'password',
             'password_confirmation' => 'password',
         ], $overrides);

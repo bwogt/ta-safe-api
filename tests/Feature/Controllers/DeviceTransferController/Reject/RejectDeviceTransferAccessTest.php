@@ -4,7 +4,7 @@ namespace Tests\Feature\Controllers\DeviceTransferController\Reject;
 
 use Database\Factories\UserFactory;
 
-class RejectDeviceTransferAccessTest extends RejectDeviceTransferTestSetUp
+final class RejectDeviceTransferAccessTest extends RejectDeviceTransferTestSetUp
 {
     public function test_an_unauthenticated_user_should_not_be_allowed_to_reject_a_device_transfer(): void
     {

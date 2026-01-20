@@ -2,30 +2,24 @@
 
 namespace App\Http\Requests\Device;
 
-use App\Http\Requests\ApiFormRequest;
 use App\Models\DeviceSharingToken;
 use App\Rules\ExpiredDeviceSharingTokenRule;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ViewDeviceByTokenRequest extends ApiFormRequest
+class ViewDeviceByTokenRequest extends FormRequest
 {
-    /**
-     * Validates the 'token' field and returns an instance of DeviceSharingToken.
-     */
     public function deviceSharingToken(): DeviceSharingToken
     {
+        $token = $this->input('token');
+
         return DeviceSharingToken::with([
             'device.user',
             'device.deviceModel',
             'device.attributeValidationLogs',
             'device.transfers' => fn ($q) => $q->acceptedAndOrdered(),
-        ])->where('token', $this->token)->firstOrFail();
+        ])->where('token', $token)->firstOrFail();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         return [

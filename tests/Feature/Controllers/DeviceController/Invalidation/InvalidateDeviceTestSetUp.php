@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class InvalidateDeviceTestSetUp extends TestCase
+abstract class InvalidateDeviceTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;

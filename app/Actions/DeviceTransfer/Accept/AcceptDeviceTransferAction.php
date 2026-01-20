@@ -4,108 +4,68 @@ namespace App\Actions\DeviceTransfer\Accept;
 
 use App\Actions\Validator\DeviceTransferValidator;
 use App\Enums\Device\DeviceTransferStatus;
-use App\Exceptions\HttpJsonResponseException;
-use App\Models\Device;
+use App\Exceptions\Application\DeviceTransfer\AcceptDeviceTransferFailedException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\DeviceTransfer;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class AcceptDeviceTransferAction
 {
-    public function __construct(
-        private readonly User $user,
-        private DeviceTransfer $transfer
-    ) {}
-
-    public function execute(): DeviceTransfer
+    public function __invoke(User $user, DeviceTransfer $transfer): DeviceTransfer
     {
-        $this->validateAttributesBeforeAction();
-
         try {
-            return DB::transaction(function () {
-                $this->updateDeviceTransfer();
-                $this->updateDeviceOwner();
-                $this->logSuccess();
+            $this->validateBusinessRules($user, $transfer);
 
-                return $this->transfer;
+            return DB::transaction(function () use ($user, $transfer) {
+                $this->updateDeviceTransfer($transfer);
+                $this->updateDeviceOwner($user, $transfer);
+                $this->logSuccess($user, $transfer);
+
+                return $transfer;
             });
-        } catch (Exception $e) {
-            $this->handleException($e);
+        } catch (BusinessRuleException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            $this->handleFailure($e, $user, $transfer);
         }
     }
 
-    /**
-     * Validate attributes against business rules before the action occurs.
-     */
-    private function validateAttributesBeforeAction(): void
+    private function validateBusinessRules(User $user, DeviceTransfer $transfer): void
     {
-        DeviceTransferValidator::for($this->transfer)
-            ->mustBeTargetUser($this->user)
-            ->mustBePending();
+        DeviceTransferValidator::mustBeTheRecipient($user, $transfer);
+        DeviceTransferValidator::mustBePending($transfer);
     }
 
-    /**
-     * Updates the device transfer to be accepted.
-     */
-    private function updateDeviceTransfer(): void
+    private function updateDeviceTransfer(DeviceTransfer $transfer): void
     {
-        $this->transfer->update(['status' => DeviceTransferStatus::ACCEPTED]);
+        $transfer->update(['status' => DeviceTransferStatus::ACCEPTED]);
     }
 
-    /**
-     * Updates the device owner to be the target user.
-     */
-    private function updateDeviceOwner(): void
+    private function updateDeviceOwner(User $user, DeviceTransfer $transfer): void
     {
-        $this->transfer->device->update(['user_id' => $this->user->id]);
+        $transfer->device->update(['user_id' => $user->id]);
     }
 
-    /**
-     * Log a success message for the device transfer acceptance.
-     */
-    private function logSuccess(): void
+    private function logSuccess(User $user, DeviceTransfer $transfer): void
     {
-        Log::info("The user {$this->user->name} successfully accepted device transfer.", [
-            'user_id' => $this->user->id,
-            'transfer_id' => $this->transfer->id,
+        Log::info('Device transfer successfully accepted.', [
+            'user_id' => $user->id,
+            'transfer_id' => $transfer->id,
         ]);
     }
 
-    /**
-     * Handles an exception that occurred during the action execution.
-     */
-    private function handleException(Exception $e): never
+    private function handleFailure(Throwable $e, User $user, DeviceTransfer $transfer): never
     {
-        $this->logError($e);
-        $this->throwException();
-    }
-
-    /**
-     * Logs an error message for the device transfer acceptance failure.
-     */
-    private function logError(Exception $e): void
-    {
-        Log::error("The user {$this->user->name} failed to accept device transfer.", [
-            'user_id' => $this->user->id,
-            'transfer_id' => $this->transfer->id,
-            'context' => [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ],
-        ]);
-    }
-
-    /**
-     * Throws an exception when the device transfer acceptance fails.
-     */
-    private function throwException(): never
-    {
-        throw new HttpJsonResponseException(
-            trans('actions.device_transfer.errors.accept'),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+        throw new AcceptDeviceTransferFailedException(
+            previous: $e,
+            context: [
+                'user_id' => $user->id,
+                'transfer_id' => $transfer->id,
+            ]
         );
     }
+
 }

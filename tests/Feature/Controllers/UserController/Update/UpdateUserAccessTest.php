@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\UserController\Update;
 
-class UpdateUserAccessTest extends UpdateUserTestSetUp
+final class UpdateUserAccessTest extends UpdateUserTestSetUp
 {
     public function test_an_unauthenticated_user_should_not_be_allowed_to_update_profile(): void
     {

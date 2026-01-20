@@ -2,7 +2,8 @@
 
 namespace Tests\Unit\Actions\Device\Validate;
 
-use App\Dto\Device\Invoice\DeviceInvoiceDto;
+use App\Actions\Device\Validate\StartDeviceValidationAction;
+use App\Dto\Device\DeviceInvoiceDTO;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
@@ -10,19 +11,21 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class StartDeviceValidationActionTestSetUp extends TestCase
+abstract class StartDeviceValidationActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 
     protected User $user;
     protected Device $device;
-    protected DeviceInvoiceDto $data;
+    protected DeviceInvoiceDTO $data;
+    protected StartDeviceValidationAction $action;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->userSetUp();
+        $this->actionSetUp();
         $this->deviceSetUp();
         $this->dataSetUp();
     }
@@ -30,6 +33,11 @@ class StartDeviceValidationActionTestSetUp extends TestCase
     private function userSetUp(): void
     {
         $this->user = UserFactory::new()->create();
+    }
+
+    private function actionSetUp(): void
+    {
+        $this->action = new StartDeviceValidationAction;
     }
 
     private function deviceSetUp(): void
@@ -47,7 +55,7 @@ class StartDeviceValidationActionTestSetUp extends TestCase
             . " {$this->device->deviceModel->storage} "
             . " {$this->device->deviceModel->ram} ";
 
-        $this->data = new DeviceInvoiceDto(
+        $this->data = new DeviceInvoiceDTO(
             name: $this->user->name,
             cpf: $this->user->cpf,
             products: $products

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceSharingController\Create;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -15,7 +15,7 @@ class CreateSharingTokenResponseTest extends CreateSharingTokenTestSetUp
         $this->postJson($this->route())
             ->assertCreated()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::SUCCESS)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
                     ->where('message.text', trans('actions.device.success.token'))
                     ->has('id')
                     ->has('token')

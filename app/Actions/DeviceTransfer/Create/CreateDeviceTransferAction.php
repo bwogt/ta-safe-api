@@ -4,109 +4,71 @@ namespace App\Actions\DeviceTransfer\Create;
 
 use App\Actions\Validator\DeviceTransferValidator;
 use App\Actions\Validator\DeviceValidator;
-use App\Exceptions\HttpJsonResponseException;
-use App\Models\Device;
+use App\Dto\DeviceTransfer\CreateDeviceTransferDTO;
+use App\Exceptions\Application\DeviceTransfer\CreateDeviceTransferFailedException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\DeviceTransfer;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class CreateDeviceTransferAction
 {
-    public function __construct(
-        private readonly User $user,
-        private readonly User $targetUser,
-        private readonly Device $device
-    ) {}
-
-    public function execute(): DeviceTransfer
+    public function __invoke(User $user, CreateDeviceTransferDTO $data): DeviceTransfer
     {
-        $this->validateAttributesBeforeAction();
-
         try {
-            return DB::transaction(function () {
-                $transfer = $this->createTransfer();
+            $this->validateBusinessRules($user, $data);
+
+            return DB::transaction(function () use ($user, $data) {
+                $transfer = $this->createDeviceTransfer($user, $data);
                 $this->logSuccess($transfer);
 
                 return $transfer;
             });
-        } catch (Exception $e) {
-            $this->handleException($e);
+        } catch (BusinessRuleException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            $this->handleFailure($e, $user, $data);
         }
     }
 
-    /**
-     * Validate attributes against business rules before the action occurs.
-     */
-    private function validateAttributesBeforeAction(): void
+    private function validateBusinessRules(User $user, CreateDeviceTransferDTO $data): void
     {
-        DeviceValidator::for($this->device)
-            ->mustBeOwner($this->user)
-            ->statusMustBeValidated();
+        DeviceValidator::mustBeOwner($user, $data->device);
+        DeviceValidator::statusMustBeValidated($data->device);
 
-        DeviceTransferValidator::create()
-            ->mustNotTransferToSelf($this->user, $this->targetUser)
-            ->mustNotExistPendingTransfer($this->device);
+        DeviceTransferValidator::mustNotTransferToSelf($user, $data->targetUser);
+        DeviceTransferValidator::mustBeAvailableForTransfer($data->device);
     }
 
-    /**
-     * Create a new device transfer.
-     */
-    private function createTransfer(): DeviceTransfer
+    private function createDeviceTransfer(User $user, CreateDeviceTransferDTO $data): DeviceTransfer
     {
         return DeviceTransfer::create([
-            'device_id' => $this->device->id,
-            'source_user_id' => $this->user->id,
-            'target_user_id' => $this->targetUser->id,
+            'device_id' => $data->device->id,
+            'source_user_id' => $user->id,
+            'target_user_id' => $data->targetUser->id,
         ]);
     }
 
-    /**
-     * Log a success message for the device transfer creation.
-     */
     private function logSuccess(DeviceTransfer $transfer): void
     {
-        Log::info("The user {$this->user->name} successfully created device transfer.", [
-            'user_id' => $this->user->id,
-            'target_user_id' => $this->targetUser->id,
+        Log::info('Device transfer successfully created.', [
             'transfer_id' => $transfer->id,
+            'user_id' => $transfer->source_user_id,
+            'target_user_id' => $transfer->target_user_id,
         ]);
     }
 
-    /**
-     * Handles an exception that occurred during the action execution.
-     */
-    private function handleException(Exception $e): never
+    private function handleFailure(Throwable $e, User $user, CreateDeviceTransferDTO $data): never
     {
-        $this->logError($e);
-        $this->throwException();
-    }
-
-    /**
-     * Log an error message for the device transfer creation failure.
-     */
-    private function logError(Exception $e): void
-    {
-        Log::error("The user {$this->user->name} failed to create device transfer.", [
-            'user_id' => $this->user->id,
-            'target_user_id' => $this->targetUser->id,
-            'context' => [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ],
-        ]);
-    }
-
-    /**
-     * Throws an exception when the device transfer creation fails.
-     */
-    private function throwException(): never
-    {
-        throw new HttpJsonResponseException(
-            trans('actions.device_transfer.errors.create'),
-            Response::HTTP_INTERNAL_SERVER_ERROR
+        throw new CreateDeviceTransferFailedException(
+            previous: $e,
+            context: [
+                'device_id' => $data->device->id,
+                'user_id' => $user->id,
+                'target_user_id' => $data->targetUser->id,
+            ]
         );
     }
 }

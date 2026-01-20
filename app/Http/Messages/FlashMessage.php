@@ -2,17 +2,16 @@
 
 namespace App\Http\Messages;
 
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FlashMessage extends JsonResource
 {
-    public const SUCCESS = 'success';
-    public const INFO = 'info';
-    public const WARNING = 'warning';
-    public const ERROR = 'error';
-
-    public function __construct(private string $type, private string $msg) {}
+    public function __construct(
+        private readonly FlashMessageType $type,
+        private readonly string $msg
+    ) {}
 
     /**
      * Merge data for the FlashMessage instance.
@@ -27,7 +26,12 @@ class FlashMessage extends JsonResource
      */
     public function toArray(?Request $request = null): array
     {
-        return ['message' => ['type' => $this->type, 'text' => $this->msg]];
+        return [
+            'message' => [
+                'type' => $this->type,
+                'text' => $this->msg,
+            ],
+        ];
     }
 
     /**
@@ -35,7 +39,7 @@ class FlashMessage extends JsonResource
      */
     public static function success(string $msg): FlashMessage
     {
-        return new FlashMessage(type: self::SUCCESS, msg: $msg);
+        return new FlashMessage(type: FlashMessageType::SUCCESS, msg: $msg);
     }
 
     /**
@@ -43,7 +47,7 @@ class FlashMessage extends JsonResource
      */
     public static function info(string $msg): FlashMessage
     {
-        return new FlashMessage(type: self::INFO, msg: $msg);
+        return new FlashMessage(type: FlashMessageType::INFO, msg: $msg);
     }
 
     /**
@@ -51,7 +55,7 @@ class FlashMessage extends JsonResource
      */
     public static function warning(string $msg): FlashMessage
     {
-        return new FlashMessage(type: self::WARNING, msg: $msg);
+        return new FlashMessage(type: FlashMessageType::WARNING, msg: $msg);
     }
 
     /**
@@ -59,6 +63,6 @@ class FlashMessage extends JsonResource
      */
     public static function error(string $msg): FlashMessage
     {
-        return new FlashMessage(type: self::ERROR, msg: $msg);
+        return new FlashMessage(type: FlashMessageType::ERROR, msg: $msg);
     }
 }

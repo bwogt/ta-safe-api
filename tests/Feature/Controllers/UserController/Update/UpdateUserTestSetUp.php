@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class UpdateUserTestSetUp extends TestCase
+abstract class UpdateUserTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
@@ -35,12 +35,10 @@ class UpdateUserTestSetUp extends TestCase
 
     protected function data(array $overrides = []): array
     {
-        $faker = \Faker\Factory::create('pt_BR');
-
         return array_merge([
-            'name' => $faker->name(),
-            'email' => $faker->unique()->safeEmail(),
-            'phone' => $faker->unique()->cellPhoneNumber(),
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->unique()->cellPhoneNumber(),
         ], $overrides);
     }
 }

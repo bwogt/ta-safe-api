@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth\Register;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 
@@ -13,7 +13,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.name'),
@@ -38,7 +38,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['name' => Str::random(256)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.max.string', [
                         'max' => 255,
@@ -52,7 +52,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['email' => Str::random(10)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.email', [
                         'attribute' => 'email',
@@ -65,7 +65,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['email' => $this->user->email]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.unique', [
                         'attribute' => 'email',
@@ -78,7 +78,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['cpf' => Str::random(14)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.cpf.0', trans('validation.regex', [
                         'attribute' => 'cpf',
@@ -91,7 +91,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['cpf' => $this->user->cpf]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.cpf.0', trans('validation.unique', [
                         'attribute' => 'cpf',
@@ -104,7 +104,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['phone' => Str::random(15)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.phone.0', trans('validation.regex', [
                         'attribute' => trans('validation.attributes.phone'),
@@ -117,7 +117,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['phone' => $this->user->phone]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.phone.0', trans('validation.unique', [
                         'attribute' => trans('validation.attributes.phone'),
@@ -135,7 +135,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         ]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.password.0', trans('validation.min.string', [
                         'attribute' => trans('validation.attributes.password'),
@@ -154,7 +154,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         ]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.password.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.password'),
@@ -168,7 +168,7 @@ class RegisterUserRulesTest extends RegisterUserTestSetUp
         $this->postJson($this->route(), $this->validUserData(['password_confirmation' => Str::random(8)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.password.0', trans('validation.confirmed', [
                         'attribute' => trans('validation.attributes.password'),

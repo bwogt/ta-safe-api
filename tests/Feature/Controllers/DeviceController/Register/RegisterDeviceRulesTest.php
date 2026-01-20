@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controllers\DeviceController\Register;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
@@ -20,7 +20,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         $this->postJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.device_model_id.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.device_model_id'),
@@ -50,7 +50,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.device_model_id.0', trans('validation.integer', [
                         'attribute' => trans('validation.attributes.device_model_id'),
@@ -66,7 +66,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.device_model_id.0', trans('validation.exists', [
                         'attribute' => trans('validation.attributes.device_model_id'),
@@ -82,7 +82,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.color.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.color'),
@@ -99,7 +99,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.access_key.0', trans('validation.digits', [
                         'attribute' => trans('validation.attributes.access_key'),
@@ -116,7 +116,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.access_key.0', trans('validation.unique', [
                         'attribute' => trans('validation.attributes.access_key'),
@@ -133,7 +133,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
                 'imei_2' => $this->generateRandomNumber(16),
             ]))->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.imei_1.0', trans('validation.digits', [
                         'attribute' => trans('validation.attributes.imei_1'),
@@ -158,7 +158,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
         )
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.imei_1.0', trans('validation.different', [
                         'attribute' => trans('validation.attributes.imei_1'),
@@ -180,7 +180,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
             )
                 ->assertUnprocessable()
                 ->assertJson(
-                    fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                    fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                         ->where('message.text', trans('flash_messages.errors'))
                         ->where('errors.imei_1.0', trans('validation.unique', [
                             'attribute' => trans('validation.attributes.imei_1'),
@@ -202,7 +202,7 @@ class RegisterDeviceRulesTest extends RegisterDeviceTestSetUp
             )
                 ->assertUnprocessable()
                 ->assertJson(
-                    fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                    fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                         ->where('message.text', trans('flash_messages.errors'))
                         ->where('errors.imei_2.0', trans('validation.unique', [
                             'attribute' => trans('validation.attributes.imei_2'),

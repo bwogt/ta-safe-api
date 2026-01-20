@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Controllers\DeviceController\Validation;
 
-use App\Http\Messages\FlashMessage;
+use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
+final class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
 {
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
         $this->postJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.cpf.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.cpf'),
@@ -39,7 +39,7 @@ class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
         $this->postJson($this->route(), $this->data(['cpf' => $this->generateRandomNumber(17)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.cpf.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.cpf'),
@@ -53,7 +53,7 @@ class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
         $this->postJson($this->route(), $this->data(['name' => $this->generateRandomNumber(256)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.name'),
@@ -67,7 +67,7 @@ class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
         $this->postJson($this->route(), $this->data(['products' => Str::random(16001)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessage::ERROR)
+                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.products.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.products'),

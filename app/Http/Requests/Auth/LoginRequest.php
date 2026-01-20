@@ -2,15 +2,19 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Http\Requests\ApiFormRequest;
+use App\Dto\Auth\CredentialsDTO;
+use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends ApiFormRequest
+class LoginRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
-     */
+    public function toDto(): CredentialsDTO
+    {
+        return new CredentialsDTO(
+            email: $this->input('email'),
+            password: $this->input('password')
+        );
+    }
+
     public function rules(): array
     {
         return [
