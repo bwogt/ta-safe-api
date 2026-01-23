@@ -1,4 +1,4 @@
-# TA-SAFE-API
+# 📱 TA-SAFE-API
 Este repositório contém a API responsável pelo backend do sistema Tá Safe, uma plataforma desenvolvida para rastreabilidade de celulares usados.
 O backend é responsável por gerenciar toda a lógica de negócio, persistência de dados e integrações externas, oferecendo segurança e confiabilidade no processo de compra e venda de aparelhos.
 
@@ -21,7 +21,8 @@ https://github.com/bwogt/ta-safe-mobile
 + PHP 
 + Laravel Framework 
 + MySQL 
-+ Docker
++ Docker / Laravel Sail
++ PHPUnit
 
 ## Instalação Local
 
@@ -60,7 +61,7 @@ DB_USERNAME=sail
 DB_PASSWORD=password
 ~~~
 
-6. Iniciar o Ambiente Docker
+6. Iniciar o Ambiente de Desenvolvimento
 ~~~bash
 ./vendor/bin/sail up -d
 ~~~
