@@ -2,6 +2,9 @@
 Este repositório contém a API responsável pelo backend do sistema Tá Safe, uma plataforma desenvolvida para rastreabilidade de celulares usados.
 O backend é responsável por gerenciar toda a lógica de negócio, persistência de dados e integrações externas, oferecendo segurança e confiabilidade no processo de compra e venda de aparelhos.
 
+## Gestão de atividades (Kanban)
+https://github.com/users/bwogt/projects/4
+
 ## Monografia
 https://repositorio.utfpr.edu.br/jspui/handle/1/34098
 
