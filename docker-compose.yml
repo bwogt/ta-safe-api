@@ -1,3 +1,18 @@
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: docker/php/Dockerfile
+    args:
+      UID: ${UID:-1000}
+      GID: ${GID:-1000}
+  volumes:
+    - .:/var/www/html
+  networks:
+    - laravel
+  depends_on:
+    db:
+      condition: service_healthy
+
 x-mysql-base: &mysql-base
   image: mysql:8.0
   networks:
@@ -10,20 +25,13 @@ x-mysql-base: &mysql-base
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
+    <<: *app-base
     container_name: ta-safe-api-app
-    volumes:
-      - .:/var/www/html
-    networks:
-      - laravel
-    depends_on:
-      db:
-        condition: service_healthy
+
+  worker:
+    <<: *app-base
+    container_name: ta-safe-api-worker
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
 
   webserver: 
     image: nginx:alpine
