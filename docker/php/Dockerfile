@@ -11,8 +11,9 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libzip-dev \
-    libpng-dev \
     libonig-dev \
+    libpng-dev \
+    libjpeg-dev \
     libxml2-dev \
     curl \
     && docker-php-ext-install \
@@ -20,8 +21,9 @@ RUN apt-get update && apt-get install -y \
         mbstring \
         zip \
         exif \
-        pcntl
-
+        pcntl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g ${GID} app \
     && useradd -u ${UID} -g app -m app
