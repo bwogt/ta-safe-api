@@ -1,3 +1,7 @@
+# -------------------------------
+# Base definitions
+# -------------------------------
+
 x-app-base: &app-base
   build:
     context: .
@@ -9,9 +13,6 @@ x-app-base: &app-base
     - .:/var/www/html
   networks:
     - laravel
-  depends_on:
-    db:
-      condition: service_healthy
 
 x-mysql-base: &mysql-base
   image: mysql:8.0
@@ -23,16 +24,30 @@ x-mysql-base: &mysql-base
     timeout: 5s
     retries: 3
 
+# -------------------------------
+# Services
+# -------------------------------
+
 services:
+
+  # Application (PHP-FPM)
   app:
     <<: *app-base
     container_name: ta-safe-api-app
+    depends_on:
+      db_test:
+        condition: service_healthy
+    profiles: ['web']
+  
 
+  # Worker for queues (background jobs)
   worker:
     <<: *app-base
     container_name: ta-safe-api-worker
     command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
+    profiles: ['web']
 
+  # Nginx for web requests (optional in dev)
   webserver: 
     image: nginx:alpine
     container_name: ta-safe-api-nginx
@@ -45,7 +60,9 @@ services:
       - app
     networks:
       - laravel
-    
+    profiles: ['web']
+  
+  # Development database (persistent)
   db:
     <<: *mysql-base
     container_name: ta-safe-api-mysql
@@ -58,21 +75,36 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    profiles: ['web']
 
+  # Application (PHP-FPM) for tests / TDD
+  app_test: 
+    <<: *app-base
+    container_name: ta-safe-api-app-test
+    volumes:
+      - .:/var/www/html 
+      - ./.env.testing:/var/www/html/.env
+    environment:
+      APP_ENV: testing
+    profiles: ['test']
+
+  # Test database (ephemeral, no volume)
   db_test: 
     <<: *mysql-base
     container_name: ta-safe-api-mysql-test
     environment:
-      MYSQL_DATABASE: app_test
-      MYSQL_USER: test
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - db_test_data:/var/lib/mysql
+      MYSQL_DATABASE: ${DB_DATABASE}      
+      MYSQL_USER: ${DB_USERNAME}          
+      MYSQL_PASSWORD: ${DB_PASSWORD} 
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    profiles: ['test']
+
+# -------------------------------
+# Networks & Volumes
+# -------------------------------
 
 networks:
   laravel:
 
 volumes:
   db_data:
-  db_test_data:
