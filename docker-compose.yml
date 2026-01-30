@@ -35,7 +35,7 @@ services:
     <<: *app-base
     container_name: ta-safe-api-app
     depends_on:
-      db_test:
+      db:
         condition: service_healthy
     profiles: ['web']
   
@@ -44,6 +44,9 @@ services:
   worker:
     <<: *app-base
     container_name: ta-safe-api-worker
+    depends_on:
+      db:
+        condition: service_healthy
     command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
     profiles: ['web']
 
@@ -81,6 +84,9 @@ services:
   app_test: 
     <<: *app-base
     container_name: ta-safe-api-app-test
+    depends_on:
+      db_test:
+        condition: service_healthy
     volumes:
       - .:/var/www/html 
       - ./.env.testing:/var/www/html/.env
