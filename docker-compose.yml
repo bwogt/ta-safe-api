@@ -34,6 +34,8 @@ services:
   app:
     <<: *app-base
     container_name: ta-safe-api-app
+    labels: 
+      observability.logs: "true"
     depends_on:
       db:
         condition: service_healthy
@@ -44,6 +46,8 @@ services:
   worker:
     <<: *app-base
     container_name: ta-safe-api-worker
+    labels:
+      observability.logs: "true"
     depends_on:
       db:
         condition: service_healthy
@@ -92,6 +96,8 @@ services:
       - ./.env.testing:/var/www/html/.env
     environment:
       APP_ENV: testing
+    ports:
+      - "3307:3307"
     profiles: ['test']
 
   # Test database (ephemeral, no volume)
@@ -105,6 +111,54 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     profiles: ['test']
 
+  loki: 
+    image: grafana/loki:latest
+    container_name: ta-safe-api-loki
+    volumes:
+      - ./docker/observability/loki/loki-config.yaml:/etc/loki/config.yaml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - laravel
+    profiles: ['obs']
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: ta-safe-api-alloy
+    user: root
+    volumes:
+      - ./docker/observability/alloy/config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: run --storage.path=/tmp/alloy --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
+    ports:
+      - "12345:12345"
+    depends_on:
+      - loki
+    networks:
+      - laravel
+    profiles: ['obs']
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ta-safe-api-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_LOG_LEVEL: info
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - loki
+    networks:
+      - laravel
+    profiles: ['obs']
+
 # -------------------------------
 # Networks & Volumes
 # -------------------------------
@@ -114,3 +168,5 @@ networks:
 
 volumes:
   db_data:
+  loki_data:
+  grafana_data:
