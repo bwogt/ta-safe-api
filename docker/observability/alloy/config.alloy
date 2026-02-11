@@ -23,15 +23,20 @@ discovery.relabel "logs_only" {
 
   rule {
     source_labels = ["__meta_docker_container_name"]
-    regex         = "/(.*)"
+    regex         = "/ta-safe-api-(.*)"
     target_label  = "service_name"
   }
 }
 
 loki.source.docker "default" {
   host       = "unix:///var/run/docker.sock"
-  labels     = {"platform" = "docker"}
   targets    = discovery.docker.container.targets
   relabel_rules = discovery.relabel.logs_only.rules
   forward_to = [loki.write.local.receiver]
+
+  labels     = {
+    deployment_environment = "dev",
+    service_namespace      = "backend",
+    platform               = "docker",
+  }
 }
