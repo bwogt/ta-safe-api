@@ -65,7 +65,7 @@ class DeviceController extends Controller
         Device $device
     ): JsonResponse {
         $action($request->user(), $device, $request->toDto());
-        ValidateDeviceRegistrationJob::dispatchAfterResponse($device);
+        ValidateDeviceRegistrationJob::dispatch($device);
 
         return response()->json(FlashMessage::success(
             trans('actions.device.success.validate'))->merge([
