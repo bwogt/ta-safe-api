@@ -36,7 +36,7 @@ O projeto utiliza um ambiente Docker customizado, substituindo o Laravel Sail, p
  - Docker Engine
  - Docker Compose
 
-### Passos
+### Passos para executar
 
 1. Clone o Repositório
 ~~~git
