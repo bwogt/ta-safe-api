@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Application\ApplicationFailsException;
+use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\ApiExceptionRenderer;
 use App\Exceptions\Helpers\ApplicationExceptionLogger;
 use App\Exceptions\Helpers\ValidationExceptionRenderer;
@@ -21,6 +22,15 @@ class Handler extends ExceptionHandler
         'current_password',
         'password',
         'password_confirmation',
+    ];
+
+    /**
+     * A list of the exception types that are not reported.
+     *
+     * @var array<int, class-string<\Throwable>>
+     */
+    protected $dontReport = [
+        BusinessRuleException::class,
     ];
 
     /**
