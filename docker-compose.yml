@@ -97,6 +97,7 @@ services:
     depends_on:
       db_test:
         condition: service_healthy
+    command: ["sh", "/var/www/html/docker/entrypoints/app-test.sh"]
     volumes:
       - .:/var/www/html 
       - ./.env.testing:/var/www/html/.env
