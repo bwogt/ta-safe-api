@@ -2,36 +2,39 @@
 Este repositório contém a API responsável pelo backend do sistema Tá Safe, uma plataforma desenvolvida para rastreabilidade de celulares usados.
 O backend é responsável por gerenciar toda a lógica de negócio, persistência de dados e integrações externas, oferecendo segurança e confiabilidade no processo de compra e venda de aparelhos.
 
-## Gestão de atividades (Kanban)
+## 📌 Gestão de atividades (Kanban)
 https://github.com/users/bwogt/projects/4
 
-## Monografia
+## 📄 Monografia
 https://repositorio.utfpr.edu.br/jspui/handle/1/34098
 
-## Frontend
+## 📱 Frontend
 https://github.com/bwogt/ta-safe-mobile
 
-## Principais funcionalidades
+## 🚀 Principais funcionalidades
 
-+ Cadastro e autenticação de usuários (com foco em segurança e privacidade).
-+ Registro de celulares a partir da NF-e vinculada ao CPF do primeiro proprietário.
-+ Consulta de histórico de propriedade, permitindo verificar a procedência do aparelho.
-+ Transferência de propriedade entre usuários, com registro formal da transação.
-+ Automatização para validação e extração de dados da NF-e.
++ Cadastro e autenticação de usuários;
++ Registro de celulares a partir da NF-e vinculada ao CPF do primeiro proprietário;
++ Consulta de histórico de propriedade do aparelho;
++ Transferência de propriedade entre usuários;
++ Automatização para validação e extração de dados da NF-e;
++ Processamento assíncrono de tarefas via filas.
 
-## Tecnologias
+## 🛠️ Tecnologias
 
 + PHP 
-+ Laravel Framework 
++ Laravel 
 + MySQL 
-+ Docker / Laravel Sail
++ Docker & Docker Compose
 + PHPUnit
 
-## Instalação Local
+## 🐳 Ambiente de Desenvolvimento (Docker)
 
-### Requisitos
-- Docker Engine
-- Docker Compose
+O projeto utiliza um ambiente Docker customizado, substituindo o Laravel Sail, para permitir maior controle da infraestrutura e integração com ferramentas de observabilidade.
+
+**Requisitos**
+ - Docker Engine
+ - Docker Compose
 
 ### Passos
 
@@ -45,49 +48,67 @@ git clone git@github.com:bruw/ta-safe-api.git
 cd ta-safe-api
 ~~~
 
-3. Instale as Dependências:
-
+3. Copie o arquivo de ambiente
 ~~~bash
-docker run --rm \
-    -u "$(id -u):$(id -g)" \
-    -v "$(pwd):/var/www/html" \
-    -w /var/www/html \
-    laravelsail/php83-composer:latest \
-    composer install --ignore-platform-reqs
+cp .env.example .env
 ~~~
 
-4. Copie o arquivo `example.env` e renomeie para `.env`
-
-5. Modifique o `.env` com suas variáveis
-~~~bash
-DB_USERNAME=sail
-DB_PASSWORD=password
+4. Ajuste as variáveis necessárias no .env
+~~~env
+DB_DATABASE=ta_safe
+DB_USERNAME=ta_safe
+DB_PASSWORD=secret
 ~~~
 
-6. Iniciar o Ambiente de Desenvolvimento
+5. Suba o ambient web
 ~~~bash
-./vendor/bin/sail up -d
+docker compose --profile web up -d --build
 ~~~
 
-7. Gere uma APP_KEY
+6. Gere uma APP_KEY
 ~~~bash
 ./vendor/bin/sail artisan key:generate
 ~~~
 
-8. Executar Migrations e Seeders
+## 🧪 Ambiente de Testes
+O ambiente de testes é totalmente isolado, utilizando:
+ - containers próprios
+ - banco de dados efêmero
+ - variáveis de ambiente específicas
+
+1 . Suba o ambiente de testes
 ~~~bash
-./vendor/bin/sail artisan migrate:refresh --seed
+docker compose \
+  --profile test \
+  --env-file=.env.testing \
+  up -d --build
 ~~~
 
-## Testes
-Para executar os testes utilize o seguinte comando
+2 . Executando os testes
 ~~~bash
-./vendor/bin/sail artisan test
+docker compose exec app_test php artisan test
 ~~~
 
-## Documentação
+As migrations são executadas automaticamente ao subir o container de testes.
+
+## 📊 Observabilidade (Logs)
+O projeto conta com uma stack de observabilidade focada no pilar de logs, utilizando:
+ - Grafana Loki para armazenamento de logs
+ - Grafana Alloy para coleta automática dos logs dos containers Docker
+ - Grafana para visualização e análise
+
+1. Subindo a stack de observabilidade
+~~~bash
+docker compose --profile obs up -d
+~~~
+
+2. Acessos
+- Grafana: http://localhost:3000
+     - usuário: admin
+     - senha: admin
+
+## 📘 Documentação
 Para visualizar a documentação da API acesse
 ~~~bash
 http://localhost/docs/api#/
 ~~~
-
