@@ -1,0 +1,42 @@
+logging {
+  level = "info"
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+discovery.docker "container" {
+  host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "logs_only" {
+  targets = []
+
+  rule {
+    source_labels = ["__meta_docker_container_label_observability_logs"]
+    regex         = "true"
+    action        = "keep"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/ta-safe-api-(.*)"
+    target_label  = "service_name"
+  }
+}
+
+loki.source.docker "default" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.docker.container.targets
+  relabel_rules = discovery.relabel.logs_only.rules
+  forward_to = [loki.write.local.receiver]
+
+  labels     = {
+    deployment_environment = "dev",
+    service_namespace      = "backend",
+    platform               = "docker",
+  }
+}

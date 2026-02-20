@@ -6,7 +6,6 @@ use App\Exceptions\Application\ApplicationFailsException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\ApiExceptionRenderer;
 use App\Exceptions\Helpers\ApplicationExceptionLogger;
-use App\Exceptions\Helpers\BusinessExceptionLogger;
 use App\Exceptions\Helpers\ValidationExceptionRenderer;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
@@ -26,12 +25,20 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * A list of the exception types that are not reported.
+     *
+     * @var array<int, class-string<\Throwable>>
+     */
+    protected $dontReport = [
+        BusinessRuleException::class,
+    ];
+
+    /**
      * Register the exception handling callbacks for the application.
      */
     public function register(): void
     {
         $this->reportable(fn (ApplicationFailsException $e) => (new ApplicationExceptionLogger)($e));
-        $this->reportable(fn (BusinessRuleException $e) => (new BusinessExceptionLogger)($e));
 
         $this->renderable(fn (ValidationException $e, $request) => (new ValidationExceptionRenderer)($e, $request));
         $this->renderable(fn (Throwable $e, $request) => (new ApiExceptionRenderer)($e, $request));
