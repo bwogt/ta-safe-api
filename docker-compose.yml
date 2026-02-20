@@ -39,6 +39,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: ["sh", "/var/www/html/docker/entrypoints/app.sh"]
+    healthcheck:
+      test: ["CMD", "php", "artisan", "tinker", "--execute=Schema::hasTable('jobs')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     profiles: ['web']
   
 
@@ -49,7 +55,7 @@ services:
     labels:
       observability.logs: "true"
     depends_on:
-      db:
+      app:
         condition: service_healthy
     command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
     profiles: ['web']
