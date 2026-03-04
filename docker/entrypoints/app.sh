@@ -1,11 +1,15 @@
 #!/usr/bin/env sh
 set -e
 
-echo "🔄 Running migrations..."
-php artisan migrate --force
+echo "🔍 Checking if database is initialized..."
 
-echo "🌱 Running seeds..."
-php artisan db:seed --force
+if ! php artisan migrate:status > /dev/null 2>&1; then
+  echo "⚙️ First-time setup detected. Running migrations and seed..."
+  php artisan migrate --force
+  php artisan db:seed --force
+else
+  echo "✅ Database already initialized. Skipping migrations."
+fi
 
 echo "🚀 Starting PHP-FPM..."
 php-fpm
