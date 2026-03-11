@@ -67,7 +67,7 @@ docker compose --profile web up -d --build
 
 6. Gere uma APP_KEY
 ~~~bash
-./vendor/bin/sail artisan key:generate
+docker compose exec app php artisan key:generate
 ~~~
 
 ## 🧪 Ambiente de Testes
