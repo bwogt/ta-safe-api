@@ -9,7 +9,7 @@ https://github.com/users/bwogt/projects/4
 https://repositorio.utfpr.edu.br/jspui/handle/1/34098
 
 ## 📱 Frontend
-https://github.com/bwogt/ta-safe-mobile
+https://github.com/bwogt/ta-safe-mobile-old
 
 ## 🚀 Principais funcionalidades
 
