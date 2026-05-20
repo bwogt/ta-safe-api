@@ -96,6 +96,15 @@ services:
       - "3307:3307"
     profiles: ['test']
 
+  # Redis for caching
+  redis:
+    image: redis:8.4-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    profiles: ['web', 'test']
+
   # Test database (ephemeral, no volume)
   db_test: 
     <<: *mysql-base
@@ -151,5 +160,6 @@ services:
 
 volumes:
   db_data:
+  redis_data:
   loki_data:
   grafana_data:
