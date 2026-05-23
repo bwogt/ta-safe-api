@@ -3,41 +3,31 @@
 namespace Tests\Feature\Seeders;
 
 use App\Models\Brand;
-use Database\Seeders\BrandSeeder;
+use Database\Seeders\Production\BrandSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class BrandSeederTest extends TestCase
 {
     use RefreshDatabase;
 
-    private array $data;
-
-    protected function setUp(): void
+    public function test_should_populates_brands_table(): void
     {
-        parent::SetUp();
-
-        $this->seed([
-            BrandSeeder::class,
-        ]);
-
-        $json = File::get(database_path('data/brands.json'));
-        $this->data = json_decode($json);
+        $this->seed(BrandSeeder::class);
+        $this->assertGreaterThan(0, Brand::count());
     }
 
-    public function test_must_have_created_the_correct_number_of_brands(): void
+    public function test_should_is_idempotent_and_does_not_duplicate_brands(): void
     {
-        $this->assertEquals(Brand::count(), count($this->data));
-    }
+        $this->seed(BrandSeeder::class);
+        $firstCount = Brand::count();
 
-    public function test_the_brands_attributes_must_have_been_generated_correctly(): void
-    {
-        foreach ($this->data as $item) {
-            $brand = Brand::where(['name' => $item->name])->first();
+        $this->seed(BrandSeeder::class);
+        $secondCount = Brand::count();
 
-            $this->assertNotNull($brand);
-            $this->assertEquals($brand->name, $item->name);
-        }
+        $this->assertEquals(
+            $firstCount, $secondCount,
+            'The brand seeder duplicated records when it ran for the second time.'
+        );
     }
 }

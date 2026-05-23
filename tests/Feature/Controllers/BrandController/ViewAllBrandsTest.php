@@ -5,7 +5,7 @@ namespace Tests\Feature\Controllers\BrandController;
 use App\Enums\FlashMessage\FlashMessageType;
 use App\Models\Brand;
 use Database\Factories\UserFactory;
-use Database\Seeders\BrandSeeder;
+use Database\Seeders\Production\BrandSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;

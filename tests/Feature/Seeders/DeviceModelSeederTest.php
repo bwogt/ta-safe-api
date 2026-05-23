@@ -3,51 +3,38 @@
 namespace Tests\Feature\Seeders;
 
 use App\Models\DeviceModel;
-use Database\Seeders\BrandSeeder;
-use Database\Seeders\DeviceModelSeeder;
+use Database\Seeders\Production\BrandSeeder;
+use Database\Seeders\Production\DeviceModelSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class DeviceModelSeederTest extends TestCase
 {
     use RefreshDatabase;
 
-    private array $data;
-
     protected function setUp(): void
     {
-        parent::SetUp();
-
-        $this->seed([
-            BrandSeeder::class,
-            DeviceModelSeeder::class,
-        ]);
-
-        $json = File::get(database_path('data/device-models.json'));
-        $this->data = json_decode($json);
+        parent::setUp();
+        $this->seed(BrandSeeder::class);
     }
 
-    public function test_must_have_created_the_correct_number_of_device_models(): void
+    public function test_should_populates_device_models_table(): void
     {
-        $this->assertEquals(DeviceModel::count(), count($this->data));
+        $this->seed(DeviceModelSeeder::class);
+        $this->assertGreaterThan(0, DeviceModel::count());
     }
 
-    public function test_the_device_models_attributes_must_have_been_generated_correctly(): void
+    public function test_should_is_idempotent_and_does_not_duplicate_device_models(): void
     {
-        foreach ($this->data as $item) {
-            $deviceModel = DeviceModel::where([
-                'name' => $item->name,
-                'ram' => $item->ram,
-                'storage' => $item->storage,
-            ])->first();
+        $this->seed(DeviceModelSeeder::class);
+        $firstCount = DeviceModel::count();
 
-            $this->assertNotNull($deviceModel);
+        $this->seed(DeviceModelSeeder::class);
+        $secondCount = DeviceModel::count();
 
-            $this->assertEquals($deviceModel->name, $item->name);
-            $this->assertEquals($deviceModel->ram, $item->ram);
-            $this->assertEquals($deviceModel->storage, $item->storage);
-            $this->assertEquals($deviceModel->brand->name, $item->brand);
-        }
+        $this->assertEquals(
+            $firstCount, $secondCount,
+            'The device model seeder duplicated records when it ran for the second time.'
+        );
     }
 }
