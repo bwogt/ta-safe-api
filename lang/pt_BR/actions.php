@@ -11,6 +11,7 @@ return [
             'register' => 'Ocorreu um erro ao registrar o usuário.',
             'login' => 'Ocorreu um erro ao autenticar o usuário.',
             'logout' => 'Ocorreu um erro ao desconectar o usuário.',
+            'forgot_password' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
         ],
     ],
     'user' => [
