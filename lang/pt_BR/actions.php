@@ -6,6 +6,7 @@ return [
             'register' => 'Usuário registrado com sucesso.',
             'login' => 'Usuário autenticado com sucesso.',
             'logout' => 'Usuário desconectado com sucesso.',
+            'forgot_password' => 'Código de redefinição de senha enviado com sucesso.',
         ],
         'errors' => [
             'register' => 'Ocorreu um erro ao registrar o usuário.',
