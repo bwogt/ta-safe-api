@@ -3,17 +3,22 @@
 namespace Tests\Unit\Actions\Auth\Password;
 
 use App\Actions\Auth\Password\ForgotPasswordAction;
+use App\Notifications\Auth\ForgotPasswordNotification;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 
 final class ForgotPasswordActionTest extends ForgotPasswordActionTestSetUp
 {
     public function test_should_store_password_reset_code(): void
     {
-        (new ForgotPasswordAction)($this->user->email);
+        $code = (new ForgotPasswordAction)($this->user->email);
 
         $key = $this->getResetCodeKey($this->user->email);
+
         $this->assertTrue(Cache::has($key));
+        $this->assertTrue(Hash::check($code, Cache::get($key)));
     }
 
     public function test_should_use_configured_password_reset_code_ttl(): void
@@ -96,5 +101,12 @@ final class ForgotPasswordActionTest extends ForgotPasswordActionTestSetUp
         $newCode = Cache::get($key);
 
         $this->assertEquals($code, $newCode);
+    }
+
+    public function test_should_send_password_reset_notification(): void
+    {
+        (new ForgotPasswordAction)($this->user->email);
+
+        Notification::assertSentTo($this->user, ForgotPasswordNotification::class);
     }
 }

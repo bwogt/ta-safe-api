@@ -7,6 +7,8 @@ use App\Actions\Validator\ResetPasswordValidator;
 use App\Exceptions\Application\Auth\ForgotPasswordFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\BusinessRuleExceptionLogger;
+use App\Models\User;
+use App\Notifications\Auth\ForgotPasswordNotification;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -23,12 +25,15 @@ final class ForgotPasswordAction
                 ->get(function () use ($email) {
                     ResetPasswordValidator::mustNotBeInCooldown($email);
 
+                    $user = $this->userByEmail($email);
                     $code = $this->generatePasswordResetCode();
 
                     $this->storePasswordResetCode($email, $code);
+                    $user->notify(new ForgotPasswordNotification($code));
+
                     $this->initializeAttempts($email);
                     $this->initializeResetCooldown($email);
-                    $this->logSuccess($email);
+                    $this->logSuccess($user);
 
                     return $code;
                 });
@@ -42,6 +47,11 @@ final class ForgotPasswordAction
                 context: ['email' => $email]
             );
         }
+    }
+
+    private function userByEmail(string $email): User
+    {
+        return User::whereEmail($email)->firstOrFail();
     }
 
     private function generatePasswordResetCode(): string
@@ -82,8 +92,8 @@ final class ForgotPasswordAction
         );
     }
 
-    private function logSuccess(string $email): void
+    private function logSuccess(User $user): void
     {
-        Log::info('User successfully requested password reset code.', ['email' => $email]);
+        Log::info('User successfully requested password reset code.', ['user_id' => $user->id]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Development;
 
+use App\Enums\Device\DeviceValidationStatus;
 use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
 use App\Models\DeviceModel;
@@ -22,7 +23,7 @@ class DeviceSeeder extends Seeder
                 $deviceModel = $this->deviceModelByName($rawDevice->model->name);
                 $device = $this->createDevice($user, $deviceModel, $rawDevice);
 
-                ValidateDeviceRegistrationJob::dispatch($device);
+                ValidateDeviceRegistrationJob::dispatchSync($device);
             }
         }
     }
@@ -47,8 +48,9 @@ class DeviceSeeder extends Seeder
     private function createDevice(User $user, DeviceModel $deviceModel, $rawDevice): Device
     {
         $device = Device::updateOrCreate([
-            'device_model_id' => $deviceModel->id,
             'user_id' => $user->id,
+            'device_model_id' => $deviceModel->id,
+            'validation_status' => DeviceValidationStatus::IN_ANALYSIS,
             'color' => $rawDevice->color,
             'imei_1' => $rawDevice->imei1,
             'imei_2' => $rawDevice->imei2,
