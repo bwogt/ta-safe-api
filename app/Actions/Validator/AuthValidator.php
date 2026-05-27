@@ -3,6 +3,7 @@
 namespace App\Actions\Validator;
 
 use App\Dto\Auth\CredentialsDTO;
+use App\Exceptions\BusinessRules\Auth\EmailNotExistsException;
 use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -17,5 +18,12 @@ class AuthValidator
         throw_unless($emailMatch && $passwordMatch, new InvalidCredentialsException([
             'email' => $data->email,
         ]));
+    }
+
+    public static function emailMustBeExists(string $email): void
+    {
+        $emailExists = User::where('email', $email)->exists();
+
+        throw_unless($emailExists, new EmailNotExistsException(['email' => $email]));
     }
 }

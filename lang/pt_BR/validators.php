@@ -3,6 +3,8 @@
 return [
     'auth' => [
         'invalid_credentials' => 'Credenciais inválidas.',
+        'email_not_exists' => 'O e-mail informado não existe.',
+        'password_reset_cooldown' => 'Usuário já solicitou um código para redefinição de senha.',
     ],
     'device' => [
         'user_not_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',

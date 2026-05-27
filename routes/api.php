@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)->prefix('auth')->name('api.auth.')->group(function () {
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
+    Route::post('forgot-password', 'forgotPassword')->name('forgot-password');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
