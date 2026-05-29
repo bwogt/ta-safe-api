@@ -2,10 +2,10 @@
 
 namespace App\Actions\Validator;
 
-use App\Exceptions\BusinessRules\Auth\InvalidPasswordResetCodeException;
-use App\Exceptions\BusinessRules\Auth\PasswordResetAttemptExceededException;
-use App\Exceptions\BusinessRules\Auth\PasswordResetBlockedException;
-use App\Exceptions\BusinessRules\Auth\PasswordResetCooldownException;
+use App\Exceptions\BusinessRules\PasswordReset\InvalidPasswordResetCodeException;
+use App\Exceptions\BusinessRules\PasswordReset\PasswordResetAttemptExceededException;
+use App\Exceptions\BusinessRules\PasswordReset\PasswordResetBlockedException;
+use App\Exceptions\BusinessRules\PasswordReset\PasswordResetCooldownException;
 use Illuminate\Support\Facades\Cache;
 
 final class ResetPasswordValidator

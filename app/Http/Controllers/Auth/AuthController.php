@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\Auth\Login\LoginAction;
-use App\Actions\Auth\Password\ForgotPasswordAction;
 use App\Actions\Auth\Register\RegisterUserAction;
-use App\Actions\Auth\Reset\Check\CheckPasswordResetCodeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
-use App\Http\Requests\Auth\CheckPasswordResetCodeRequest;
-use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Http\Resources\Auth\LoginResource;
@@ -46,30 +42,6 @@ class AuthController extends Controller
 
         return response()->json(
             FlashMessage::success(trans('actions.auth.success.logout')),
-            Response::HTTP_OK
-        );
-    }
-
-    public function forgotPassword(
-        ForgotPasswordRequest $request,
-        ForgotPasswordAction $action
-    ): JsonResponse {
-        $action($request->email());
-
-        return response()->json(
-            FlashMessage::success(trans('actions.auth.success.forgot_password')),
-            Response::HTTP_OK
-        );
-    }
-
-    public function checkPasswordResetCode(
-        CheckPasswordResetCodeRequest $request,
-        CheckPasswordResetCodeAction $action
-    ): JsonResponse {
-        $action($request->email(), $request->code());
-
-        return response()->json(
-            FlashMessage::success(trans('actions.auth.success.check_password_reset_code')),
             Response::HTTP_OK
         );
     }
