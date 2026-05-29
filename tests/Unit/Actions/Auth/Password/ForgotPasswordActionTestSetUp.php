@@ -14,6 +14,7 @@ class ForgotPasswordActionTestSetUp extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+    protected string $email;
 
     protected function setUp(): void
     {
@@ -21,27 +22,18 @@ class ForgotPasswordActionTestSetUp extends TestCase
         Cache::flush();
         Notification::fake();
 
+        $this->userSetUp();
+    }
+
+    private function userSetUp(): void
+    {
         $this->user = UserFactory::new()->create();
     }
 
-    protected function getResetCodeKey(string $email, bool $withPrefix = false): string
+    protected function getPasswordResetCacheKey(string $scope, bool $withPrefix = false): string
     {
-        return $withPrefix
-            ? config('cache.prefix') . ":password_reset_code:{$email}"
-            : "password_reset_code:{$email}";
-    }
+        $key = "password_reset_{$scope}:{$this->user->email}";
 
-    protected function getAttemptsKey(string $email, bool $withPrefix = false): string
-    {
-        return $withPrefix
-            ? config('cache.prefix') . ":password_reset_attempts:{$email}"
-            : "password_reset_attempts:{$email}";
-    }
-
-    protected function getCooldownKey(string $email, bool $withPrefix = false): string
-    {
-        return $withPrefix
-            ? config('cache.prefix') . ":password_reset_cooldown:{$email}"
-            : "password_reset_cooldown:{$email}";
+        return ! $withPrefix ? $key : config('cache.prefix') . ":{$key}";
     }
 }
