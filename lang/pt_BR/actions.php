@@ -7,12 +7,14 @@ return [
             'login' => 'Usuário autenticado com sucesso.',
             'logout' => 'Usuário desconectado com sucesso.',
             'forgot_password' => 'Código de redefinição de senha enviado com sucesso.',
+            'check_password_reset_code' => 'Código de redefinição de senha verificado com sucesso.',
         ],
         'errors' => [
             'register' => 'Ocorreu um erro ao registrar o usuário.',
             'login' => 'Ocorreu um erro ao autenticar o usuário.',
             'logout' => 'Ocorreu um erro ao desconectar o usuário.',
             'forgot_password' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
+            'check_password_reset_code' => 'Ocorreu um erro ao verificar o código de redefinição de senha.',
         ],
     ],
     'user' => [

@@ -51,6 +51,7 @@ final class ForgotPasswordAction
     {
         AuthValidator::emailMustBeExists($email);
         ResetPasswordValidator::mustNotBeInCooldown($email);
+        ResetPasswordValidator::emailMustNotBeBlock($email);
     }
 
     private function userByEmail(string $email): User

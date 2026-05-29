@@ -24,6 +24,7 @@ Route::controller(AuthController::class)->prefix('auth')->name('api.auth.')->gro
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
     Route::post('forgot-password', 'forgotPassword')->name('forgot-password');
+    Route::post('check-password-reset-code', 'checkPasswordResetCode')->name('check-password-reset-code');
 });
 
 Route::middleware('auth:sanctum')->group(function () {

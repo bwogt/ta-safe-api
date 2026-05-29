@@ -5,6 +5,9 @@ return [
         'invalid_credentials' => 'Credenciais inválidas.',
         'email_not_exists' => 'O e-mail informado não existe.',
         'password_reset_cooldown' => 'Usuário já solicitou um código para redefinição de senha.',
+        'invalid_password_reset_code' => 'Código de redefinição de senha é inválido ou não existe.',
+        'password_reset_attempts_exceeded' => 'Você excedeu o limite de tentativas de redefinição de senha. Tente novamente em alguns minutos',
+        'password_reset_blocked' => 'A redefinição de senha está temporariamente bloqueada para este usuário. Tente novamente em alguns minutos',
     ],
     'device' => [
         'user_not_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
