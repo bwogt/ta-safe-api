@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth;
 use App\Dto\Auth\RegisterUserDTO;
 use App\Rules\CpfRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ class RegisterUserRequest extends FormRequest
             'email' => ['bail', 'required', 'email', 'unique:users,email'],
             'cpf' => ['bail', 'required', 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/', new CpfRule, 'unique:users'],
             'phone' => ['bail', 'required', 'regex:/^[(]\d{2}[)]\s\d{5}-\d{4}$/', 'unique:users,phone'],
-            'password' => ['required', 'confirmed', 'max:255', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'max:255', Password::defaults()],
         ];
     }
 }

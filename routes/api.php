@@ -26,8 +26,10 @@ Route::controller(AuthController::class)->prefix('auth')->name('api.auth.')->gro
     Route::post('login', 'login')->name('login');
 });
 
-Route::controller(PasswordResetController::class)->prefix('password-reset')
+Route::controller(PasswordResetController::class)
+    ->prefix('password-reset')
     ->name('api.password-reset.')->group(function () {
+        Route::post('/', 'reset')->name('reset');
         Route::post('start', 'start')->name('start');
         Route::post('check-code', 'checkCode')->name('check-code');
     });

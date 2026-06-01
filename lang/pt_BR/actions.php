@@ -17,11 +17,13 @@ return [
         'success' => [
             'start' => 'Código de redefinição de senha enviado com sucesso.',
             'check_code' => 'Código de redefinição de senha verificado com sucesso.',
+            'reset' => 'Senha redefinida com sucesso.',
         ],
         'errors' => [
             'start' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
             'check_code' => 'Ocorreu um erro ao verificar o código de redefinição de senha.',
             'block' => 'Ocorreu um erro ao bloquear a redefinição de senha.',
+            'reset' => 'Ocorreu um erro ao redefinir a senha.',
         ],
     ],
     'user' => [
