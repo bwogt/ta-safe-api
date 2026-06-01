@@ -12,9 +12,12 @@ final class PasswordResetBlockAction
     public function __invoke(string $email): void
     {
         try {
-            $this->addPasswordResetBlock($email);
-            $this->revokePasswordResetCode($email);
-            $this->logSuccess($email);
+            $added = $this->addPasswordResetBlock($email);
+
+            if ($added) {
+                $this->revokePasswordResetCode($email);
+                $this->logSuccess($email);
+            }
         } catch (Throwable $e) {
             throw new PasswordResetBlockFailedException(
                 previous: $e,
@@ -23,11 +26,11 @@ final class PasswordResetBlockAction
         }
     }
 
-    private function addPasswordResetBlock(string $email): void
+    private function addPasswordResetBlock(string $email): bool
     {
         $ttl = (int) config('security.password_reset.block');
 
-        Cache::put(
+        return Cache::add(
             key: "password_reset_block:{$email}",
             value: true,
             ttl: now()->addSeconds($ttl)

@@ -3,6 +3,7 @@
 namespace App\Actions\PasswordReset\Check;
 
 use App\Actions\PasswordReset\Block\PasswordResetBlockAction;
+use App\Actions\PasswordReset\Fails\IncrementPasswordResetAttemptAction;
 use App\Actions\Validator\ResetPasswordValidator;
 use App\Exceptions\Application\PasswordReset\CheckPasswordResetCodeFailedException;
 use App\Exceptions\BusinessRules\PasswordReset\InvalidPasswordResetCodeException;
@@ -28,7 +29,7 @@ final class CheckPasswordResetCodeAction
             (new PasswordResetBlockAction)($email);
             throw $e;
         } catch (InvalidPasswordResetCodeException $e) {
-            $this->incrementAttempts($email);
+            (new IncrementPasswordResetAttemptAction)($email);
             throw $e;
         } catch (Throwable $e) {
             throw new CheckPasswordResetCodeFailedException(
@@ -43,11 +44,6 @@ final class CheckPasswordResetCodeAction
         ResetPasswordValidator::emailMustNotBeBlock($email);
         ResetPasswordValidator::attemptsMustNotBeExceeded($email);
         ResetPasswordValidator::codeMustBeValid($email, $code);
-    }
-
-    private function incrementAttempts(string $email): void
-    {
-        Cache::increment("password_reset_attempts:{$email}");
     }
 
     private function logSuccess(string $email): void

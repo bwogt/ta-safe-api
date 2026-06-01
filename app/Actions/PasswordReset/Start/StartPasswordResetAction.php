@@ -49,9 +49,9 @@ final class StartPasswordResetAction
 
     private function validateBusinessRules(string $email): void
     {
+        ResetPasswordValidator::emailMustNotBeBlock($email);
         AuthValidator::emailMustBeExists($email);
         ResetPasswordValidator::mustNotBeInCooldown($email);
-        ResetPasswordValidator::emailMustNotBeBlock($email);
     }
 
     private function userByEmail(string $email): User

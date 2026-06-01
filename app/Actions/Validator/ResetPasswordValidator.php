@@ -19,8 +19,8 @@ final class ResetPasswordValidator
 
     public static function attemptsMustNotBeExceeded(string $email): void
     {
-        $attempts = (int) Cache::get("password_reset_attempts:{$email}");
         $limit = (int) config('security.password_reset.max_attempts');
+        $attempts = (int) Cache::get("password_reset_attempts:{$email}");
 
         throw_if($attempts >= $limit, new PasswordResetAttemptExceededException);
     }
@@ -30,7 +30,9 @@ final class ResetPasswordValidator
         $cachedCode = Cache::get("password_reset_code:{$email}");
 
         if ($cachedCode) {
+            $code = hash_hmac('sha256', $code, config('app.key'));
             $sameCode = hash_equals($cachedCode, $code);
+
             throw_unless($sameCode, new InvalidPasswordResetCodeException);
         } else {
             throw new InvalidPasswordResetCodeException;
