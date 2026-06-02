@@ -22,7 +22,7 @@ final class IncrementPasswordResetAttemptAction
     {
         $maxAttempts = (int) config('security.password_reset.max_attempts');
 
-        if ($attempts >= $maxAttempts) {
+        if ($attempts > $maxAttempts) {
             throw new PasswordResetAttemptExceededException;
         }
     }

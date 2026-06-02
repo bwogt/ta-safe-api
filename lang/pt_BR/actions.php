@@ -15,7 +15,7 @@ return [
     ],
     'password_reset' => [
         'success' => [
-            'start' => 'Código de redefinição de senha enviado com sucesso.',
+            'start' => 'Se houver uma conta associada a este e-mail, enviaremos um código de redefinição.',
             'check_code' => 'Código de redefinição de senha verificado com sucesso.',
             'reset' => 'Senha redefinida com sucesso.',
         ],

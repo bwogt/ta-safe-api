@@ -11,7 +11,8 @@ final class ResetPasswordAccessTest extends ResetPasswordTestSetUp
     {
         $this->postJson($this->route(), $this->data())
             ->assertOk()
-            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
-                ->where('message.text', trans('actions.password_reset.success.reset')));
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('message.type', FlashMessageType::SUCCESS)
+                ->where('message.text', __('actions.password_reset.success.reset')));
     }
 }

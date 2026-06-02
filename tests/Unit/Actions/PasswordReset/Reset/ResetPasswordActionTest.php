@@ -14,7 +14,7 @@ final class ResetPasswordActionTest extends ResetPasswordActionTestSetUp
 {
     public function test_should_update_the_user_password(): void
     {
-        $dto = $this->makeDto();
+        $dto = $this->makeResetPasswordDto();
         (new ResetPasswordAction)($dto);
 
         $this->user->refresh();
@@ -23,7 +23,7 @@ final class ResetPasswordActionTest extends ResetPasswordActionTestSetUp
 
     public function test_should_clear_password_reset_code_state(): void
     {
-        $dto = $this->makeDto();
+        $dto = $this->makeResetPasswordDto();
         (new ResetPasswordAction)($dto);
 
         $this->assertFalse(Cache::has("password_reset_code:{$this->user->email}"));
@@ -34,7 +34,7 @@ final class ResetPasswordActionTest extends ResetPasswordActionTestSetUp
     public function test_should_thrown_an_exception_when_the_code_is_invalid(): void
     {
         $this->expectException(InvalidPasswordResetCodeException::class);
-        (new ResetPasswordAction)($this->makeDto(['code' => 'invalid_code']));
+        (new ResetPasswordAction)($this->makeResetPasswordDto(['code' => 'invalid_code']));
     }
 
     public function test_should_thrown_an_exception_when_the_email_is_blocked(): void
@@ -42,26 +42,26 @@ final class ResetPasswordActionTest extends ResetPasswordActionTestSetUp
         (new PasswordResetBlockAction)($this->user->email);
 
         $this->expectException(PasswordResetBlockedException::class);
-        (new ResetPasswordAction)($this->makeDto());
+        (new ResetPasswordAction)($this->makeResetPasswordDto());
     }
 
     public function test_should_throw_an_exception_when_the_attempts_is_exceeded(): void
     {
         $limit = (int) config('security.password_reset.max_attempts');
-        Cache::put("password_reset_attempts:{$this->user->email}", $limit);
+        Cache::put("password_reset_attempts:{$this->user->email}", $limit + 1);
 
         $this->expectException(PasswordResetAttemptExceededException::class);
-        (new ResetPasswordAction)($this->makeDto());
+        (new ResetPasswordAction)($this->makeResetPasswordDto());
     }
 
     public function test_should_block_the_email_when_the_attempts_is_exceeded(): void
     {
         $limit = (int) config('security.password_reset.max_attempts');
-        Cache::put("password_reset_attempts:{$this->user->email}", $limit);
+        Cache::put("password_reset_attempts:{$this->user->email}", $limit + 1);
 
         try {
-            (new ResetPasswordAction)($this->makeDto());
-            $this->fail('Expected InvalidPasswordResetCodeException was not thrown.');
+            (new ResetPasswordAction)($this->makeResetPasswordDto());
+            $this->fail('Expected PasswordResetAttemptExceededException was not thrown.');
         } catch (PasswordResetAttemptExceededException $e) {
             $this->assertTrue(Cache::has("password_reset_block:{$this->user->email}"));
         }
@@ -69,7 +69,7 @@ final class ResetPasswordActionTest extends ResetPasswordActionTestSetUp
 
     public function test_should_increment_the_password_reset_attempts(): void
     {
-        $dto = $this->makeDto(['code' => 'invalid_code']);
+        $dto = $this->makeResetPasswordDto(['code' => 'invalid_code']);
         $key = "password_reset_attempts:{$this->user->email}";
 
         $this->assertEquals(0, Cache::get($key));

@@ -13,7 +13,8 @@ final class StartPasswordResetAccessTest extends StartPasswordResetTestSetUp
             'email' => $this->user->email,
         ])
             ->assertOk()
-            ->assertJson(fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
-                ->where('message.text', trans('actions.password_reset.success.start')));
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('message.type', FlashMessageType::SUCCESS)
+                ->where('message.text', __('actions.password_reset.success.start')));
     }
 }

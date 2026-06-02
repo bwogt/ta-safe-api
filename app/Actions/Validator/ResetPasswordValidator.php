@@ -22,7 +22,7 @@ final class ResetPasswordValidator
         $limit = (int) config('security.password_reset.max_attempts');
         $attempts = (int) Cache::get("password_reset_attempts:{$email}");
 
-        throw_if($attempts >= $limit, new PasswordResetAttemptExceededException);
+        throw_if($attempts > $limit, new PasswordResetAttemptExceededException);
     }
 
     public static function codeMustBeValid(string $email, string $code): void

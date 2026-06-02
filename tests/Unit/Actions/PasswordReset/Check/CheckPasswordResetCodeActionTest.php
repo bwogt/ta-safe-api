@@ -23,7 +23,6 @@ final class CheckPasswordResetCodeActionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         Cache::flush();
         Notification::fake();
 
@@ -63,12 +62,11 @@ final class CheckPasswordResetCodeActionTest extends TestCase
     {
         $limit = (int) config('security.password_reset.max_attempts');
         $key = "password_reset_attempts:{$this->user->email}";
-
-        Cache::put($key, $limit);
+        Cache::put($key, $limit + 1);
 
         try {
             (new CheckPasswordResetCodeAction)($this->user->email, 'invalid_code');
-            $this->fail('Expected InvalidPasswordResetCodeException was not thrown.');
+            $this->fail('Expected PasswordResetAttemptExceededException was not thrown.');
         } catch (PasswordResetAttemptExceededException $e) {
             $this->assertTrue(Cache::has("password_reset_block:{$this->user->email}"));
         }

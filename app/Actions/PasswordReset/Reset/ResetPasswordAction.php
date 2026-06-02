@@ -5,7 +5,7 @@ namespace App\Actions\PasswordReset\Reset;
 use App\Actions\PasswordReset\Block\PasswordResetBlockAction;
 use App\Actions\PasswordReset\Fails\IncrementPasswordResetAttemptAction;
 use App\Actions\Validator\ResetPasswordValidator;
-use App\Dto\Password\PasswordResetDTO;
+use App\Dto\PasswordReset\ResetPasswordDTO;
 use App\Exceptions\Application\PasswordReset\ResetPasswordFailedException;
 use App\Exceptions\BusinessRules\PasswordReset\InvalidPasswordResetCodeException;
 use App\Exceptions\BusinessRules\PasswordReset\PasswordResetAttemptExceededException;
@@ -19,7 +19,7 @@ use Throwable;
 
 final class ResetPasswordAction
 {
-    public function __invoke(PasswordResetDTO $dto): void
+    public function __invoke(ResetPasswordDTO $dto): void
     {
         try {
             Cache::lock("reset_password_lock:{$dto->email}", 10)
@@ -51,7 +51,7 @@ final class ResetPasswordAction
         }
     }
 
-    private function resetPasswordBusinessRules(PasswordResetDTO $dto): void
+    private function resetPasswordBusinessRules(ResetPasswordDTO $dto): void
     {
         ResetPasswordValidator::emailMustNotBeBlock($dto->email);
         ResetPasswordValidator::attemptsMustNotBeExceeded($dto->email);

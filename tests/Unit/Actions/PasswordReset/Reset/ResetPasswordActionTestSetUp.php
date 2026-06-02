@@ -3,7 +3,7 @@
 namespace Tests\Unit\Actions\PasswordReset\Reset;
 
 use App\Actions\PasswordReset\Start\StartPasswordResetAction;
-use App\Dto\Password\PasswordResetDTO;
+use App\Dto\PasswordReset\ResetPasswordDTO;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,13 +35,12 @@ class ResetPasswordActionTestSetUp extends TestCase
 
     private function startPasswordResetSetUp(): void
     {
-        $code = (new StartPasswordResetAction)($this->user->email);
-        $this->code = $code;
+        $this->code = (new StartPasswordResetAction)($this->user->email);
     }
 
-    protected function makeDto(array $overrides = []): PasswordResetDTO
+    protected function makeResetPasswordDto(array $overrides = []): ResetPasswordDTO
     {
-        return new PasswordResetDTO(
+        return new ResetPasswordDTO(
             code: $overrides['code'] ?? $this->code,
             email: $overrides['email'] ?? $this->user->email,
             password: $overrides['password'] ?? 'password2026',

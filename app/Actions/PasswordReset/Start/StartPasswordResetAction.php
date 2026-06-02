@@ -5,6 +5,7 @@ namespace App\Actions\PasswordReset\Start;
 use App\Actions\Validator\AuthValidator;
 use App\Actions\Validator\ResetPasswordValidator;
 use App\Exceptions\Application\PasswordReset\StartPasswordResetFailedException;
+use App\Exceptions\BusinessRules\Auth\EmailNotExistsException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\BusinessRuleExceptionLogger;
 use App\Models\User;
@@ -35,10 +36,12 @@ final class StartPasswordResetAction
 
                     return $code;
                 });
-        } catch (BusinessRuleException $e) {
+        } catch (EmailNotExistsException $e) {
             (new BusinessRuleExceptionLogger)($e);
 
             return null;
+        } catch (BusinessRuleException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw new StartPasswordResetFailedException(
                 previous: $e,

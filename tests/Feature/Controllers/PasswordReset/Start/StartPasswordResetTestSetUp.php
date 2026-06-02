@@ -21,6 +21,11 @@ class StartPasswordResetTestSetUp extends TestCase
         Cache::flush();
         Notification::fake();
 
+        $this->userSetUp();
+    }
+
+    private function userSetUp(): void
+    {
         $this->user = UserFactory::new()->create();
     }
 

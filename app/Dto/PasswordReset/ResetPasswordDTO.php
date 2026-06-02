@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto\Password;
+namespace App\Dto\PasswordReset;
 
-final class PasswordResetDTO
+final class ResetPasswordDTO
 {
     public function __construct(
         public readonly string $code,

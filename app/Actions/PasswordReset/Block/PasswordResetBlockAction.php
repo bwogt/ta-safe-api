@@ -15,7 +15,7 @@ final class PasswordResetBlockAction
             $added = $this->addPasswordResetBlock($email);
 
             if ($added) {
-                $this->revokePasswordResetCode($email);
+                $this->clearPasswordResetState($email);
                 $this->logSuccess($email);
             }
         } catch (Throwable $e) {
@@ -37,7 +37,7 @@ final class PasswordResetBlockAction
         );
     }
 
-    private function revokePasswordResetCode(string $email): void
+    private function clearPasswordResetState(string $email): void
     {
         Cache::forget("password_reset_code:{$email}");
         Cache::forget("password_reset_attempts:{$email}");

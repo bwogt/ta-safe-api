@@ -34,8 +34,7 @@ class ResetPasswordTestSetUp extends TestCase
 
     private function codeSetUp(): void
     {
-        $code = (new StartPasswordResetAction)($this->user->email);
-        $this->code = $code;
+        $this->code = (new StartPasswordResetAction)($this->user->email);
     }
 
     protected function route(): string

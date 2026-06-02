@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests\PasswordReset;
 
-use App\Dto\Password\PasswordResetDTO;
+use App\Dto\PasswordReset\ResetPasswordDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 class ResetPasswordRequest extends FormRequest
 {
-    public function toDto(): PasswordResetDTO
+    public function toDto(): ResetPasswordDTO
     {
-        return new PasswordResetDTO(
+        return new ResetPasswordDTO(
             code: $this->input('code'),
             email: $this->input('email'),
             password: $this->input('password'),
