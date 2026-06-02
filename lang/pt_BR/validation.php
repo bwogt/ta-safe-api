@@ -252,6 +252,7 @@ return [
         'products' => 'produtos',
         'cpf' => 'cpf',
         'token' => 'código de acesso',
+        'code' => 'código',
     ],
 
 ];

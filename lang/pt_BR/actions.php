@@ -6,13 +6,24 @@ return [
             'register' => 'Usuário registrado com sucesso.',
             'login' => 'Usuário autenticado com sucesso.',
             'logout' => 'Usuário desconectado com sucesso.',
-            'forgot_password' => 'Código de redefinição de senha enviado com sucesso.',
         ],
         'errors' => [
             'register' => 'Ocorreu um erro ao registrar o usuário.',
             'login' => 'Ocorreu um erro ao autenticar o usuário.',
             'logout' => 'Ocorreu um erro ao desconectar o usuário.',
-            'forgot_password' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
+        ],
+    ],
+    'password_reset' => [
+        'success' => [
+            'start' => 'Se houver uma conta associada a este e-mail, enviaremos um código de redefinição.',
+            'check_code' => 'Código de redefinição de senha verificado com sucesso.',
+            'reset' => 'Senha redefinida com sucesso.',
+        ],
+        'errors' => [
+            'start' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
+            'check_code' => 'Ocorreu um erro ao verificar o código de redefinição de senha.',
+            'block' => 'Ocorreu um erro ao bloquear a redefinição de senha.',
+            'reset' => 'Ocorreu um erro ao redefinir a senha.',
         ],
     ],
     'user' => [
