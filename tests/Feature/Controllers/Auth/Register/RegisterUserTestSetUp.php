@@ -24,13 +24,12 @@ abstract class RegisterUserTestSetUp extends TestCase
         return route('api.auth.register');
     }
 
-    protected function validUserData(array $overrides = []): array
+    protected function data(array $overrides = []): array
     {
         return array_merge([
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'cpf' => fake()->unique()->cpf(),
-            'phone' => fake()->unique()->cellPhoneNumber(),
             'password' => 'password',
             'password_confirmation' => 'password',
         ], $overrides);

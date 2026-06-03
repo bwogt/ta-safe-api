@@ -39,10 +39,10 @@ class ViewDeviceByTokenResponseTest extends ViewDeviceByTokenTestSetUp
         $this->getJson($this->route($this->deviceSharingToken->token))
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('user.id', $this->user->id)
+                fn (AssertableJson $json) => $json
+                    ->where('user.id', $this->user->id)
                     ->where('user.name', $this->user->name)
                     ->where('user.cpf', $this->addAsteriskMaskForCpf($this->user->cpf))
-                    ->where('user.phone', $this->addAsteriskMaskForPhone($this->user->phone))
                     ->has('user.created_at')
                     ->etc()
             );

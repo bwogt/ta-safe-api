@@ -15,7 +15,6 @@ class RegisterUserRequest extends FormRequest
             name: $this->input('name'),
             email: $this->input('email'),
             cpf: $this->input('cpf'),
-            phone: $this->input('phone'),
             password: $this->input('password'),
         );
     }
@@ -26,8 +25,7 @@ class RegisterUserRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['bail', 'required', 'email', 'unique:users,email'],
             'cpf' => ['bail', 'required', 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/', new CpfRule, 'unique:users'],
-            'phone' => ['bail', 'required', 'regex:/^[(]\d{2}[)]\s\d{5}-\d{4}$/', 'unique:users,phone'],
-            'password' => ['required', 'confirmed', 'max:255', Password::defaults()],
+            'password' => ['required', Password::defaults()],
         ];
     }
 }

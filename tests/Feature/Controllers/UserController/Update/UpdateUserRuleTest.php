@@ -20,16 +20,14 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route())
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
+                fn (AssertableJson $json) => $json
+                    ->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.required', [
                         'attribute' => trans('validation.attributes.name'),
                     ]))
                     ->where('errors.email.0', trans('validation.required', [
                         'attribute' => 'email',
-                    ]))
-                    ->where('errors.phone.0', trans('validation.required', [
-                        'attribute' => trans('validation.attributes.phone'),
                     ]))
             );
     }
@@ -39,7 +37,8 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['name' => Str::random(256)]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
+                fn (AssertableJson $json) => $json
+                    ->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.name.0', trans('validation.max.string', [
                         'attribute' => trans('validation.attributes.name'),
@@ -53,7 +52,8 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['email' => 'abc']))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
+                fn (AssertableJson $json) => $json
+                    ->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.email', [
                         'attribute' => 'email',
@@ -66,36 +66,11 @@ final class UpdateUserRuleTest extends UpdateUserTestSetUp
         $this->patchJson($this->route(), $this->data(['email' => $this->anotherUser->email]))
             ->assertUnprocessable()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
+                fn (AssertableJson $json) => $json
+                    ->where('message.type', FlashMessageType::ERROR)
                     ->where('message.text', trans('flash_messages.errors'))
                     ->where('errors.email.0', trans('validation.unique', [
                         'attribute' => 'email',
-                    ]))
-            );
-    }
-
-    public function test_should_return_an_error_when_the_phone_field_is_not_unique(): void
-    {
-        $this->patchJson($this->route(), $this->data(['phone' => $this->anotherUser->phone]))
-            ->assertUnprocessable()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
-                    ->where('message.text', trans('flash_messages.errors'))
-                    ->where('errors.phone.0', trans('validation.unique', [
-                        'attribute' => trans('validation.attributes.phone'),
-                    ]))
-            );
-    }
-
-    public function test_should_return_an_error_when_the_phone_field_regex_is_not_valid(): void
-    {
-        $this->patchJson($this->route(), $this->data(['phone' => '42999999999']))
-            ->assertUnprocessable()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::ERROR)
-                    ->where('message.text', trans('flash_messages.errors'))
-                    ->where('errors.phone.0', trans('validation.regex', [
-                        'attribute' => trans('validation.attributes.phone'),
                     ]))
             );
     }

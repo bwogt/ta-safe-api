@@ -21,7 +21,10 @@ class UpdateUserAction
                 return $user;
             });
         } catch (Throwable $e) {
-            $this->handleFailure($e, $user);
+            throw new UpdateUserFailedException(
+                previous: $e,
+                context: ['user_id' => $user->id]
+            );
         }
     }
 
@@ -30,20 +33,11 @@ class UpdateUserAction
         $user->update([
             'name' => $data->name,
             'email' => $data->email,
-            'phone' => $data->phone,
         ]);
     }
 
     private function logSuccess(User $user): void
     {
         Log::info('User profile updated successfully.', ['user_id' => $user->id]);
-    }
-
-    private function handleFailure(Throwable $e, User $user): never
-    {
-        throw new UpdateUserFailedException(
-            previous: $e,
-            context: ['user_id' => $user->id]
-        );
     }
 }

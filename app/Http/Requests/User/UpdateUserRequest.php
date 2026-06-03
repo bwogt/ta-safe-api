@@ -13,7 +13,6 @@ class UpdateUserRequest extends FormRequest
         return new UpdateUserDTO(
             name: $this->input('name'),
             email: $this->input('email'),
-            phone: $this->input('phone'),
         );
     }
 
@@ -26,13 +25,6 @@ class UpdateUserRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users')
-                    ->ignore($this->user()->id),
-            ],
-            'phone' => [
-                'bail',
-                'required',
-                'regex:/^[(]\d{2}[)]\s\d{5}-\d{4}$/',
                 Rule::unique('users')
                     ->ignore($this->user()->id),
             ],

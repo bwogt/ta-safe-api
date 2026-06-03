@@ -24,7 +24,6 @@ final class UpdateUserActionTest extends UpdateUserActionTestSetUp
             'id' => $this->user->id,
             'name' => $this->data->name,
             'email' => $this->data->email,
-            'phone' => $this->data->phone,
         ]);
     }
 
@@ -32,7 +31,8 @@ final class UpdateUserActionTest extends UpdateUserActionTestSetUp
     {
         $this->expectException(UpdateUserFailedException::class);
 
-        DB::shouldReceive('transaction')->once()
+        DB::shouldReceive('transaction')
+            ->once()
             ->andThrow(new Exception('Simulates a transaction error',
                 Response::HTTP_INTERNAL_SERVER_ERROR
             ));

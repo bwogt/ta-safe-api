@@ -14,11 +14,11 @@ class ViewUserResponseTest extends ViewUserTestSetUp
         $this->getJson($this->route())
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('id', $this->user->id)
+                fn (AssertableJson $json) => $json
+                    ->where('id', $this->user->id)
                     ->where('name', $this->user->name)
                     ->where('email', $this->user->email)
                     ->where('cpf', $this->user->cpf)
-                    ->where('phone', $this->user->phone)
                     ->has('created_at')
                     ->has('updated_at')
                     ->missing('password')

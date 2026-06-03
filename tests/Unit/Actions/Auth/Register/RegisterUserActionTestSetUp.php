@@ -33,7 +33,6 @@ abstract class RegisterUserActionTestSetUp extends TestCase
             name: fake()->name(),
             email: fake()->unique()->safeEmail(),
             cpf: fake()->unique()->cpf(),
-            phone: fake()->unique()->cellPhoneNumber(),
             password: 'password',
         );
     }
