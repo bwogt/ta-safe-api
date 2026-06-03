@@ -25,7 +25,7 @@ class RegisterUserRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['bail', 'required', 'email', 'unique:users,email'],
             'cpf' => ['bail', 'required', 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/', new CpfRule, 'unique:users'],
-            'password' => ['required', 'confirmed', 'max:255', Password::defaults()],
+            'password' => ['required', Password::defaults()],
         ];
     }
 }
