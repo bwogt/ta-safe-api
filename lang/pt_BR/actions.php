@@ -13,6 +13,19 @@ return [
             'logout' => 'Ocorreu um erro ao desconectar o usuário.',
         ],
     ],
+    'password_reset' => [
+        'success' => [
+            'start' => 'Se houver uma conta associada a este e-mail, enviaremos um código de redefinição.',
+            'check_code' => 'Código de redefinição de senha verificado com sucesso.',
+            'reset' => 'Senha redefinida com sucesso.',
+        ],
+        'errors' => [
+            'start' => 'Ocorreu um erro ao solicitar a redefinição de senha.',
+            'check_code' => 'Ocorreu um erro ao verificar o código de redefinição de senha.',
+            'block' => 'Ocorreu um erro ao bloquear a redefinição de senha.',
+            'reset' => 'Ocorreu um erro ao redefinir a senha.',
+        ],
+    ],
     'user' => [
         'success' => [
             'update' => 'Perfil atualizado com sucesso.',

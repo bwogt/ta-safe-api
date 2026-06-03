@@ -3,6 +3,13 @@
 return [
     'auth' => [
         'invalid_credentials' => 'Credenciais inválidas.',
+        'email_not_exists' => 'O e-mail informado não existe.',
+    ],
+    'password_reset' => [
+        'cooldown' => 'Você já solicitou um código para redefinição de senha. Tente novamente em alguns minutos.',
+        'blocked' => 'A redefinição de senha está temporariamente bloqueada. Tente novamente em alguns minutos.',
+        'invalid_code' => 'Código inválido ou expirado.',
+        'attempts_exceeded' => 'Você excedeu o limite de tentativas. Tente novamente em alguns minutos.',
     ],
     'device' => [
         'user_not_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Device\DeviceController;
 use App\Http\Controllers\Device\DeviceSharingController;
 use App\Http\Controllers\Device\DeviceTransferController;
 use App\Http\Controllers\DeviceModel\DeviceModelController;
+use App\Http\Controllers\PasswordReset\PasswordResetController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,14 @@ Route::controller(AuthController::class)->prefix('auth')->name('api.auth.')->gro
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
 });
+
+Route::controller(PasswordResetController::class)
+    ->prefix('password-reset')
+    ->name('api.password-reset.')->group(function () {
+        Route::post('/', 'reset')->name('reset');
+        Route::post('start', 'start')->name('start');
+        Route::post('check-code', 'checkCode')->name('check-code');
+    });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(AuthController::class)->group(function () {
