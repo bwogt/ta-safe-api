@@ -14,6 +14,7 @@ https://github.com/bwogt/ta-safe-mobile-old
 ## 🚀 Principais funcionalidades
 
 + Cadastro e autenticação de usuários;
++ Redefinição de senha de usuários;
 + Registro de celulares a partir da NF-e vinculada ao CPF do primeiro proprietário;
 + Consulta de histórico de propriedade do aparelho;
 + Transferência de propriedade entre usuários;
