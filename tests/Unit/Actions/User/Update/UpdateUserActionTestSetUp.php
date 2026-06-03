@@ -41,7 +41,6 @@ abstract class UpdateUserActionTestSetUp extends TestCase
         $this->data = new UpdateUserDTO(
             name: fake()->name(),
             email: fake()->unique()->safeEmail(),
-            phone: fake()->unique()->cellPhoneNumber(),
         );
     }
 }

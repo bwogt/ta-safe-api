@@ -14,10 +14,10 @@ class SearchUserByEmailResponseTest extends SearchUserByEmailTestSetUp
         $this->getJson($this->route(email: $this->targetUser->email))
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('id', $this->targetUser->id)
+                fn (AssertableJson $json) => $json
+                    ->where('id', $this->targetUser->id)
                     ->where('name', $this->targetUser->name)
                     ->where('cpf', $this->addAsteriskMaskForCpf($this->targetUser->cpf))
-                    ->where('phone', $this->addAsteriskMaskForPhone($this->targetUser->phone))
                     ->has('created_at')
                     ->missing('password')
             );

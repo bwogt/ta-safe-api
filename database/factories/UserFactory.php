@@ -22,10 +22,9 @@ class UserFactory extends Factory
             'name' => mb_convert_case(fake()->name(), MB_CASE_TITLE),
             'email' => strtolower(str_replace(' ', '', fake()->unique()->safeEmail())),
             'email_verified_at' => now(),
-            'password' =>  Hash::make('password'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'cpf' => fake()->unique()->cpf(),
-            'phone' => fake()->unique()->cellPhoneNumber()
         ];
     }
 

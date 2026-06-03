@@ -39,7 +39,6 @@ class RegisterUserAction
             'name' => $data->name,
             'email' => $data->email,
             'cpf' => $data->cpf,
-            'phone' => $data->phone,
             'password' => $data->password,
         ]);
     }

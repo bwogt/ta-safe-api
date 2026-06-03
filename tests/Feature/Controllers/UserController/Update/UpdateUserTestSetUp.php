@@ -38,7 +38,6 @@ abstract class UpdateUserTestSetUp extends TestCase
         return array_merge([
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->unique()->cellPhoneNumber(),
         ], $overrides);
     }
 }

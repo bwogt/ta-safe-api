@@ -24,7 +24,6 @@ class RegisterUserActionTest extends RegisterUserActionTestSetUp
             'name' => $this->data->name,
             'email' => $this->data->email,
             'cpf' => $this->data->cpf,
-            'phone' => $this->data->phone,
         ]);
     }
 
@@ -32,7 +31,8 @@ class RegisterUserActionTest extends RegisterUserActionTestSetUp
     {
         $this->expectException(RegisterUserFailedException::class);
 
-        DB::shouldReceive('transaction')->once()
+        DB::shouldReceive('transaction')
+            ->once()
             ->andThrow(new Exception('Simulates a transaction error',
                 Response::HTTP_INTERNAL_SERVER_ERROR
             ));

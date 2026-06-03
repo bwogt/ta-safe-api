@@ -26,7 +26,6 @@ class ViewDeviceResponseTest extends ViewDeviceTestSetUp
                     ->where('user.id', $this->user->id)
                     ->where('user.name', $this->user->name)
                     ->where('user.cpf', $this->user->cpf)
-                    ->where('user.phone', $this->user->phone)
                     ->has('user.created_at')
                     ->has('user.updated_at')
                     ->missing('user.password')

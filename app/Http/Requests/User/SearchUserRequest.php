@@ -11,7 +11,7 @@ class SearchUserRequest extends FormRequest
     {
         $email = $this->input('email');
 
-        return User::where('email', $email)->firstOrFail();
+        return User::whereEmail($email)->firstOrFail();
     }
 
     public function rules(): array
@@ -24,18 +24,6 @@ class SearchUserRequest extends FormRequest
                 'max:255',
                 'exists:users,email',
             ],
-        ];
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'email.exists' => trans('validation.custom.email.exists'),
         ];
     }
 }

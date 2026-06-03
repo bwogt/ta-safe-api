@@ -32,7 +32,6 @@ class UserSeeder extends Seeder
             'name' => $rawUser->name,
             'email' => $rawUser->email,
             'cpf' => $rawUser->cpf,
-            'phone' => $rawUser->phone,
             'password' => $rawUser->password,
         ]);
     }

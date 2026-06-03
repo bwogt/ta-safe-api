@@ -15,7 +15,8 @@ class UserDevicesResponseTest extends UserDevicesTestSetUp
             ->assertOk()
             ->assertJson(
                 fn (AssertableJson $json) => $json->has(1)
-                    ->first(fn (AssertableJson $json) => $json->where('id', $this->device->id)
+                    ->first(fn (AssertableJson $json) => $json
+                        ->where('id', $this->device->id)
                         ->where('color', $this->device->color)
                         ->where('imei_1', $this->device->imei_1)
                         ->where('imei_2', $this->device->imei_2)
@@ -27,7 +28,6 @@ class UserDevicesResponseTest extends UserDevicesTestSetUp
                         ->where('user.id', $this->user->id)
                         ->where('user.name', $this->user->name)
                         ->where('user.cpf', $this->user->cpf)
-                        ->where('user.phone', $this->user->phone)
                         ->has('user.created_at')
                         ->has('user.updated_at')
                         ->missing('user.password')
