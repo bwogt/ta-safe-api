@@ -25,9 +25,11 @@ https://github.com/bwogt/ta-safe-mobile-old
 
 + PHP 
 + Laravel 
-+ MySQL 
++ MySQL
++ Redis
 + Docker & Docker Compose
 + PHPUnit
++ Grafana
 
 ## 🐳 Ambiente de Desenvolvimento (Docker)
 
