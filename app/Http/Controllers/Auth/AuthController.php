@@ -10,30 +10,22 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Http\Resources\Auth\LoginResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     public function register(RegisterUserRequest $request, RegisterUserAction $action): JsonResponse
     {
-        $loginDto = $action($request->toDto());
-
         return response()->json(
-            FlashMessage::success(trans('actions.auth.success.register'))
-                ->merge(['data' => new LoginResource($loginDto)]),
+            new LoginResource($action($request->toDto())),
             Response::HTTP_CREATED
         );
     }
 
-    public function login(LoginRequest $request, LoginAction $action): JsonResponse
+    public function login(LoginRequest $request, LoginAction $action): JsonResource
     {
-        $loginDto = $action($request->toDto());
-
-        return response()->json(
-            FlashMessage::success(trans('actions.auth.success.login'))
-                ->merge(['data' => new LoginResource($loginDto)]),
-            Response::HTTP_OK
-        );
+        return new LoginResource($action($request->toDto()));
     }
 
     public function logout(): JsonResponse

@@ -22,10 +22,11 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, UpdateUserAction $action): Response
     {
-        $action($request->user(), $request->toDto());
+        $user = $action($request->user(), $request->toDto());
 
-        return response()->json(FlashMessage::success(
-            trans('actions.user.success.update')),
+        return response()->json(
+            FlashMessage::success(trans('actions.user.success.update'))
+                ->merge(['user' => new UserResource($user)]),
             Response::HTTP_OK
         );
     }
