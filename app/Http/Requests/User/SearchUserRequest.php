@@ -20,8 +20,7 @@ class SearchUserRequest extends FormRequest
             'email' => [
                 'bail',
                 'required',
-                'email',
-                'max:255',
+                'email:filter',
                 'exists:users,email',
             ],
         ];

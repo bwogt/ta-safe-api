@@ -27,7 +27,12 @@ class CreateDeviceTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'target_user_id' => ['bail', 'required', 'integer', 'exists:users,id'],
+            'target_user_id' => [
+                'bail',
+                'required',
+                'integer',
+                'exists:users,id',
+            ],
         ];
     }
 }

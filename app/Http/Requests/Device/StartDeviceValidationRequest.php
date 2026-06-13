@@ -24,9 +24,21 @@ class StartDeviceValidationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cpf' => ['required', 'string', 'max:16'],
-            'name' => ['required', 'string', 'max:255'],
-            'products' => ['required', 'string', 'max:16000'],
+            'cpf' => [
+                'required',
+                'string',
+                'max:16',
+            ],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'products' => [
+                'required',
+                'string',
+                'max:16000',
+            ],
         ];
     }
 }

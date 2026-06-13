@@ -21,11 +21,37 @@ class RegisterDeviceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'device_model_id' => ['bail', 'required', 'integer', 'exists:device_models,id'],
-            'access_key' => ['bail', 'required', 'digits:44', 'unique:invoices,access_key'],
-            'color' => ['bail', 'required', 'max:255'],
-            'imei_1' => ['bail', 'required', 'digits:15', 'different:imei_2', 'unique:devices,imei_1', 'unique:devices,imei_2'],
-            'imei_2' => ['bail', 'required', 'digits:15', 'unique:devices,imei_1', 'unique:devices,imei_2'],
+            'device_model_id' => [
+                'bail',
+                'required',
+                'integer',
+                'exists:device_models,id',
+            ],
+            'access_key' => [
+                'bail',
+                'required',
+                'digits:44',
+                'unique:invoices,access_key',
+            ],
+            'color' => [
+                'bail',
+                'required',
+                'max:255',
+            ],
+            'imei_1' => [
+                'bail',
+                'required',
+                'digits:15',
+                'different:imei_2',
+                'unique:devices,imei_1',
+                'unique:devices,imei_2'],
+            'imei_2' => [
+                'bail',
+                'required',
+                'digits:15',
+                'unique:devices,imei_1',
+                'unique:devices,imei_2',
+            ],
         ];
     }
 }

@@ -22,10 +22,28 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['bail', 'required', 'email', 'unique:users,email'],
-            'cpf' => ['bail', 'required', 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/', new CpfRule, 'unique:users'],
-            'password' => ['required', Password::defaults()],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'email' => [
+                'bail',
+                'required',
+                'email:filter',
+                'unique:users,email',
+            ],
+            'cpf' => [
+                'bail',
+                'required',
+                'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/',
+                new CpfRule,
+                'unique:users',
+            ],
+            'password' => [
+                'required',
+                Password::defaults(),
+            ],
         ];
     }
 }
