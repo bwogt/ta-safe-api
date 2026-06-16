@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controllers\Auth\Login;
 
-use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class LoginAccessTest extends LoginTestSetUp
@@ -15,14 +14,12 @@ class LoginAccessTest extends LoginTestSetUp
         ])
             ->assertOk()
             ->assertJson(fn (AssertableJson $json) => $json
-                ->where('message.type', FlashMessageType::SUCCESS)
-                ->where('message.text', trans('actions.auth.success.login'))
-                ->where('data.user.id', $this->user->id)
-                ->where('data.user.name', $this->user->name)
-                ->where('data.user.email', $this->user->email)
-                ->where('data.user.cpf', $this->user->cpf)
-                ->has('data.token')
-                ->missing('data.user.password')
+                ->where('user.id', $this->user->id)
+                ->where('user.name', $this->user->name)
+                ->where('user.email', $this->user->email)
+                ->where('user.cpf', $this->user->cpf)
+                ->missing('user.password')
+                ->has('token')
             );
     }
 }

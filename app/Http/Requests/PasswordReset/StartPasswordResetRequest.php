@@ -14,7 +14,12 @@ class StartPasswordResetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => [
+                'bail',
+                'required',
+                'string',
+                'email:filter',
+            ],
         ];
     }
 }
