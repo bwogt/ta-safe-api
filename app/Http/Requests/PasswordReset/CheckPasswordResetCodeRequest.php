@@ -20,8 +20,8 @@ class CheckPasswordResetCodeRequest extends FormRequest
     {
         return [
             'code' => [
-                'required', 
-                'digits:6'
+                'required',
+                'digits:6',
             ],
             'email' => [
                 'bail',
