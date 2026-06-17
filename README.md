@@ -1,4 +1,12 @@
 # TA-SAFE-API
+[![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
+[![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io)
+[![Grafana](https://img.shields.io/badge/Grafana-Stack-F46800?style=flat&logo=grafana&logoColor=white)](https://grafana.com)
+[![PHPUnit](https://img.shields.io/badge/Tests-PHPUnit-6C2AF2?style=flat&logo=php&logoColor=white)](https://phpunit.de)
+
 Este repositório contém a API responsável pelo backend do sistema Tá Safe, uma plataforma desenvolvida para rastreabilidade de celulares usados.
 O backend é responsável por gerenciar toda a lógica de negócio, persistência de dados e integrações externas, oferecendo segurança e confiabilidade no processo de compra e venda de aparelhos.
 
