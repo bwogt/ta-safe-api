@@ -11,7 +11,7 @@
 
 No Brasil, **mais de 1 milhão de celulares são roubados ou furtados por ano**. Esse mercado paralelo movimenta cifras significativas e alimenta um ciclo em que aparelhos de procedência duvidosa são repassados a consumidores sem qualquer comprovação de origem.
 
-Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o registro voluntário das transferências de propriedade entre usuários. Esses dados constroem um histórico público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e promovendo maior transparência sobre sua origem.
+Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o gerenciamento da transferência de propriedade entre usuários por meio de um fluxo de solicitação e aceite. A cada transferência concluída, o histórico do dispositivo é atualizado, formando um registro público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e promovendo maior transparência sobre sua origem.
 
 Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas.
 
