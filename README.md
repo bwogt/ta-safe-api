@@ -17,18 +17,18 @@ Esta API é responsável por orquestrar toda a lógica de negócio do sistema, g
 
 ## 📌 Monografia e links úteis
 
-- 📄 [Monografia completa (TCC)](https://github.com](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf))
-- 🗂️ [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
-- 📱 [Frontend mobile (versão legada)](https://github.com/bwogt/ta-safe-mobile-old)
-- 🚀 [Frontend mobile (nova versão)](https://github.com/bwogt/ta-safe-mobile)  — em breve
+- 📄 [Monografia completa (TCC)](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf)
+- 🎯 [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
+- 📱 [Frontend mobile (📦 versão legada)](https://github.com/bwogt/ta-safe-mobile-old)
+- 📱 [Frontend mobile (🔥 nova versão)](https://github.com/bwogt/ta-safe-mobile)  — em breve
 
 
 ## 🚀 Principais funcionalidades
 
 + **Autenticação**: Cadastro, login e redefinição de senha;
-+ **Registro de celulares**: Validação e extração de dados a partir da Nota Fiscal Eletrônica (NF-e);
-+ **Histórico de propriedade**: Consulta ao histórico de propriedade e de transferências do aparelho;
-+ **Transferência de titularidade**: Registro da transferência de propriedade entre usuários.
++ **Registro de celulares**: Registro do aparelho com validação e extração automática de dados a partir da Nota Fiscal Eletrônica (NF-e);
++ **Histórico de propriedade**: Consulta ao histórico de proprietários e às transferências registradas do aparelho;
++ **Transferência de titularidade**: Registro voluntário da transferência de propriedade entre usuários.
 
 ## 🛠️ Stack de Tecnologias
 
@@ -48,8 +48,8 @@ Esta API é responsável por orquestrar toda a lógica de negócio do sistema, g
 
 ### Pré-Requisitos
 - Git
-- Docker Engine
-- Docker Compose
+- Docker Engine 24+
+- Docker Compose v2
 
 ### Passos para executar
 
@@ -91,7 +91,7 @@ O ambiente de testes é executado de forma isolada, utilizando:
  - banco de dados efêmero
  - variáveis de ambiente específicas
 
-1 . Suba o ambiente de testes
+1. Suba o ambiente de testes
 ~~~bash
 docker compose \
   --profile test \
@@ -99,7 +99,7 @@ docker compose \
   up -d --build
 ~~~
 
-2 . Executando os testes
+2. Executando testes unitários e de integração
 ~~~bash
 docker compose exec app_test php artisan test
 ~~~
