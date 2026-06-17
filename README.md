@@ -28,7 +28,7 @@ Esta API é responsável por orquestrar toda a lógica de negócio do sistema, g
 + **Autenticação**: Cadastro, login e redefinição de senha;
 + **Registro de celulares**: Registro do aparelho com validação e extração automática de dados a partir da Nota Fiscal Eletrônica (NF-e);
 + **Histórico de propriedade**: Consulta ao histórico de proprietários e às transferências registradas do aparelho;
-+ **Transferência de titularidade**: Registro voluntário da transferência de propriedade entre usuários.
++ **Transferência de titularidade**: Gerenciamento de solicitações de transferência entre usuários, incluindo criação, cancelamento e aceite.
 
 ## 🛠️ Stack de Tecnologias
 
