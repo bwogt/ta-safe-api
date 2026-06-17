@@ -7,45 +7,49 @@
 [![Grafana](https://img.shields.io/badge/Grafana-Stack-F46800?style=flat&logo=grafana&logoColor=white)](https://grafana.com)
 [![PHPUnit](https://img.shields.io/badge/Tests-PHPUnit-6C2AF2?style=flat&logo=php&logoColor=white)](https://phpunit.de)
 
-Este repositório contém a API responsável pelo backend do sistema Tá Safe, uma plataforma desenvolvida para rastreabilidade de celulares usados.
-O backend é responsável por gerenciar toda a lógica de negócio, persistência de dados e integrações externas, oferecendo segurança e confiabilidade no processo de compra e venda de aparelhos.
+## 🧠 Contexto e Motivação
 
-## 📌 Gestão de atividades (Kanban)
-https://github.com/users/bwogt/projects/4
+No Brasil, **mais de 1 milhão de celulares são roubados ou furtados por ano**. Esse mercado paralelo movimenta cifras significativas e alimenta um ciclo em que aparelhos de procedência duvidosa são repassados a consumidores sem qualquer comprovação de origem.
 
-## 📄 Monografia
-https://repositorio.utfpr.edu.br/jspui/handle/1/34098
+Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o registro voluntário das transferências de propriedade entre usuários. Esses dados constroem um histórico público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e aumentando a transparência sobre sua origem.
 
-## 📱 Frontend
-https://github.com/bwogt/ta-safe-mobile-old
+Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas.
+
+## 📌 Monografia e links úteis
+
+- 📄 [Monografia completa (TCC)](https://github.com](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf))
+- 🗂️ [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
+- 📱 [Frontend mobile (versão legada)](https://github.com/bwogt/ta-safe-mobile-old)
+- 🚀 [Frontend mobile (nova versão)](https://github.com/bwogt/ta-safe-mobile)  — em breve
+
 
 ## 🚀 Principais funcionalidades
 
-+ Cadastro e autenticação de usuários;
-+ Redefinição de senha de usuários;
-+ Registro de celulares a partir da NF-e vinculada ao CPF do primeiro proprietário;
-+ Consulta de histórico de propriedade do aparelho;
-+ Transferência de propriedade entre usuários;
-+ Automatização para validação e extração de dados da NF-e;
-+ Processamento assíncrono de tarefas via filas.
++ **Autenticação**: Cadastro, login e redefinição de senha;
++ **Registro de celulares**: Validação e extração de dados a partir da Nota Fiscal Eletrônica (NF-e);
++ **Histórico de propriedade**: Consulta ao histórico de propriedade e de transferências do aparelho;
++ **Transferência de titularidade**: Registro da transferência de propriedade entre usuários.
 
-## 🛠️ Tecnologias
+## 🛠️ Stack de Tecnologias
 
-+ PHP 
-+ Laravel 
-+ MySQL
-+ Redis
-+ Docker & Docker Compose
-+ PHPUnit
-+ Grafana
+| Camada          | Tecnologia                         |
+|-----------------|-----------------------------------|
+| **Linguagem**   | PHP 8.3                           |
+| **Framework**   | Laravel 12                        |
+| **Banco de Dados** | MySQL 8.0                      |
+| **Cache / Filas** | Redis 7.2                       |
+| **Containerização** | Docker & Docker Compose (custom) |
+| **Testes**      | PHPUnit (com ambiente isolado)    |
+| **Observabilidade** | Grafana + Loki + Alloy          |
+| **Documentação** | Swagger/OpenAPI (UI integrada)   |
+
 
 ## 🐳 Ambiente de Desenvolvimento (Docker)
 
-O projeto utiliza um ambiente Docker customizado, substituindo o Laravel Sail, para permitir maior controle da infraestrutura e integração com ferramentas de observabilidade.
-
-**Requisitos**
- - Docker Engine
- - Docker Compose
+### Pré-Requisitos
+- Git
+- Docker Engine
+- Docker Compose
 
 ### Passos para executar
 
@@ -71,7 +75,7 @@ DB_USERNAME=ta_safe
 DB_PASSWORD=secret
 ~~~
 
-5. Suba o ambient web
+5. Suba o ambiente de desenvolvimento (`com perfil web`)
 ~~~bash
 docker compose --profile web up -d --build
 ~~~
