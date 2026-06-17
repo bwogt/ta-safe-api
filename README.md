@@ -19,7 +19,7 @@ Esta API é responsável por orquestrar toda a lógica de negócio do sistema, g
 
 - 📄 [Monografia (TCC)](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf)
 - 🎯 [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
-- 📱 [Frontend mobile (📦 versão legada)](https://github.com/bwogt/ta-safe-mobile-old)
+- 📱 [Frontend mobile (📦 versão legada)](https://github.com/bwogt/ta-safe-mobile-legacy)
 - 📱 [Frontend mobile (🔥 nova versão)](https://github.com/bwogt/ta-safe-mobile)  — em breve
 
 
