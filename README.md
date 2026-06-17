@@ -1,6 +1,6 @@
 # TA-SAFE-API
-[![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
-[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io)
@@ -11,7 +11,7 @@
 
 No Brasil, **mais de 1 milhão de celulares são roubados ou furtados por ano**. Esse mercado paralelo movimenta cifras significativas e alimenta um ciclo em que aparelhos de procedência duvidosa são repassados a consumidores sem qualquer comprovação de origem.
 
-Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o registro voluntário das transferências de propriedade entre usuários. Esses dados constroem um histórico público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e aumentando a transparência sobre sua origem.
+Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o registro voluntário das transferências de propriedade entre usuários. Esses dados constroem um histórico público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e promovendo maior transparência sobre sua origem.
 
 Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas.
 
@@ -86,7 +86,7 @@ docker compose exec app php artisan key:generate
 ~~~
 
 ## 🧪 Ambiente de Testes
-O ambiente de testes é totalmente isolado, utilizando:
+O ambiente de testes é executado de forma isolada, utilizando:
  - containers próprios
  - banco de dados efêmero
  - variáveis de ambiente específicas
@@ -107,7 +107,7 @@ docker compose exec app_test php artisan test
 As migrations são executadas automaticamente ao subir o container de testes.
 
 ## 📊 Observabilidade (Logs)
-O projeto conta com uma stack de observabilidade focada no pilar de logs, utilizando:
+O projeto possui uma stack de observabilidade voltada para o pilar de logs, composta por:
  - Grafana Loki para armazenamento de logs
  - Grafana Alloy para coleta automática dos logs dos containers Docker
  - Grafana para visualização e análise
@@ -123,7 +123,7 @@ docker compose --profile obs up -d
      - senha: admin
 
 ## 📘 Documentação
-Para visualizar a documentação da API acesse
+Após iniciar o ambiente de desenvolvimento, a documentação interativa da API estará disponível em:
 ~~~bash
 http://localhost/docs/api#/
 ~~~
