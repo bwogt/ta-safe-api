@@ -15,7 +15,7 @@ Diante desse cenário, o comprador comum dispõe de poucos recursos para verific
 
 Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas.
 
-## 📌 Links Úteis
+## 📌 Links úteis
 
 - 📄 [Monografia (TCC)](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf)
 - 🎯 [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
