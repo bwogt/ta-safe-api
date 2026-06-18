@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceController\Validation;
+namespace Tests\Feature\Controllers\DeviceValidationController\Start;
 
 use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-final class StartValidateDeviceRulesTest extends StartValidateDeviceTestSetUp
+final class StartDeviceValidationRulesTest extends StartDeviceValidationTestSetUp
 {
     protected function setUp(): void
     {

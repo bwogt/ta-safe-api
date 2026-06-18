@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceController\Validation;
+namespace Tests\Feature\Controllers\DeviceValidationController\Start;
 
 use Database\Factories\UserFactory;
 
-final class StartValidateDeviceAccessTest extends StartValidateDeviceTestSetUp
+final class StartDeviceValidationAccessTest extends StartDeviceValidationTestSetUp
 {
     public function test_an_unauthenticated_user_should_not_be_allowed_to_validate_a_device_record(): void
     {

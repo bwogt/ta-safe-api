@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceController\Validation;
+namespace Tests\Feature\Controllers\DeviceValidationController\Start;
 
 use App\Models\Device;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-abstract class StartValidateDeviceTestSetUp extends TestCase
+class StartDeviceValidationTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RandomNumberGenerator;
@@ -35,14 +35,12 @@ abstract class StartValidateDeviceTestSetUp extends TestCase
 
     private function deviceSetUp(): void
     {
-        $this->device = DeviceFactory::new()
-            ->for($this->user)
-            ->create();
+        $this->device = DeviceFactory::new()->for($this->user)->create();
     }
 
-    protected function route(array $overrides = []): string
+    protected function route(): string
     {
-        return route('api.device.validation', ['device' => $this->device]);
+        return route('api.device.validation.start', ['device' => $this->device]);
     }
 
     protected function data(array $overrides = []): array

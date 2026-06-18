@@ -41,9 +41,6 @@ class DeviceController extends Controller
         );
     }
 
-    /**
-     * Delete a device with rejected validation.
-     */
     public function delete(Device $device, DeleteDeviceAction $action): Response
     {
         $this->authorize('accessAsOwner', $device);
@@ -53,40 +50,6 @@ class DeviceController extends Controller
         return response()->json(FlashMessage::success(
             trans('actions.device.success.delete')),
             Response::HTTP_OK
-        );
-    }
-
-    /**
-     * Validate a device's registration.
-     */
-    public function validation(
-        StartDeviceValidationRequest $request,
-        StartDeviceValidationAction $action,
-        Device $device
-    ): JsonResponse {
-        $action($request->user(), $device, $request->toDto());
-        ValidateDeviceRegistrationJob::dispatch($device);
-
-        return response()->json(FlashMessage::success(
-            trans('actions.device.success.validate'))->merge([
-                'device' => new DeviceResource($device),
-            ]), Response::HTTP_OK
-        );
-    }
-
-    /**
-     * Invalidate a device's registration.
-     */
-    public function invalidation(Device $device, InvalidateDeviceAction $action): JsonResponse
-    {
-        $this->authorize('accessAsOwner', $device);
-
-        $action(request()->user(), $device);
-
-        return response()->json(FlashMessage::success(
-            trans('actions.device.success.invalidate'))->merge([
-                'device' => new DeviceResource($device),
-            ]), Response::HTTP_OK
         );
     }
 }

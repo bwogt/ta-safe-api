@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceController\Invalidation;
+namespace Tests\Feature\Controllers\DeviceValidationController\Invalidate;
 
 use Database\Factories\UserFactory;
 

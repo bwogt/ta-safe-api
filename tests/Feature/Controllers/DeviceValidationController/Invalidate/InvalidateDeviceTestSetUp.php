@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceController\Invalidation;
+namespace Tests\Feature\Controllers\DeviceValidationController\Invalidate;
 
 use App\Models\Device;
 use App\Models\User;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-abstract class InvalidateDeviceTestSetUp extends TestCase
+class InvalidateDeviceTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
@@ -40,6 +40,6 @@ abstract class InvalidateDeviceTestSetUp extends TestCase
 
     protected function route(): string
     {
-        return route('api.device.invalidation', ['device' => $this->device]);
+        return route('api.device.validation.invalidate', ['device' => $this->device]);
     }
 }

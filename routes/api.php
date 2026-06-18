@@ -5,6 +5,7 @@ use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Device\DeviceController;
 use App\Http\Controllers\Device\DeviceSharingController;
 use App\Http\Controllers\Device\DeviceTransferController;
+use App\Http\Controllers\Device\DeviceValidationController;
 use App\Http\Controllers\DeviceModel\DeviceModelController;
 use App\Http\Controllers\PasswordReset\PasswordResetController;
 use App\Http\Controllers\User\UserController;
@@ -51,9 +52,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('devices/{device}', 'view')->name('api.device.view');
         Route::post('devices', 'register')->name('api.device.register');
         Route::delete('devices/{device}', 'delete')->name('api.device.delete');
-        Route::post('devices/{device}/validate', 'validation')->name('api.device.validation');
-        Route::post('devices/{device}/invalidate', 'invalidation')->name('api.device.invalidation');
     });
+
+    Route::controller(DeviceValidationController::class)
+        ->prefix('devices')
+        ->name('api.device.validation.')
+        ->group(function () {
+            Route::post('{device}/validate', 'start')->name('start');
+            Route::post('{device}/invalidate', 'invalidate')->name('invalidate');
+        });
 
     Route::controller(DeviceTransferController::class)->group(function () {
         Route::post('devices/{device}', 'create')->name('api.device.transfer.create');
