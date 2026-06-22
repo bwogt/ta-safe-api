@@ -50,6 +50,14 @@ return [
             'invalidate' => 'Ocorreu um erro ao invalidar o dispositivo.',
         ],
     ],
+    'device_sharing' => [
+        'success' => [
+            'create' => 'Código de compartilhamento criado com sucesso!',
+        ],
+        'errors' => [
+            'create' => 'Ocorreu um erro ao criar o código de compartilhamento.',
+        ],
+    ],
     'device_transfer' => [
         'success' => [
             'create' => 'Transferência de registro criada com sucesso!',

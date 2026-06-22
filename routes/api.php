@@ -69,10 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('device-transfers/{deviceTransfer}/reject', 'reject')->name('api.device.transfer.reject');
     });
 
-    Route::controller(DeviceSharingController::class)->group(function () {
-        Route::post('devices/{device}/share', 'createSharingToken')->name('api.device.share.create');
-        Route::get('devices', 'viewDeviceByToken')->name('api.device.share.view');
-    });
+    Route::controller(DeviceSharingController::class)
+        ->name('api.device.share.')
+        ->group(function () {
+            Route::post('devices/{device}/share', 'createSharingCode')->name('create');
+            Route::get('devices', 'viewDeviceByToken')->name('view');
+        });
 
     Route::controller(BrandController::class)->group(function () {
         Route::get('brands', 'brands');

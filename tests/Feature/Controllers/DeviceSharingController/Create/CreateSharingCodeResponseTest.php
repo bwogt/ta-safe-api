@@ -6,9 +6,9 @@ use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class CreateSharingTokenResponseTest extends CreateSharingTokenTestSetUp
+final class CreateSharingCodeResponseTest extends CreateSharingCodeTestSetUp
 {
-    public function test_should_response_the_expected_data(): void
+    public function should_return_created_response_with_success_message_and_code(): void
     {
         Sanctum::actingAs($this->user);
 
@@ -16,10 +16,8 @@ class CreateSharingTokenResponseTest extends CreateSharingTokenTestSetUp
             ->assertCreated()
             ->assertJson(
                 fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
-                    ->where('message.text', trans('actions.device.success.token'))
-                    ->has('id')
-                    ->has('token')
-                    ->has('expires_at')
+                    ->where('message.text', __('actions.device_sharing.success.create'))
+                    ->has('code')
             );
     }
 }

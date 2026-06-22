@@ -14,6 +14,7 @@ return [
     'device' => [
         'user_not_owner' => 'Somente o proprietário do dispositivo pode realizar esta ação.',
         'invalid_device_state' => 'Este dispositivo está em um estado inválido para realizar esta operação.',
+        'active_share' => 'Este dispositivo já possui um código de compartilhamento ativo.',
     ],
     'device_transfer' => [
         'self_transfer_not_allowed' => 'Não é possível transferir um dispositivo para si mesmo.',

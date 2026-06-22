@@ -7,10 +7,11 @@ use App\Models\User;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-abstract class CreateSharingTokenTestSetUp extends TestCase
+class CreateSharingCodeTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
@@ -21,6 +22,7 @@ abstract class CreateSharingTokenTestSetUp extends TestCase
     protected function setUp(): void
     {
         parent::SetUp();
+        Redis::flushdb();
 
         $this->userSetUp();
         $this->deviceSetUp();

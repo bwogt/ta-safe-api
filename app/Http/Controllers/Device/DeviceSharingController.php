@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
-use App\Actions\Device\Token\CreateSharingTokenAction;
+use App\Actions\Device\Share\CreateDeviceSharingCodeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\ViewDeviceByTokenRequest;
@@ -13,20 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeviceSharingController extends Controller
 {
-    /**
-     * Create a token to share device registration.
-     */
-    public function createSharingToken(Device $device, CreateSharingTokenAction $action): Response
-    {
+    public function createSharingCode(
+        CreateDeviceSharingCodeAction $action,
+        Device $device
+    ): Response {
         $this->authorize('accessAsOwner', $device);
-
-        $token = $action(request()->user(), $device);
+        $code = $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
-            trans('actions.device.success.token'))->merge([
-                'id' => $token->id,
-                'token' => $token->token,
-                'expires_at' => $token->expires_at,
+            __('actions.device_sharing.success.create'))->merge([
+                'code' => $code,
             ]), Response::HTTP_CREATED
         );
     }
