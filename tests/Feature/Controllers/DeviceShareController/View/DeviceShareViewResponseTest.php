@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceSharingController\View;
+namespace Tests\Feature\Controllers\DeviceShareController\View;
 
 use App\Traits\StringMasks;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class ViewDeviceByTokenResponseTest extends ViewDeviceByTokenTestSetUp
+final class DeviceShareViewResponseTest extends DeviceShareViewTestSetUp
 {
     use StringMasks;
 
@@ -18,10 +18,11 @@ class ViewDeviceByTokenResponseTest extends ViewDeviceByTokenTestSetUp
 
     public function test_should_return_the_expected_response_data_for_the_device(): void
     {
-        $this->getJson($this->route($this->deviceSharingToken->token))
+        $this->getJson($this->route($this->code))
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('id', $this->device->id)
+                fn (AssertableJson $json) => $json
+                    ->where('id', $this->device->id)
                     ->where('color', $this->device->color)
                     ->where('imei_1', $this->addAsteriskMaskForImei($this->device->imei_1))
                     ->where('imei_2', $this->addAsteriskMaskForImei($this->device->imei_2))
@@ -36,7 +37,7 @@ class ViewDeviceByTokenResponseTest extends ViewDeviceByTokenTestSetUp
 
     public function test_should_return_the_expected_response_data_for_the_device_owner(): void
     {
-        $this->getJson($this->route($this->deviceSharingToken->token))
+        $this->getJson($this->route($this->code))
             ->assertOk()
             ->assertJson(
                 fn (AssertableJson $json) => $json
@@ -50,10 +51,11 @@ class ViewDeviceByTokenResponseTest extends ViewDeviceByTokenTestSetUp
 
     public function test_should_return_the_expected_response_data_for_the_device_model(): void
     {
-        $this->getJson($this->route($this->deviceSharingToken->token))
+        $this->getJson($this->route($this->code))
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('device_model.id', $this->device->deviceModel->id)
+                fn (AssertableJson $json) => $json
+                    ->where('device_model.id', $this->device->deviceModel->id)
                     ->where('device_model.name', $this->device->deviceModel->name)
                     ->where('device_model.ram', $this->device->deviceModel->ram)
                     ->where('device_model.storage', $this->device->deviceModel->storage)

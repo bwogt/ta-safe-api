@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Device\DeviceController;
-use App\Http\Controllers\Device\DeviceSharingController;
+use App\Http\Controllers\Device\DeviceShareController;
 use App\Http\Controllers\Device\DeviceTransferController;
 use App\Http\Controllers\Device\DeviceValidationController;
 use App\Http\Controllers\DeviceModel\DeviceModelController;
@@ -69,11 +69,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('device-transfers/{deviceTransfer}/reject', 'reject')->name('api.device.transfer.reject');
     });
 
-    Route::controller(DeviceSharingController::class)
+    Route::controller(DeviceShareController::class)
         ->name('api.device.share.')
         ->group(function () {
-            Route::post('devices/{device}/share', 'createSharingCode')->name('create');
-            Route::get('devices', 'viewDeviceByToken')->name('view');
+            Route::get('devices', 'view')->name('view');
+            Route::post('devices/{device}/share', 'generate')->name('generate');
         });
 
     Route::controller(BrandController::class)->group(function () {

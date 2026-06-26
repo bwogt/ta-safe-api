@@ -4,7 +4,7 @@ namespace App\Actions\Device\Share;
 
 use App\Actions\Validator\DeviceShareValidator;
 use App\Actions\Validator\DeviceValidator;
-use App\Exceptions\Application\Device\CreateDeviceSharingCodeException;
+use App\Exceptions\Application\Device\DeviceShareGenerateException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\Device;
 use App\Models\User;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Redis;
 use RuntimeException;
 use Throwable;
 
-final class CreateDeviceSharingCodeAction
+final class DeviceShareGenerateAction
 {
     private const MAX_GENERATION_ATTEMPTS = 5;
 
@@ -33,7 +33,7 @@ final class CreateDeviceSharingCodeAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            throw new CreateDeviceSharingCodeException(
+            throw new DeviceShareGenerateException(
                 previous: $e,
                 context: [
                     'user_id' => $user->id,
@@ -116,7 +116,7 @@ final class CreateDeviceSharingCodeAction
     private function logSuccess(User $user, Device $device): void
     {
         Log::info(
-            message: 'Device share code successfully created.',
+            message: 'Device share code issued successfully.',
             context: [
                 'user_id' => $device->user_id,
                 'device_id' => $device->id,

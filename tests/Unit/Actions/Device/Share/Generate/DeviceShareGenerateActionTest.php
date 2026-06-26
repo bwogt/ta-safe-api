@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Actions\Device\Share;
+namespace Tests\Unit\Actions\Device\Share\Generate;
 
-use App\Actions\Device\Share\CreateDeviceSharingCodeAction;
-use App\Exceptions\Application\Device\CreateDeviceSharingCodeException;
+use App\Actions\Device\Share\DeviceShareGenerateAction;
+use App\Exceptions\Application\Device\DeviceShareGenerateException;
 use App\Exceptions\BusinessRules\Device\ActiveShareCodeException;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
 use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
@@ -13,11 +13,11 @@ use Exception;
 use Illuminate\Support\Facades\Redis;
 use RuntimeException;
 
-final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
+final class DeviceShareGenerateActionTest extends DeviceShareActionTestSetUp
 {
     public function test_should_create_a_device_share_code(): void
     {
-        $code = (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
         $cachedCode = Redis::get("device:{$this->device->id}:active_share");
 
         $this->assertEquals($code, $cachedCode);
@@ -26,7 +26,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
 
     public function test_should_create_a_device_active_share_state(): void
     {
-        $code = (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
         $cachedDeviceId = (int) Redis::get("device_share:code:{$code}");
 
         $this->assertEquals($this->device->id, $cachedDeviceId);
@@ -34,7 +34,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
 
     public function test_should_set_one_day_ttl_for_active_share_key(): void
     {
-        (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        (new DeviceShareGenerateAction)($this->user, $this->device);
         $ttl = Redis::ttl("device:{$this->device->id}:active_share");
 
         $this->assertGreaterThan(86300, $ttl);
@@ -43,7 +43,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
 
     public function test_should_set_one_day_ttl_for_share_code_key(): void
     {
-        $code = (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
         $ttl = Redis::ttl("device_share:code:{$code}");
 
         $this->assertGreaterThan(86300, $ttl);
@@ -55,7 +55,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         $user = UserFactory::new()->create();
 
         try {
-            (new CreateDeviceSharingCodeAction)($user, $this->device);
+            (new DeviceShareGenerateAction)($user, $this->device);
             $this->fail('Expected UserNotOwnerException was not thrown.');
         } catch (UserNotOwnerException $e) {
             $this->assertFalse((bool) Redis::exists("device:{$this->device->id}:active_share"));
@@ -67,7 +67,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         $device = DeviceFactory::new()->for($this->user)->create();
 
         try {
-            (new CreateDeviceSharingCodeAction)($this->user, $device);
+            (new DeviceShareGenerateAction)($this->user, $device);
             $this->fail('Expected InvalidDeviceStateException was not thrown.');
         } catch (InvalidDeviceStateException $e) {
             $this->assertFalse((bool) Redis::exists("device:{$device->id}:active_share"));
@@ -79,7 +79,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         $device = DeviceFactory::new()->for($this->user)->inAnalysis()->create();
 
         try {
-            (new CreateDeviceSharingCodeAction)($this->user, $device);
+            (new DeviceShareGenerateAction)($this->user, $device);
             $this->fail('Expected InvalidDeviceStateException was not thrown.');
         } catch (InvalidDeviceStateException $e) {
             $this->assertFalse((bool) Redis::exists("device:{$device->id}:active_share"));
@@ -91,7 +91,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         $device = DeviceFactory::new()->for($this->user)->rejected()->create();
 
         try {
-            (new CreateDeviceSharingCodeAction)($this->user, $device);
+            (new DeviceShareGenerateAction)($this->user, $device);
             $this->fail('Expected InvalidDeviceStateException was not thrown.');
         } catch (InvalidDeviceStateException $e) {
             $this->assertFalse((bool) Redis::exists("device:{$device->id}:active_share"));
@@ -100,10 +100,10 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
 
     public function test_should_throw_exception_when_device_already_has_active_share_code(): void
     {
-        $code = (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
 
         try {
-            (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+            (new DeviceShareGenerateAction)($this->user, $this->device);
             $this->fail('Expected ActiveShareCodeException was not thrown.');
         } catch (ActiveShareCodeException $e) {
             $this->assertTrue((bool) Redis::exists("device_share:code:{$code}"));
@@ -117,8 +117,8 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
             ->once()
             ->andThrow(new Exception('Redis get error'));
 
-        $this->expectException(CreateDeviceSharingCodeException::class);
-        (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $this->expectException(DeviceShareGenerateException::class);
+        (new DeviceShareGenerateAction)($this->user, $this->device);
     }
 
     public function test_should_throw_domain_exception_when_redis_eval_fails(): void
@@ -129,8 +129,8 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
             ->once()
             ->andThrow(new Exception('Redis connection timeout'));
 
-        $this->expectException(CreateDeviceSharingCodeException::class);
-        (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $this->expectException(DeviceShareGenerateException::class);
+        (new DeviceShareGenerateAction)($this->user, $this->device);
     }
 
     public function test_should_throw_domain_exception_when_max_generation_attempts_reached(): void
@@ -139,9 +139,9 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         Redis::shouldReceive('eval')->times(5)->andReturn(0);
 
         try {
-            (new CreateDeviceSharingCodeAction)($this->user, $this->device);
-            $this->fail('Expected CreateDeviceSharingCodeException was not thrown.');
-        } catch (CreateDeviceSharingCodeException $e) {
+            (new DeviceShareGenerateAction)($this->user, $this->device);
+            $this->fail('Expected DeviceShareGenerateException was not thrown.');
+        } catch (DeviceShareGenerateException $e) {
             $this->assertInstanceOf(RuntimeException::class, $e->getPrevious());
             $this->assertEquals(
                 'Maximum attempts reached while generating device share code.',
@@ -155,7 +155,7 @@ final class DeviceShareCodeActionTest extends DeviceShareCodeActionTestSetUp
         Redis::shouldReceive('get')->andReturn(null);
         Redis::shouldReceive('eval')->times(3)->andReturn(0, 0, 1);
 
-        $code = (new CreateDeviceSharingCodeAction)($this->user, $this->device);
+        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
         $this->assertMatchesRegularExpression('/^\d{8}$/', $code);
     }
 }

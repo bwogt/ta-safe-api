@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceSharingController\Create;
+namespace Tests\Feature\Controllers\DeviceShareController\Generate;
 
 use Database\Factories\UserFactory;
 
-final class CreateSharingCodeAccessTest extends CreateSharingCodeTestSetUp
+final class DeviceShareGenerateAccessTest extends DeviceShareGenerateTestSetUp
 {
     public function test_should_not_allow_unauthenticated_user_to_create_device_sharing_code(): void
     {

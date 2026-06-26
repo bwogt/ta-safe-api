@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Actions\Device\Share;
+namespace Tests\Unit\Actions\Device\Share\Generate;
 
 use App\Models\Device;
 use App\Models\User;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
-class DeviceShareCodeActionTestSetUp extends TestCase
+class DeviceShareActionTestSetUp extends TestCase
 {
     use RefreshDatabase;
 

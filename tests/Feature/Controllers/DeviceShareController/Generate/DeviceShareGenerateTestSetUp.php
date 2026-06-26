@@ -1,33 +1,31 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceSharingController\View;
+namespace Tests\Feature\Controllers\DeviceShareController\Generate;
 
 use App\Models\Device;
-use App\Models\DeviceSharingToken;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
-use Database\Factories\DeviceSharingTokenFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class ViewDeviceByTokenTestSetUp extends TestCase
+class DeviceShareGenerateTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
 
     protected User $user;
     protected Device $device;
-    protected DeviceSharingToken $deviceSharingToken;
 
     protected function setUp(): void
     {
         parent::SetUp();
+        Redis::flushdb();
 
         $this->userSetUp();
         $this->deviceSetUp();
-        $this->tokenSetUp();
     }
 
     private function userSetUp(): void
@@ -43,15 +41,8 @@ class ViewDeviceByTokenTestSetUp extends TestCase
             ->create();
     }
 
-    private function tokenSetUp(): void
+    protected function route(): string
     {
-        $this->deviceSharingToken = DeviceSharingTokenFactory::new()
-            ->for($this->device)
-            ->create();
-    }
-
-    protected function route(?string $token = null): string
-    {
-        return route('api.device.share.view', ['token' => $token]);
+        return route('api.device.share.generate', $this->device);
     }
 }
