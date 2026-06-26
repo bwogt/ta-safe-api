@@ -1,25 +1,29 @@
 <?php
 
-namespace Tests\Unit\Actions\Device\Share\Generate;
+namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
+use App\Actions\Device\Share\CreateDeviceShareCodeAction;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Redis;
+use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class DeviceShareActionTestSetUp extends TestCase
+class GetDeviceByShareCodeTestSetUp extends TestCase
 {
+    use AccessAsserts;
     use RefreshDatabase;
 
-    protected Device $device;
     protected User $user;
+    protected Device $device;
+    protected string $code;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        parent::SetUp();
         Redis::flushdb();
 
         $this->userSetUp();
@@ -37,5 +41,12 @@ class DeviceShareActionTestSetUp extends TestCase
             ->for($this->user)
             ->validated()
             ->create();
+
+        $this->code = (new CreateDeviceShareCodeAction)($this->user, $this->device);
+    }
+
+    protected function route(?string $code = null): string
+    {
+        return route('api.device.share.view', ['code' => $code]);
     }
 }

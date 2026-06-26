@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceShareController\View;
+namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
 use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-final class DeviceShareViewRulesTest extends DeviceShareViewTestSetUp
+final class GetDeviceByShareCodeRulesTest extends GetDeviceByShareCodeTestSetUp
 {
     protected function setUp(): void
     {

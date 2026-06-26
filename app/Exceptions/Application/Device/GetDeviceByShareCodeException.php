@@ -4,7 +4,7 @@ namespace App\Exceptions\Application\Device;
 
 use App\Exceptions\Application\ApplicationFailsException;
 
-final class DeviceShareGenerateException extends ApplicationFailsException
+class GetDeviceByShareCodeException extends ApplicationFailsException
 {
     public function domain(): string
     {
@@ -13,11 +13,11 @@ final class DeviceShareGenerateException extends ApplicationFailsException
 
     public function action(): string
     {
-        return 'generate';
+        return 'get';
     }
 
     public function defaultMessage(): string
     {
-        return 'Failed to generate a device sharing code.';
+        return 'Failed to retrieve the device by sharing code.';
     }
 }

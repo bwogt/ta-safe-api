@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceShareController\Generate;
+namespace Tests\Feature\Controllers\DeviceShareController\Create;
 
 use App\Models\Device;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Redis;
 use Tests\Feature\Asserts\AccessAsserts;
 use Tests\TestCase;
 
-class DeviceShareGenerateTestSetUp extends TestCase
+class CreateDeviceShareCodeTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
@@ -43,6 +43,6 @@ class DeviceShareGenerateTestSetUp extends TestCase
 
     protected function route(): string
     {
-        return route('api.device.share.generate', $this->device);
+        return route('api.device.share.create', $this->device);
     }
 }

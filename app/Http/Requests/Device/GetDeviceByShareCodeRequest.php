@@ -4,7 +4,7 @@ namespace App\Http\Requests\Device;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class DeviceShareViewRequest extends FormRequest
+final class GetDeviceByShareCodeRequest extends FormRequest
 {
     public function rules(): array
     {

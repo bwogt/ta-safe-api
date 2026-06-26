@@ -50,12 +50,12 @@ return [
     ],
     'device_share' => [
         'success' => [
-            'generate' => 'Código de compartilhamento gerado com sucesso!',
+            'create' => 'Código de compartilhamento gerado com sucesso!',
             'view' => 'Informações do dispositivo carregadas com sucesso!',
         ],
         'errors' => [
-            'generate' => 'Ocorreu um erro ao gerar o código de compartilhamento.',
-            'view' => 'Ocorreu um erro ao carregar as informações do dispositivo.',
+            'create' => 'Ocorreu um erro ao gerar o código de compartilhamento.',
+            'get' => 'Ocorreu um erro ao carregar as informações do dispositivo.',
         ],
     ],
     'device_transfer' => [

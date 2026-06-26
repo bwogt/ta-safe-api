@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Actions\Device\Share\View;
+namespace Tests\Unit\Actions\Device\Share\Get;
 
-use App\Actions\Device\Share\DeviceShareGenerateAction;
-use App\Actions\Device\Share\DeviceShareViewAction;
-use App\Exceptions\Application\Device\DeviceShareViewException;
+use App\Actions\Device\Share\CreateDeviceShareCodeAction;
+use App\Actions\Device\Share\GetDeviceByShareCodeAction;
+use App\Exceptions\Application\Device\GetDeviceByShareCodeException;
 use App\Exceptions\BusinessRules\Device\ShareCodeNotFoundException;
 use App\Models\Device;
 use App\Models\User;
@@ -15,7 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
-final class DeviceShareViewActionTest extends TestCase
+final class GetDeviceByShareCodeActionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -46,16 +46,16 @@ final class DeviceShareViewActionTest extends TestCase
 
     public function test_should_return_device_when_share_code_is_valid(): void
     {
-        $code = (new DeviceShareGenerateAction)($this->user, $this->device);
+        $code = (new CreateDeviceShareCodeAction)($this->user, $this->device);
 
-        $device = (new DeviceShareViewAction)($this->user, $code);
+        $device = (new GetDeviceByShareCodeAction)($this->user, $code);
         $this->assertEquals($this->device->id, $device->id);
     }
 
     public function test_should_throw_exception_when_share_code_is_invalid(): void
     {
         $this->expectException(ShareCodeNotFoundException::class);
-        (new DeviceShareViewAction)($this->user, 'invalid');
+        (new GetDeviceByShareCodeAction)($this->user, 'invalid');
     }
 
     public function test_should_throw_domain_exception_when_redis_fails(): void
@@ -72,7 +72,7 @@ final class DeviceShareViewActionTest extends TestCase
             ->once()
             ->andThrow(new Exception('Redis connection error'));
 
-        $this->expectException(DeviceShareViewException::class);
-        (new DeviceShareViewAction)($this->user, $code);
+        $this->expectException(GetDeviceByShareCodeException::class);
+        (new GetDeviceByShareCodeAction)($this->user, $code);
     }
 }

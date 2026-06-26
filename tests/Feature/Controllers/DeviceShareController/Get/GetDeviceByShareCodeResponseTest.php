@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceShareController\View;
+namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
 use App\Traits\StringMasks;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-final class DeviceShareViewResponseTest extends DeviceShareViewTestSetUp
+final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSetUp
 {
     use StringMasks;
 

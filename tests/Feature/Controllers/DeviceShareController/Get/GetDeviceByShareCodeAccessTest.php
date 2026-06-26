@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Controllers\DeviceShareController\View;
+namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
-final class DeviceShareViewAccessTest extends DeviceShareViewTestSetUp
+final class GetDeviceByShareCodeAccessTest extends GetDeviceByShareCodeTestSetUp
 {
     public function test_an_unauthenticated_user_must_not_be_authorized_to_view_a_device(): void
     {

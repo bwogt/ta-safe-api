@@ -3,7 +3,7 @@
 namespace App\Actions\Device\Share;
 
 use App\Actions\Validator\DeviceShareValidator;
-use App\Exceptions\Application\Device\DeviceShareViewException;
+use App\Exceptions\Application\Device\GetDeviceByShareCodeException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Models\Device;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Throwable;
 
-final class DeviceShareViewAction
+final class GetDeviceByShareCodeAction
 {
     public function __invoke(User $user, string $code): Device
     {
@@ -25,7 +25,7 @@ final class DeviceShareViewAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            throw new DeviceShareViewException(
+            throw new GetDeviceByShareCodeException(
                 previous: $e,
                 context: [
                     'user_id' => $user->id,
