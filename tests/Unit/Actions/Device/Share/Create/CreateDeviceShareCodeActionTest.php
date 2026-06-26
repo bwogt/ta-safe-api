@@ -113,7 +113,7 @@ final class CreateDeviceShareCodeActionTest extends CreateDeviceShareCodeActionT
 
     public function test_should_throw_domain_exception_when_redis_fails_during_validation(): void
     {
-        Redis::shouldReceive('get')
+        Redis::shouldReceive('exists')
             ->once()
             ->andThrow(new Exception('Redis get error'));
 
@@ -123,7 +123,7 @@ final class CreateDeviceShareCodeActionTest extends CreateDeviceShareCodeActionT
 
     public function test_should_throw_domain_exception_when_redis_eval_fails(): void
     {
-        Redis::shouldReceive('get')->andReturn(null);
+        Redis::shouldReceive('exists')->andReturn(null);
 
         Redis::shouldReceive('eval')
             ->once()
@@ -135,7 +135,7 @@ final class CreateDeviceShareCodeActionTest extends CreateDeviceShareCodeActionT
 
     public function test_should_throw_domain_exception_when_max_generation_attempts_reached(): void
     {
-        Redis::shouldReceive('get')->andReturn(null);
+        Redis::shouldReceive('exists')->andReturn(null);
         Redis::shouldReceive('eval')->times(5)->andReturn(0);
 
         try {
@@ -152,7 +152,7 @@ final class CreateDeviceShareCodeActionTest extends CreateDeviceShareCodeActionT
 
     public function test_should_retry_generating_code_when_collision_occurs(): void
     {
-        Redis::shouldReceive('get')->andReturn(null);
+        Redis::shouldReceive('exists')->andReturn(null);
         Redis::shouldReceive('eval')->times(3)->andReturn(0, 0, 1);
 
         $code = (new CreateDeviceShareCodeAction)($this->user, $this->device);

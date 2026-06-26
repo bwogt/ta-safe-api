@@ -11,14 +11,14 @@ final class DeviceShareValidator
 {
     public static function mustNotHaveAnActiveCode(Device $device): void
     {
-        $code = Redis::get("device:{$device->id}:active_share");
+        $exists = (bool) Redis::exists("device:{$device->id}:active_share");
 
-        throw_if($code, new ActiveShareCodeException(['device_id' => $device->id]));
+        throw_if($exists, new ActiveShareCodeException(['device_id' => $device->id]));
     }
 
     public static function codeMustBeActive(string $code): void
     {
-        $exists = Redis::exists("device_share:code:{$code}");
+        $exists = (bool) Redis::exists("device_share:code:{$code}");
 
         throw_unless($exists, new ShareCodeNotFoundException);
     }

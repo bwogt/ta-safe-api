@@ -33,7 +33,6 @@ final class DeviceValidationController extends Controller
     public function invalidate(Device $device, InvalidateDeviceAction $action): JsonResponse
     {
         $this->authorize('accessAsOwner', $device);
-
         $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
