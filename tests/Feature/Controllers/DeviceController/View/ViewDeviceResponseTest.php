@@ -20,7 +20,7 @@ class ViewDeviceResponseTest extends ViewDeviceTestSetUp
                     ->where('imei_2', $this->device->imei_2)
                     ->where('access_key', $this->device->invoice->access_key)
                     ->where('validation_status', $this->device->validation_status->value)
-                    ->where('sharing_token', null)
+                    ->where('share_code', null)
                     ->has('created_at')
                     ->has('updated_at')
                     ->where('user.id', $this->user->id)

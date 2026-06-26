@@ -13,7 +13,7 @@ use App\Models\Device;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final Class DeviceValidationController extends Controller
+final class DeviceValidationController extends Controller
 {
     public function start(
         StartDeviceValidationRequest $request,

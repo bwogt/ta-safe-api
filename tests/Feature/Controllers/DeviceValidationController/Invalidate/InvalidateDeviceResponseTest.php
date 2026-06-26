@@ -24,7 +24,7 @@ class InvalidateDeviceResponseTest extends InvalidateDeviceTestSetUp
                     ->where('device.imei_2', $this->device->imei_2)
                     ->where('device.access_key', $this->device->invoice->access_key)
                     ->where('device.validation_status', DeviceValidationStatus::REJECTED->value)
-                    ->has('device.sharing_token')
+                    ->has('device.share_code')
                     ->has('device.created_at')
                     ->has('device.updated_at')
                     ->has('device.user')

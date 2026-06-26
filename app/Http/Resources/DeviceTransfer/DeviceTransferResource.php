@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\DeviceTransfer;
 
-use App\Http\Resources\Device\DeviceSummaryResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

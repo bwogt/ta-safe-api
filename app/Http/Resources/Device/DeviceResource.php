@@ -3,11 +3,11 @@
 namespace App\Http\Resources\Device;
 
 use App\Http\Resources\DeviceModel\DeviceModelResource;
-use App\Http\Resources\DeviceSharingToken\DeviceSharingTokenResource;
 use App\Http\Resources\DeviceTransfer\DeviceTransferBasicResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Redis;
 
 class DeviceResource extends JsonResource
 {
@@ -25,7 +25,7 @@ class DeviceResource extends JsonResource
             'imei_2' => $this->imei_2,
             'access_key' => $this->invoice->access_key,
             'validation_status' => $this->validation_status,
-            'sharing_token' => new DeviceSharingTokenResource($this->sharingToken),
+            'share_code' => Redis::get("device:{$this->id}:active_share"),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'user' => new UserResource($this->user),

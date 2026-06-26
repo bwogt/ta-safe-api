@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Device;
 
 use App\Actions\Device\Delete\DeleteDeviceAction;
-use App\Actions\Device\Invalidate\InvalidateDeviceAction;
 use App\Actions\Device\Register\RegisterDeviceAction;
-use App\Actions\Device\Validate\StartDeviceValidationAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\RegisterDeviceRequest;
-use App\Http\Requests\Device\StartDeviceValidationRequest;
 use App\Http\Resources\Device\DeviceResource;
-use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
