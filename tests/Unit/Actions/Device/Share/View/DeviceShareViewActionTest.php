@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Actions\Device\Share\Access;
+namespace Tests\Unit\Actions\Device\Share\View;
 
 use App\Actions\Device\Share\DeviceShareGenerateAction;
 use App\Actions\Device\Share\DeviceShareViewAction;

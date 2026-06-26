@@ -8,7 +8,7 @@ use Laravel\Sanctum\Sanctum;
 
 final class DeviceShareGenerateResponseTest extends DeviceShareGenerateTestSetUp
 {
-    public function should_return_created_response_with_success_message_and_code(): void
+    public function test_should_return_created_response_with_success_message_and_code(): void
     {
         Sanctum::actingAs($this->user);
 
