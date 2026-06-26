@@ -105,12 +105,4 @@ class Device extends Model
             'device_id' => $this->id,
         ])->latest('id')->first();
     }
-
-    /**
-     * Get the sharing token associated with the device.
-     */
-    public function sharingToken(): HasOne
-    {
-        return $this->hasOne(DeviceSharingToken::class);
-    }
 }

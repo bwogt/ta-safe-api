@@ -38,16 +38,24 @@ return [
         'success' => [
             'register' => 'Dispositivo registrado com sucesso!',
             'delete' => 'Dispositivo excluído com sucesso!',
-            'token' => 'Código de visualização gerado com sucesso!',
             'validate' => 'Informações enviadas com sucesso! Seu registro esta em análise.',
             'invalidate' => 'Não é possível validar este dispositivo pois a nota fiscal é inválida.',
         ],
         'errors' => [
             'register' => 'Ocorreu um erro ao registrar o dispositivo.',
             'delete' => 'Ocorreu um erro ao excluir o dispositivo.',
-            'token' => 'Ocorreu um erro ao gerar o código de visualização.',
             'validate' => 'Ocorreu um erro ao validar o dispositivo.',
             'invalidate' => 'Ocorreu um erro ao invalidar o dispositivo.',
+        ],
+    ],
+    'device_share' => [
+        'success' => [
+            'create' => 'Código de compartilhamento gerado com sucesso!',
+            'get' => 'Informações do dispositivo carregadas com sucesso!',
+        ],
+        'errors' => [
+            'create' => 'Ocorreu um erro ao gerar o código de compartilhamento.',
+            'get' => 'Ocorreu um erro ao carregar as informações do dispositivo.',
         ],
     ],
     'device_transfer' => [

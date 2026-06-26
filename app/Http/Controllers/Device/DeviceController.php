@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Device;
 
 use App\Actions\Device\Delete\DeleteDeviceAction;
-use App\Actions\Device\Invalidate\InvalidateDeviceAction;
 use App\Actions\Device\Register\RegisterDeviceAction;
-use App\Actions\Device\Validate\StartDeviceValidationAction;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\Device\RegisterDeviceRequest;
-use App\Http\Requests\Device\StartDeviceValidationRequest;
 use App\Http\Resources\Device\DeviceResource;
-use App\Jobs\Device\ValidateDeviceRegistrationJob;
 use App\Models\Device;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -41,9 +37,6 @@ class DeviceController extends Controller
         );
     }
 
-    /**
-     * Delete a device with rejected validation.
-     */
     public function delete(Device $device, DeleteDeviceAction $action): Response
     {
         $this->authorize('accessAsOwner', $device);
@@ -53,40 +46,6 @@ class DeviceController extends Controller
         return response()->json(FlashMessage::success(
             trans('actions.device.success.delete')),
             Response::HTTP_OK
-        );
-    }
-
-    /**
-     * Validate a device's registration.
-     */
-    public function validation(
-        StartDeviceValidationRequest $request,
-        StartDeviceValidationAction $action,
-        Device $device
-    ): JsonResponse {
-        $action($request->user(), $device, $request->toDto());
-        ValidateDeviceRegistrationJob::dispatch($device);
-
-        return response()->json(FlashMessage::success(
-            trans('actions.device.success.validate'))->merge([
-                'device' => new DeviceResource($device),
-            ]), Response::HTTP_OK
-        );
-    }
-
-    /**
-     * Invalidate a device's registration.
-     */
-    public function invalidation(Device $device, InvalidateDeviceAction $action): JsonResponse
-    {
-        $this->authorize('accessAsOwner', $device);
-
-        $action(request()->user(), $device);
-
-        return response()->json(FlashMessage::success(
-            trans('actions.device.success.invalidate'))->merge([
-                'device' => new DeviceResource($device),
-            ]), Response::HTTP_OK
         );
     }
 }

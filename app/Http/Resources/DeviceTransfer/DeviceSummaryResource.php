@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Resources\Device;
+namespace App\Http\Resources\DeviceTransfer;
 
 use App\Http\Resources\DeviceModel\DeviceModelResource;
-use App\Http\Resources\DeviceTransfer\DeviceTransferBasicResource;
-use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Redis;
 
-class DeviceResource extends JsonResource
+class DeviceSummaryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,17 +21,11 @@ class DeviceResource extends JsonResource
             'color' => $this->color,
             'imei_1' => $this->imei_1,
             'imei_2' => $this->imei_2,
-            'access_key' => $this->invoice->access_key,
             'validation_status' => $this->validation_status,
             'share_code' => Redis::get("device:{$this->id}:active_share"),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => new UserResource($this->user),
             'device_model' => new DeviceModelResource($this->deviceModel),
-            'validated_attributes' => $this->attributeValidationLogs->mapWithKeys(fn ($log) => [
-                $log->attribute_label => $log->validated,
-            ]),
-            'transfers' => DeviceTransferBasicResource::collection($this->transfers),
         ];
     }
 }

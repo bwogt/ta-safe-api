@@ -1,0 +1,62 @@
+<?php
+
+namespace Tests\Feature\Controllers\DeviceValidationController\Start;
+
+use App\Models\Device;
+use App\Models\User;
+use App\Traits\RandomNumberGenerator;
+use Database\Factories\DeviceFactory;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\Asserts\AccessAsserts;
+use Tests\TestCase;
+
+class StartDeviceValidationTestSetUp extends TestCase
+{
+    use AccessAsserts;
+    use RandomNumberGenerator;
+    use RefreshDatabase;
+
+    protected User $user;
+    protected Device $device;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->userSetUp();
+        $this->deviceSetUp();
+    }
+
+    private function userSetUp(): void
+    {
+        $this->user = UserFactory::new()->create();
+    }
+
+    private function deviceSetUp(): void
+    {
+        $this->device = DeviceFactory::new()->for($this->user)->create();
+    }
+
+    protected function route(): string
+    {
+        return route('api.device.validation.start', ['device' => $this->device]);
+    }
+
+    protected function data(array $overrides = []): array
+    {
+        $products = "{$this->device->deviceModel->brand->name} "
+            . "{$this->device->deviceModel->name} "
+            . "{$this->device->color} "
+            . "{$this->device->imei_1}"
+            . "{$this->device->imei_2}"
+            . "{$this->device->ram}"
+            . "{$this->device->storage}";
+
+        return array_merge([
+            'name' => $this->user->name,
+            'cpf' => $this->user->cpf,
+            'products' => $products,
+        ], $overrides);
+    }
+}
