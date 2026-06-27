@@ -2,10 +2,10 @@
 
 namespace App\Actions\DeviceTransfer\Reject;
 
-use App\Actions\Validator\DeviceTransferValidator;
 use App\Enums\Device\DeviceTransferStatus;
 use App\Exceptions\Application\DeviceTransfer\RejectDeviceTransferFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceTransferGuard;
 use App\Models\DeviceTransfer;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class RejectDeviceTransferAction
     public function __invoke(User $user, DeviceTransfer $transfer): DeviceTransfer
     {
         try {
-            $this->validateBusinessRules($user, $transfer);
+            $this->enforceBusinessRules($user, $transfer);
 
             return DB::transaction(function () use ($user, $transfer) {
                 $this->rejectTransfer($transfer);
@@ -32,10 +32,10 @@ class RejectDeviceTransferAction
         }
     }
 
-    private function validateBusinessRules(User $user, DeviceTransfer $transfer): void
+    private function enforceBusinessRules(User $user, DeviceTransfer $transfer): void
     {
-        DeviceTransferValidator::mustBeTheRecipient($user, $transfer);
-        DeviceTransferValidator::mustBePending($transfer);
+        DeviceTransferGuard::mustBeTheRecipient($user, $transfer);
+        DeviceTransferGuard::mustBePending($transfer);
     }
 
     private function rejectTransfer(DeviceTransfer $transfer): void

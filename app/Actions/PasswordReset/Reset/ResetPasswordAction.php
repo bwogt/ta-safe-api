@@ -4,12 +4,12 @@ namespace App\Actions\PasswordReset\Reset;
 
 use App\Actions\PasswordReset\Block\PasswordResetBlockAction;
 use App\Actions\PasswordReset\Fails\IncrementPasswordResetAttemptAction;
-use App\Actions\Validator\ResetPasswordValidator;
 use App\Dto\PasswordReset\ResetPasswordDTO;
 use App\Exceptions\Application\PasswordReset\ResetPasswordFailedException;
 use App\Exceptions\BusinessRules\PasswordReset\InvalidPasswordResetCodeException;
 use App\Exceptions\BusinessRules\PasswordReset\PasswordResetAttemptExceededException;
 use App\Exceptions\BusinessRules\PasswordReset\PasswordResetBlockedException;
+use App\Guards\ResetPasswordGuard;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ final class ResetPasswordAction
         try {
             Cache::lock("reset_password_lock:{$dto->email}", 10)
                 ->get(function () use ($dto) {
-                    $this->resetPasswordBusinessRules($dto);
+                    $this->enforceBusinessRules($dto);
 
                     DB::transaction(function () use ($dto) {
                         $user = $this->userByEmail($dto->email);
@@ -51,11 +51,11 @@ final class ResetPasswordAction
         }
     }
 
-    private function resetPasswordBusinessRules(ResetPasswordDTO $dto): void
+    private function enforceBusinessRules(ResetPasswordDTO $dto): void
     {
-        ResetPasswordValidator::emailMustNotBeBlock($dto->email);
-        ResetPasswordValidator::attemptsMustNotBeExceeded($dto->email);
-        ResetPasswordValidator::codeMustBeValid($dto->email, $dto->code);
+        ResetPasswordGuard::emailMustNotBeBlock($dto->email);
+        ResetPasswordGuard::attemptsMustNotBeExceeded($dto->email);
+        ResetPasswordGuard::codeMustBeValid($dto->email, $dto->code);
     }
 
     private function userByEmail(string $email): User

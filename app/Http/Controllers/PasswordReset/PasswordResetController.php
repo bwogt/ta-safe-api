@@ -13,7 +13,7 @@ use App\Http\Requests\PasswordReset\StartPasswordResetRequest;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class PasswordResetController extends Controller
+final class PasswordResetController extends Controller
 {
     public function start(
         StartPasswordResetRequest $request,

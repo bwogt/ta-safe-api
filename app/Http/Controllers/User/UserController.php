@@ -15,49 +15,34 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
-    /**
-     * Update user profile.
-     */
     public function update(UpdateUserRequest $request, UpdateUserAction $action): Response
     {
         $user = $action($request->user(), $request->toDto());
 
-        return response()->json(
-            FlashMessage::success(trans('actions.user.success.update'))
-                ->merge(['user' => new UserResource($user)]),
-            Response::HTTP_OK
+        return response()->json(FlashMessage::success(
+            __('actions.user.success.update'))->merge([
+                'user' => new UserResource($user),
+            ]), Response::HTTP_OK
         );
     }
 
-    /**
-     * Show current user.
-     */
     public function view(Request $request): JsonResource
     {
         return new UserResource($request->user());
     }
 
-    /**
-     * Search user by email.
-     */
     public function searchByEmail(SearchUserRequest $request): JsonResource
     {
         return new UserPublicResource($request->userByEmail());
     }
 
-    /**
-     * Get the user's devices.
-     */
     public function devices(Request $request): JsonResource
     {
         return DeviceResource::collection($request->user()->devicesOrderedByUpdate());
     }
 
-    /**
-     * Get user devices transfers.
-     */
     public function transfers(Request $request): JsonResource
     {
         return DeviceTransferResource::collection($request->user()->userDevicesTransfers());

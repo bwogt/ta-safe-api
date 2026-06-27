@@ -2,9 +2,9 @@
 
 namespace App\Actions\Device\Share;
 
-use App\Actions\Validator\DeviceShareValidator;
 use App\Exceptions\Application\Device\GetDeviceByShareCodeException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceShareGuard;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -37,7 +37,7 @@ final class GetDeviceByShareCodeAction
 
     private function enforceBusinessRules(string $code): void
     {
-        DeviceShareValidator::codeMustBeActive($code);
+        DeviceShareGuard::codeMustBeActive($code);
     }
 
     private function findByCode(string $code): Device

@@ -7,11 +7,8 @@ use App\Http\Resources\Brand\BrandResource;
 use App\Models\Brand;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BrandController extends Controller
+final class BrandController extends Controller
 {
-    /**
-     * Get all cell phone brands from the database.
-     */
     public function brands(): JsonResource
     {
         return BrandResource::collection(Brand::all());

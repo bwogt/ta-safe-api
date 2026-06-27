@@ -8,11 +8,8 @@ use App\Models\Brand;
 use App\Models\DeviceModel;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DeviceModelController extends Controller
+final class DeviceModelController extends Controller
 {
-    /**
-     * Get all device models by brand.
-     */
     public function deviceModelsByBrand(Brand $brand): JsonResource
     {
         $deviceModels = DeviceModel::where(

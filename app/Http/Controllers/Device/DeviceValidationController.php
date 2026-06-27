@@ -24,7 +24,7 @@ final class DeviceValidationController extends Controller
         ValidateDeviceRegistrationJob::dispatch($device);
 
         return response()->json(FlashMessage::success(
-            trans('actions.device.success.validate'))->merge([
+            __('actions.device.success.validate'))->merge([
                 'device' => new DeviceResource($device),
             ]), Response::HTTP_OK
         );
@@ -36,7 +36,7 @@ final class DeviceValidationController extends Controller
         $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
-            trans('actions.device.success.invalidate'))->merge([
+            __('actions.device.success.invalidate'))->merge([
                 'device' => new DeviceResource($device),
             ]), Response::HTTP_OK
         );

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Validator;
+namespace App\Guards;
 
 use App\Dto\Auth\CredentialsDTO;
 use App\Exceptions\BusinessRules\Auth\EmailNotExistsException;
@@ -8,7 +8,7 @@ use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthValidator
+final class AuthGuard
 {
     public static function credentialsMustBeValid(?User $user, CredentialsDTO $data): void
     {

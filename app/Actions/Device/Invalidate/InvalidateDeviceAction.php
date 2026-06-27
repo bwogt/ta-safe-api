@@ -2,22 +2,22 @@
 
 namespace App\Actions\Device\Invalidate;
 
-use App\Actions\Validator\DeviceValidator;
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\Application\Device\InvalidateDeviceFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceGuard;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class InvalidateDeviceAction
+final class InvalidateDeviceAction
 {
     public function __invoke(User $user, Device $device): Device
     {
         try {
-            $this->validateBusinessRules($user, $device);
+            $this->enforceBusinessRules($user, $device);
 
             return DB::transaction(function () use ($user, $device) {
                 $this->updateDeviceStatus($device);
@@ -32,10 +32,10 @@ class InvalidateDeviceAction
         }
     }
 
-    private function validateBusinessRules(User $user, Device $device): void
+    private function enforceBusinessRules(User $user, Device $device): void
     {
-        DeviceValidator::mustBeOwner($user, $device);
-        DeviceValidator::statusMustBePending($device);
+        DeviceGuard::mustBeOwner($user, $device);
+        DeviceGuard::statusMustBePending($device);
     }
 
     private function updateDeviceStatus(Device $device): void
