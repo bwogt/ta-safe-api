@@ -21,5 +21,14 @@ docker compose --profile web up -d --build
 docker compose --profile test --env-file=.env.testing up -d --build
 ~~~
 
+2. Run the test suite to verify all changes
+~~~bash
+docker compose exec app_test php artisan test
+~~~
+
+## 📘  Docs
+API documentation can be viewed locally at:
+http://localhost/docs/api#/
+
 ## 🔗 Related Issue
 Closes #**ISSUE_NUMBER**

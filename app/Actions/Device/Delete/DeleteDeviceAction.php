@@ -27,7 +27,13 @@ final class DeleteDeviceAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->handleFailure($e, $user, $device);
+            throw new DeleteDeviceFailedException(
+                previous: $e,
+                context: [
+                    'user_id' => $user->id,
+                    'device_id' => $device->id,
+                ]
+            );
         }
     }
 
@@ -48,16 +54,5 @@ final class DeleteDeviceAction
             'user_id' => $user->id,
             'device_id' => $device->id,
         ]);
-    }
-
-    private function handleFailure(Throwable $e, User $user, Device $device): never
-    {
-        throw new DeleteDeviceFailedException(
-            previous: $e,
-            context: [
-                'user_id' => $user->id,
-                'device_id' => $device->id,
-            ]
-        );
     }
 }

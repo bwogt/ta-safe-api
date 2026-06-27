@@ -28,7 +28,14 @@ final class InvalidateDeviceAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->handleFailure($e, $user, $device);
+            throw new InvalidateDeviceFailedException(
+                previous: $e,
+                context: [
+                    'user_id' => $user->id,
+                    'device_id' => $device->id,
+                    'validation_status' => $device->validation_status,
+                ]
+            );
         }
     }
 
@@ -49,17 +56,5 @@ final class InvalidateDeviceAction
             'user_id' => $user->id,
             'device_id' => $device->id,
         ]);
-    }
-
-    private function handleFailure(Throwable $e, User $user, Device $device): never
-    {
-        throw new InvalidateDeviceFailedException(
-            previous: $e,
-            context: [
-                'user_id' => $user->id,
-                'device_id' => $device->id,
-                'validation_status' => $device->validation_status,
-            ]
-        );
     }
 }
