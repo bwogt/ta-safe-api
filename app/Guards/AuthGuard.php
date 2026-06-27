@@ -8,7 +8,7 @@ use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthGuard
+final class AuthGuard
 {
     public static function credentialsMustBeValid(?User $user, CredentialsDTO $data): void
     {

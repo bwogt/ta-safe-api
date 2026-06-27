@@ -2,23 +2,23 @@
 
 namespace App\Actions\Device\Validate;
 
-use App\Actions\Validator\DeviceValidator;
 use App\Dto\Device\DeviceInvoiceDTO;
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\Application\Device\StartDeviceValidationFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceGuard;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class StartDeviceValidationAction
+final class StartDeviceValidationAction
 {
     public function __invoke(User $user, Device $device, DeviceInvoiceDTO $data): Device
     {
         try {
-            $this->validateBusinessRules($user, $device);
+            $this->enforceBusinessRules($user, $device);
 
             return DB::transaction(function () use ($user, $device, $data) {
                 $this->updateDeviceStatus($device);
@@ -34,10 +34,10 @@ class StartDeviceValidationAction
         }
     }
 
-    private function validateBusinessRules(User $user, Device $device): void
+    private function enforceBusinessRules(User $user, Device $device): void
     {
-        DeviceValidator::mustBeOwner($user, $device);
-        DeviceValidator::statusMustBePending($device);
+        DeviceGuard::mustBeOwner($user, $device);
+        DeviceGuard::statusMustBePending($device);
     }
 
     private function updateDeviceStatus(Device $device): void

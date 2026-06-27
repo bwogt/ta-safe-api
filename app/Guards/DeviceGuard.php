@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Validator;
+namespace App\Guards;
 
 use App\Enums\Device\DeviceValidationStatus;
 use App\Exceptions\BusinessRules\Device\InvalidDeviceStateException;
@@ -8,7 +8,7 @@ use App\Exceptions\BusinessRules\Device\UserNotOwnerException;
 use App\Models\Device;
 use App\Models\User;
 
-class DeviceValidator
+final class DeviceGuard
 {
     public static function mustBeOwner(User $user, Device $device): void
     {

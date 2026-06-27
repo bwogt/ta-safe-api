@@ -2,21 +2,21 @@
 
 namespace App\Actions\Device\Delete;
 
-use App\Actions\Validator\DeviceValidator;
 use App\Exceptions\Application\Device\DeleteDeviceFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceGuard;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class DeleteDeviceAction
+final class DeleteDeviceAction
 {
     public function __invoke(User $user, Device $device): bool
     {
         try {
-            $this->validateBusinessRules($user, $device);
+            $this->enforceBusinessRules($user, $device);
 
             return DB::transaction(function () use ($user, $device) {
                 $this->deleteDevice($device);
@@ -31,10 +31,10 @@ class DeleteDeviceAction
         }
     }
 
-    private function validateBusinessRules(User $user, Device $device): void
+    private function enforceBusinessRules(User $user, Device $device): void
     {
-        DeviceValidator::mustBeOwner($user, $device);
-        DeviceValidator::statusMustBeRejected($device);
+        DeviceGuard::mustBeOwner($user, $device);
+        DeviceGuard::statusMustBeRejected($device);
     }
 
     private function deleteDevice(Device $device): void

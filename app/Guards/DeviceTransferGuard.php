@@ -11,7 +11,7 @@ use App\Models\Device;
 use App\Models\DeviceTransfer;
 use App\Models\User;
 
-class DeviceTransferGuard
+final class DeviceTransferGuard
 {
     public static function mustNotTransferToSelf(User $sourceUser, User $targetUser): void
     {

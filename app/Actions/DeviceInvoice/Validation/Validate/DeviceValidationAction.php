@@ -3,9 +3,9 @@
 namespace App\Actions\DeviceInvoice\Validation\Validate;
 
 use App\Actions\DeviceInvoice\ProductMatch\InvoiceProductMatchAction;
-use App\Actions\Validator\DeviceValidator;
 use App\Dto\Invoice\Search\InvoiceProductMatchResultDto;
 use App\Enums\Device\DeviceValidationStatus;
+use App\Guards\DeviceGuard;
 use App\Models\Device;
 use App\Services\DeviceInvoice\DeviceInvoiceValidationService;
 use Exception;
@@ -13,7 +13,7 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class DeviceValidationAction
+final class DeviceValidationAction
 {
     private InvoiceProductMatchResultDto $invoiceProduct;
     private DeviceInvoiceValidationService $deviceValidationService;
@@ -25,10 +25,9 @@ class DeviceValidationAction
     {
         try {
             $this->initialize();
+            $this->enforceBusinessRules();
 
             return DB::transaction(function () {
-                $this->validateAttributesBeforeAction();
-
                 $this->mandatoryValidations();
                 $this->optionalValidations();
                 $this->validateByLogs();
@@ -58,9 +57,9 @@ class DeviceValidationAction
         );
     }
 
-    private function validateAttributesBeforeAction(): void
+    private function enforceBusinessRules(): void
     {
-        DeviceValidator::statusMustBeInAnalysis($this->device);
+        DeviceGuard::statusMustBeInAnalysis($this->device);
     }
 
     /**

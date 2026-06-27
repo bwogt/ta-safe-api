@@ -2,10 +2,10 @@
 
 namespace App\Actions\DeviceTransfer\Create;
 
-use App\Actions\Validator\DeviceValidator;
 use App\Dto\DeviceTransfer\CreateDeviceTransferDTO;
 use App\Exceptions\Application\DeviceTransfer\CreateDeviceTransferFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceGuard;
 use App\Guards\DeviceTransferGuard;
 use App\Models\DeviceTransfer;
 use App\Models\User;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class CreateDeviceTransferAction
+final class CreateDeviceTransferAction
 {
     public function __invoke(User $user, CreateDeviceTransferDTO $data): DeviceTransfer
     {
@@ -35,8 +35,8 @@ class CreateDeviceTransferAction
 
     private function enforceBusinessRules(User $user, CreateDeviceTransferDTO $data): void
     {
-        DeviceValidator::mustBeOwner($user, $data->device);
-        DeviceValidator::statusMustBeValidated($data->device);
+        DeviceGuard::mustBeOwner($user, $data->device);
+        DeviceGuard::statusMustBeValidated($data->device);
 
         DeviceTransferGuard::mustNotTransferToSelf($user, $data->targetUser);
         DeviceTransferGuard::mustBeAvailableForTransfer($data->device);
