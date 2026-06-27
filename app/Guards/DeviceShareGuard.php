@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\Validator;
+namespace App\Guards;
 
 use App\Exceptions\BusinessRules\Device\ActiveShareCodeException;
 use App\Exceptions\BusinessRules\Device\ShareCodeNotFoundException;
 use App\Models\Device;
 use Illuminate\Support\Facades\Redis;
 
-final class DeviceShareValidator
+final class DeviceShareGuard
 {
     public static function mustNotHaveAnActiveCode(Device $device): void
     {

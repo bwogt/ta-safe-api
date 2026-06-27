@@ -2,10 +2,10 @@
 
 namespace App\Actions\Device\Share;
 
-use App\Actions\Validator\DeviceShareValidator;
 use App\Actions\Validator\DeviceValidator;
 use App\Exceptions\Application\Device\CreateDeviceShareCodeException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\DeviceShareGuard;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -48,7 +48,7 @@ final class CreateDeviceShareCodeAction
     {
         DeviceValidator::mustBeOwner($user, $device);
         DeviceValidator::statusMustBeValidated($device);
-        DeviceShareValidator::mustNotHaveAnActiveCode($device);
+        DeviceShareGuard::mustNotHaveAnActiveCode($device);
     }
 
     private function generateAndStoreDeviceShareCode(Device $device): string
