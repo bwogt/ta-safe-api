@@ -12,14 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginActionTest extends LoginActionTestSetUp
 {
-    public function should_authenticate_user_with_valid_credentials(): void
+    public function test_should_authenticate_user_with_valid_credentials(): void
     {
         $login = (new LoginAction)($this->user, $this->credentials());
 
         $this->assertInstanceOf(LoginDTO::class, $login);
     }
 
-    public function should_throw_invalid_credentials_exception_when_email_is_invalid(): void
+    public function test_should_throw_invalid_credentials_exception_when_email_is_invalid(): void
     {
         $this->expectException(InvalidCredentialsException::class);
 
@@ -30,7 +30,7 @@ class LoginActionTest extends LoginActionTestSetUp
         (new LoginAction)($this->user, $credentials);
     }
 
-    public function should_throw_invalid_credentials_exception_when_password_is_invalid(): void
+    public function test_should_throw_invalid_credentials_exception_when_password_is_invalid(): void
     {
         $this->expectException(InvalidCredentialsException::class);
 
@@ -41,7 +41,7 @@ class LoginActionTest extends LoginActionTestSetUp
         (new LoginAction)($this->user, $credentials);
     }
 
-    public function should_throw_invalid_credentials_exception_when_credentials_are_invalid(): void
+    public function test_should_throw_invalid_credentials_exception_when_credentials_are_invalid(): void
     {
         $this->expectException(LoginFailedException::class);
 
