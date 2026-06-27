@@ -15,7 +15,7 @@ use App\Models\DeviceTransfer;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeviceTransferController extends Controller
+final class DeviceTransferController extends Controller
 {
     public function create(
         CreateDeviceTransferRequest $request,

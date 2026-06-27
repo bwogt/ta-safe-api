@@ -2,12 +2,12 @@
 
 namespace App\Actions\PasswordReset\Start;
 
-use App\Actions\Validator\ResetPasswordValidator;
 use App\Exceptions\Application\PasswordReset\StartPasswordResetFailedException;
 use App\Exceptions\BusinessRules\Auth\EmailNotExistsException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\BusinessRuleExceptionLogger;
 use App\Guards\AuthGuard;
+use App\Guards\ResetPasswordGuard;
 use App\Models\User;
 use App\Notifications\Auth\ForgotPasswordNotification;
 use Illuminate\Support\Facades\Cache;
@@ -52,9 +52,9 @@ final class StartPasswordResetAction
 
     private function enforceBusinessRules(string $email): void
     {
-        ResetPasswordValidator::emailMustNotBeBlock($email);
+        ResetPasswordGuard::emailMustNotBeBlock($email);
         AuthGuard::emailMustBeExists($email);
-        ResetPasswordValidator::mustNotBeInCooldown($email);
+        ResetPasswordGuard::mustNotBeInCooldown($email);
     }
 
     private function userByEmail(string $email): User

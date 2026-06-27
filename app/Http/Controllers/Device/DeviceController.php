@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeviceController extends Controller
+final class DeviceController extends Controller
 {
     public function view(Device $device): JsonResource
     {
@@ -32,7 +32,7 @@ class DeviceController extends Controller
         $action(($request->user()), $request->toDto());
 
         return response()->json(FlashMessage::success(
-            trans('actions.device.success.register')),
+            __('actions.device.success.register')),
             Response::HTTP_CREATED,
         );
     }
@@ -44,7 +44,7 @@ class DeviceController extends Controller
         $action(request()->user(), $device);
 
         return response()->json(FlashMessage::success(
-            trans('actions.device.success.delete')),
+            __('actions.device.success.delete')),
             Response::HTTP_OK
         );
     }

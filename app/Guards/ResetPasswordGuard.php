@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Validator;
+namespace App\Guards;
 
 use App\Exceptions\BusinessRules\PasswordReset\InvalidPasswordResetCodeException;
 use App\Exceptions\BusinessRules\PasswordReset\PasswordResetAttemptExceededException;
@@ -8,7 +8,7 @@ use App\Exceptions\BusinessRules\PasswordReset\PasswordResetBlockedException;
 use App\Exceptions\BusinessRules\PasswordReset\PasswordResetCooldownException;
 use Illuminate\Support\Facades\Cache;
 
-final class ResetPasswordValidator
+final class ResetPasswordGuard
 {
     public static function mustNotBeInCooldown(string $email): void
     {
