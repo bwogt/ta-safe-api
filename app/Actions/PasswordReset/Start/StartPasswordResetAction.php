@@ -2,12 +2,12 @@
 
 namespace App\Actions\PasswordReset\Start;
 
-use App\Actions\Validator\AuthValidator;
 use App\Actions\Validator\ResetPasswordValidator;
 use App\Exceptions\Application\PasswordReset\StartPasswordResetFailedException;
 use App\Exceptions\BusinessRules\Auth\EmailNotExistsException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
 use App\Exceptions\Helpers\BusinessRuleExceptionLogger;
+use App\Guards\AuthGuard;
 use App\Models\User;
 use App\Notifications\Auth\ForgotPasswordNotification;
 use Illuminate\Support\Facades\Cache;
@@ -21,7 +21,7 @@ final class StartPasswordResetAction
         try {
             return Cache::lock("forgot_password_lock:{$email}", 10)
                 ->get(function () use ($email) {
-                    $this->validateBusinessRules($email);
+                    $this->enforceBusinessRules($email);
 
                     $user = $this->userByEmail($email);
                     $code = $this->generatePasswordResetCode();
@@ -50,10 +50,10 @@ final class StartPasswordResetAction
         }
     }
 
-    private function validateBusinessRules(string $email): void
+    private function enforceBusinessRules(string $email): void
     {
         ResetPasswordValidator::emailMustNotBeBlock($email);
-        AuthValidator::emailMustBeExists($email);
+        AuthGuard::emailMustBeExists($email);
         ResetPasswordValidator::mustNotBeInCooldown($email);
     }
 

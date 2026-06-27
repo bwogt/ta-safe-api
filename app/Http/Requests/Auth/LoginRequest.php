@@ -3,10 +3,16 @@
 namespace App\Http\Requests\Auth;
 
 use App\Dto\Auth\CredentialsDTO;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
+    public function userByEmail(): ?User
+    {
+        return User::whereEmail($this->input('email'))->first();
+    }
+
     public function toDto(): CredentialsDTO
     {
         return new CredentialsDTO(
@@ -18,17 +24,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
-                'bail',
-                'required',
-                'string',
-                'email:filter',
-            ],
-            'password' => [
-                'required',
-                'string',
-                'max:255',
-            ],
+            'email' => ['required', 'string', 'email:filter'],
+            'password' => ['required', 'string', 'max:255'],
         ];
     }
 }

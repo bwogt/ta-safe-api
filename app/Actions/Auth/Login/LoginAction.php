@@ -2,24 +2,23 @@
 
 namespace App\Actions\Auth\Login;
 
-use App\Actions\Validator\AuthValidator;
 use App\Dto\Auth\CredentialsDTO;
 use App\Dto\Auth\LoginDTO;
 use App\Exceptions\Application\Auth\LoginFailedException;
 use App\Exceptions\BusinessRules\BusinessRuleException;
+use App\Guards\AuthGuard;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class LoginAction
+final class LoginAction
 {
-    public function __invoke(CredentialsDTO $data): LoginDTO
+    public function __invoke(?User $user, CredentialsDTO $credentials): LoginDTO
     {
         try {
-            return DB::transaction(function () use ($data) {
-                $user = $this->findUserByEmail($data);
-                $this->validateCredentials($user, $data);
+            return DB::transaction(function () use ($user, $credentials) {
+                $this->enforceBusinessRules($user, $credentials);
 
                 $this->deleteAllTokens($user);
                 $token = $this->createPersonalAccessToken($user);
@@ -32,19 +31,14 @@ class LoginAction
         } catch (Throwable $e) {
             throw new LoginFailedException(
                 previous: $e,
-                context: ['email' => $data->email]
+                context: ['email' => $credentials->email]
             );
         }
     }
 
-    private function findUserByEmail(CredentialsDTO $data): ?User
+    private function enforceBusinessRules(?User $user, CredentialsDTO $data): void
     {
-        return User::where('email', $data->email)->first();
-    }
-
-    private function validateCredentials(?User $user, CredentialsDTO $data): void
-    {
-        AuthValidator::credentialsMustBeValid($user, $data);
+        AuthGuard::credentialsMustBeValid($user, $data);
     }
 
     private function deleteAllTokens(User $user): void

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Actions\Auth\Login;
 
+use App\Actions\Auth\Login\LoginAction;
 use App\Dto\Auth\LoginDTO;
 use App\Exceptions\Application\Auth\LoginFailedException;
 use App\Exceptions\BusinessRules\Auth\InvalidCredentialsException;
@@ -11,27 +12,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginActionTest extends LoginActionTestSetUp
 {
-    public function test_should_return_an_instance_of_login_dto_when_registration_is_successful(): void
+    public function should_authenticate_user_with_valid_credentials(): void
     {
-        $this->assertInstanceOf(LoginDTO::class, ($this->action)($this->credentials()));
+        $login = (new LoginAction)($this->user, $this->credentials());
+
+        $this->assertInstanceOf(LoginDTO::class, $login);
     }
 
-    public function test_should_throw_an_exception_when_the_email_is_incorrect(): void
-    {
-        $this->expectException(InvalidCredentialsException::class);
-        $anotherEmail = fake()->unique()->safeEmail();
-
-        ($this->action)($this->credentials(['email' => $anotherEmail]));
-    }
-
-    public function test_should_throw_an_exception_when_the_password_is_incorrect(): void
+    public function should_throw_invalid_credentials_exception_when_email_is_invalid(): void
     {
         $this->expectException(InvalidCredentialsException::class);
 
-        ($this->action)($this->credentials(['password' => 'wrong-password']));
+        $credentials = $this->credentials([
+            'email' => fake()->unique()->safeEmail(),
+        ]);
+
+        (new LoginAction)($this->user, $credentials);
     }
 
-    public function test_should_throw_login_failed_exception_on_failure(): void
+    public function should_throw_invalid_credentials_exception_when_password_is_invalid(): void
+    {
+        $this->expectException(InvalidCredentialsException::class);
+
+        $credentials = $this->credentials([
+            'password' => 'wrong-password',
+        ]);
+
+        (new LoginAction)($this->user, $credentials);
+    }
+
+    public function should_throw_invalid_credentials_exception_when_credentials_are_invalid(): void
     {
         $this->expectException(LoginFailedException::class);
 
@@ -40,6 +50,6 @@ class LoginActionTest extends LoginActionTestSetUp
                 Response::HTTP_INTERNAL_SERVER_ERROR
             ));
 
-        ($this->action)($this->credentials());
+        (new LoginAction)($this->user, $this->credentials());
     }
 }
