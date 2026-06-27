@@ -28,7 +28,13 @@ class RejectDeviceTransferAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->handleFailure($e, $user, $transfer);
+            throw new RejectDeviceTransferFailedException(
+                previous: $e,
+                context: [
+                    'user_id' => $user->id,
+                    'transfer_id' => $transfer->id,
+                ]
+            );
         }
     }
 
@@ -49,16 +55,5 @@ class RejectDeviceTransferAction
             'user_id' => $user->id,
             'transfer_id' => $transfer->id,
         ]);
-    }
-
-    private function handleFailure(Throwable $e, User $user, DeviceTransfer $transfer): never
-    {
-        throw new RejectDeviceTransferFailedException(
-            previous: $e,
-            context: [
-                'user_id' => $user->id,
-                'transfer_id' => $transfer->id,
-            ]
-        );
     }
 }

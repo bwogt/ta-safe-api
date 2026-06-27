@@ -29,7 +29,14 @@ final class CreateDeviceTransferAction
         } catch (BusinessRuleException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->handleFailure($e, $user, $data);
+            throw new CreateDeviceTransferFailedException(
+                previous: $e,
+                context: [
+                    'device_id' => $data->device->id,
+                    'user_id' => $user->id,
+                    'target_user_id' => $data->targetUser->id,
+                ]
+            );
         }
     }
 
@@ -58,17 +65,5 @@ final class CreateDeviceTransferAction
             'user_id' => $transfer->source_user_id,
             'target_user_id' => $transfer->target_user_id,
         ]);
-    }
-
-    private function handleFailure(Throwable $e, User $user, CreateDeviceTransferDTO $data): never
-    {
-        throw new CreateDeviceTransferFailedException(
-            previous: $e,
-            context: [
-                'device_id' => $data->device->id,
-                'user_id' => $user->id,
-                'target_user_id' => $data->targetUser->id,
-            ]
-        );
     }
 }
