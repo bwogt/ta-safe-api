@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Validator;
+namespace App\Guards;
 
 use App\Exceptions\BusinessRules\DeviceTransfer\DeviceHasPendingTransferException;
 use App\Exceptions\BusinessRules\DeviceTransfer\SelfTransferNotAllowedException;
@@ -11,7 +11,7 @@ use App\Models\Device;
 use App\Models\DeviceTransfer;
 use App\Models\User;
 
-class DeviceTransferValidator
+class DeviceTransferGuard
 {
     public static function mustNotTransferToSelf(User $sourceUser, User $targetUser): void
     {
