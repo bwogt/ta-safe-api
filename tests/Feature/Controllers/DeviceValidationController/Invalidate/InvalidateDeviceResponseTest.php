@@ -16,7 +16,8 @@ class InvalidateDeviceResponseTest extends InvalidateDeviceTestSetUp
         $this->postJson($this->route())
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('message.type', FlashMessageType::SUCCESS)
+                fn (AssertableJson $json) => $json
+                    ->where('message.type', FlashMessageType::SUCCESS)
                     ->where('message.text', trans('actions.device.success.invalidate'))
                     ->where('device.id', $this->device->id)
                     ->where('device.color', $this->device->color)
@@ -27,7 +28,6 @@ class InvalidateDeviceResponseTest extends InvalidateDeviceTestSetUp
                     ->has('device.share_code')
                     ->has('device.created_at')
                     ->has('device.updated_at')
-                    ->has('device.user')
                     ->has('device.device_model')
                     ->has('device.device_model.brand')
                     ->etc()

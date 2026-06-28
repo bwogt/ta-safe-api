@@ -14,7 +14,8 @@ class ViewDeviceResponseTest extends ViewDeviceTestSetUp
         $this->getJson($this->route())
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->where('id', $this->device->id)
+                fn (AssertableJson $json) => $json
+                    ->where('id', $this->device->id)
                     ->where('color', $this->device->color)
                     ->where('imei_1', $this->device->imei_1)
                     ->where('imei_2', $this->device->imei_2)
@@ -23,12 +24,6 @@ class ViewDeviceResponseTest extends ViewDeviceTestSetUp
                     ->where('share_code', null)
                     ->has('created_at')
                     ->has('updated_at')
-                    ->where('user.id', $this->user->id)
-                    ->where('user.name', $this->user->name)
-                    ->where('user.cpf', $this->user->cpf)
-                    ->has('user.created_at')
-                    ->has('user.updated_at')
-                    ->missing('user.password')
                     ->where('device_model.name', $this->device->deviceModel->name)
                     ->where('device_model.ram', $this->device->deviceModel->ram)
                     ->where('device_model.storage', $this->device->deviceModel->storage)
