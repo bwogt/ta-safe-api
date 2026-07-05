@@ -71,16 +71,26 @@ cp .env.example .env
 4. Ajuste as variáveis necessárias no .env
 ~~~env
 DB_DATABASE=ta_safe
-DB_USERNAME=ta_safe
-DB_PASSWORD=secret
+DB_USERNAME=developer
+DB_PASSWORD=password
 ~~~
 
-5. Suba o ambiente de desenvolvimento (`com perfil web`)
+5. Build Docker images (`perfil web`)
 ~~~bash
-docker compose --profile web up -d --build
+docker compose --profile web build
 ~~~
 
-6. Gere uma APP_KEY
+6. Instalar as depenências PHP (Composer)
+~~~bash
+docker compose --profile web run --rm app composer install
+~~~
+
+7. Iniciar a aplicação
+~~~bash
+docker compose --profile web up -d
+~~~
+
+8. Gere uma APP_KEY
 ~~~bash
 docker compose exec app php artisan key:generate
 ~~~
