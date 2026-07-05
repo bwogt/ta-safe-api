@@ -70,7 +70,7 @@ cp .env.example .env
 
 4. Ajuste as variáveis necessárias no .env
 ~~~env
-DB_DATABASE=ta_safe
+DB_DATABASE=ta_safe_api
 DB_USERNAME=developer
 DB_PASSWORD=password
 ~~~
