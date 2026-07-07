@@ -134,6 +134,5 @@ docker compose --profile obs up -d
 
 ## 📘 Documentação
 Após iniciar o ambiente de desenvolvimento, a documentação interativa da API estará disponível em:
-~~~bash
 http://localhost/docs/api#/
-~~~
+
