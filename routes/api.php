@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Brand\BrandController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Device\DeviceController;
 use App\Http\Controllers\Device\DeviceShareController;
 use App\Http\Controllers\Device\DeviceTransferController;
@@ -39,6 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::delete('logout', 'logout')->name('api.auth.logout');
     });
+
+    Route::controller(DashboardController::class)
+        ->prefix('dashboard')
+        ->name('api.dashboard')
+        ->group(function () {
+            Route::get('/', 'dashboard');
+        });
 
     Route::controller(UserController::class)->group(function () {
         Route::patch('user', 'update')->name('api.user.update');
