@@ -87,10 +87,7 @@ O ambiente de testes é executado de forma isolada, utilizando:
 
 1. Suba o ambiente de testes
 ~~~bash
-docker compose \
-  --profile test \
-  --env-file=.env.testing \
-  up -d
+docker compose --profile test --env-file=.env.testing up -d
 ~~~
 
 2. Executando testes unitários e de integração
