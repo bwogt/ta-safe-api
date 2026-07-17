@@ -70,29 +70,13 @@ cp .env.example .env
 
 4. Ajuste as variáveis necessárias no .env
 ~~~env
-DB_DATABASE=ta_safe_api
 DB_USERNAME=developer
 DB_PASSWORD=password
 ~~~
 
-5. Build Docker images (`perfil web`)
+5. Inicie a aplicação com o comando
 ~~~bash
-docker compose --profile web build
-~~~
-
-6. Instalar as depenências PHP (Composer)
-~~~bash
-docker compose --profile web run --rm app composer install
-~~~
-
-7. Iniciar a aplicação
-~~~bash
-docker compose --profile web up -d
-~~~
-
-8. Gere uma APP_KEY
-~~~bash
-docker compose exec app php artisan key:generate
+docker compose --profile web up -d --build
 ~~~
 
 ## 🧪 Ambiente de Testes
@@ -106,7 +90,7 @@ O ambiente de testes é executado de forma isolada, utilizando:
 docker compose \
   --profile test \
   --env-file=.env.testing \
-  up -d --build
+  up -d
 ~~~
 
 2. Executando testes unitários e de integração
