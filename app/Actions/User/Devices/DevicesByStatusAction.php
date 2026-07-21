@@ -4,7 +4,7 @@ namespace App\Actions\User\Devices;
 
 use App\Enums\Device\DeviceValidationStatus;
 use App\Models\User;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 
 final class DevicesByStatusAction
 {
@@ -12,7 +12,7 @@ final class DevicesByStatusAction
         User $user,
         DeviceValidationStatus $status,
         ?int $perPage = 4
-    ): LengthAwarePaginator {
+    ): CursorPaginator {
         return $user->devices()
             ->whereValidationStatus($status->value)
             ->with([
@@ -21,6 +21,6 @@ final class DevicesByStatusAction
                 'attributeValidationLogs',
             ])
             ->orderByDesc('updated_at')
-            ->paginate($perPage);
+            ->cursorPaginate($perPage);
     }
 }

@@ -4,11 +4,11 @@ namespace App\Http\Resources\Pagination;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\CursorPaginator;
 
-final class PaginatedResource extends JsonResource
+final class CursorPaginatedResource extends JsonResource
 {
-    public static function from(string $resource, LengthAwarePaginator $paginator): self
+    public static function from(string $resource, CursorPaginator $paginator): self
     {
         return new self([
             'resource' => $resource,
@@ -24,11 +24,8 @@ final class PaginatedResource extends JsonResource
         return [
             'data' => $resource::collection($paginator->items()),
             'meta' => [
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-                'per_page' => $paginator->perPage(),
-                'has_next_page' => $paginator->hasMorePages(),
-                'total' => $paginator->total(),
+                'has_more_page' => $paginator->hasMorePages(),
+                'next_cursor' => $paginator->nextCursor()?->encode(),
             ],
         ];
     }

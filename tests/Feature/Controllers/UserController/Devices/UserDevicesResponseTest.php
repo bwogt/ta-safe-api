@@ -36,11 +36,8 @@ final class UserDevicesResponseTest extends UserDevicesTestSetUp
                         ->has('transfers')
                     )
                     ->has('meta')
-                    ->where('meta.current_page', 1)
-                    ->where('meta.last_page', 1)
-                    ->where('meta.per_page', 4)
-                    ->where('meta.has_next_page', false)
-                    ->where('meta.total', 1)
+                    ->has('meta.next_cursor')
+                    ->where('meta.has_more_page', false)
             );
     }
 }
