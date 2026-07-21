@@ -28,8 +28,8 @@ class InvalidateDeviceResponseTest extends InvalidateDeviceTestSetUp
                     ->has('device.share_code')
                     ->has('device.created_at')
                     ->has('device.updated_at')
-                    ->has('device.device_model')
-                    ->has('device.device_model.brand')
+                    ->has('device.model')
+                    ->has('device.model.brand')
                     ->etc()
             );
     }

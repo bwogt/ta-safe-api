@@ -2,20 +2,22 @@
 
 namespace Tests\Feature\Controllers\UserController\Devices;
 
+use App\Enums\Device\DeviceValidationStatus;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class UserDevicesResponseTest extends UserDevicesTestSetUp
+final class UserDevicesResponseTest extends UserDevicesTestSetUp
 {
-    public function test_an_authenticated_user_should_receive_a_collection_of_devices(): void
+    public function test_an_authenticated_user_can_view_their_devices_by_status(): void
     {
         Sanctum::actingAs($this->user);
 
-        $this->getJson($this->route())
+        $this->getJson($this->route(status: DeviceValidationStatus::PENDING))
             ->assertOk()
             ->assertJson(
-                fn (AssertableJson $json) => $json->has(1)
-                    ->first(fn (AssertableJson $json) => $json
+                fn (AssertableJson $json) => $json
+                    ->has('data', 1)
+                    ->has('data.0', fn (AssertableJson $json) => $json
                         ->where('id', $this->device->id)
                         ->where('color', $this->device->color)
                         ->where('imei_1', $this->device->imei_1)
@@ -26,12 +28,19 @@ class UserDevicesResponseTest extends UserDevicesTestSetUp
                         ->has('created_at')
                         ->has('updated_at')
                         ->missing('user.password')
-                        ->where('device_model.name', $this->device->deviceModel->name)
-                        ->where('device_model.ram', $this->device->deviceModel->ram)
-                        ->where('device_model.storage', $this->device->deviceModel->storage)
-                        ->where('device_model.brand.name', $this->device->deviceModel->brand->name)
+                        ->where('model.name', $this->device->deviceModel->name)
+                        ->where('model.ram', $this->device->deviceModel->ram)
+                        ->where('model.storage', $this->device->deviceModel->storage)
+                        ->where('model.brand.name', $this->device->deviceModel->brand->name)
                         ->has('validated_attributes')
                         ->has('transfers')
-                    ));
+                    )
+                    ->has('meta')
+                    ->where('meta.current_page', 1)
+                    ->where('meta.last_page', 1)
+                    ->where('meta.per_page', 4)
+                    ->where('meta.has_next_page', false)
+                    ->where('meta.total', 1)
+            );
     }
 }

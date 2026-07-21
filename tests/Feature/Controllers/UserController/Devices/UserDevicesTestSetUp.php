@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers\UserController\Devices;
 
+use App\Enums\Device\DeviceValidationStatus;
 use App\Models\Device;
 use App\Models\User;
 use Database\Factories\DeviceFactory;
@@ -38,8 +39,10 @@ class UserDevicesTestSetUp extends TestCase
             ->create();
     }
 
-    protected function route(): string
+    protected function route(DeviceValidationStatus $status): string
     {
-        return route('api.user.devices');
+        return route('api.user.devices', [
+            'status' => $status
+        ]);
     }
 }

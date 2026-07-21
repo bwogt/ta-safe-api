@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\User\Devices\DevicesByStatusAction;
 use App\Actions\User\Update\UpdateUserAction;
+use App\Enums\Device\DeviceValidationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
 use App\Http\Requests\User\SearchUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\Device\DeviceResource;
 use App\Http\Resources\DeviceTransfer\DeviceTransferResource;
+use App\Http\Resources\Pagination\PaginatedResource;
 use App\Http\Resources\User\UserPublicResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
@@ -38,9 +41,14 @@ final class UserController extends Controller
         return new UserPublicResource($request->userByEmail());
     }
 
-    public function devices(Request $request): JsonResource
-    {
-        return DeviceResource::collection($request->user()->devicesOrderedByUpdate());
+    public function devices(
+        DevicesByStatusAction $action,
+        DeviceValidationStatus $status
+    ): JsonResource {
+        $user = request()->user();
+        $devices = $action($user, $status);
+
+        return PaginatedResource::from(DeviceResource::class, $devices);
     }
 
     public function transfers(Request $request): JsonResource
