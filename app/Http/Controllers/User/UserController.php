@@ -20,6 +20,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UserController extends Controller
 {
+    public function view(Request $request): JsonResource
+    {
+        return new UserResource($request->user());
+    }
+
+    public function searchByEmail(SearchUserRequest $request): JsonResource
+    {
+        return new UserPublicResource($request->userByEmail());
+    }
+
     public function update(UpdateUserRequest $request, UpdateUserAction $action): Response
     {
         $user = $action($request->user(), $request->toDto());
@@ -31,24 +41,17 @@ final class UserController extends Controller
         );
     }
 
-    public function view(Request $request): JsonResource
-    {
-        return new UserResource($request->user());
-    }
-
-    public function searchByEmail(SearchUserRequest $request): JsonResource
-    {
-        return new UserPublicResource($request->userByEmail());
-    }
-
     public function devices(
         DevicesByStatusAction $action,
         DeviceValidationStatus $status
     ): JsonResource {
         $user = request()->user();
-        $devices = $action($user, $status);
+        $paginatedDevices = $action($user, $status);
 
-        return CursorPaginatedResource::from(DeviceResource::class, $devices);
+        return CursorPaginatedResource::from(
+            resource: DeviceResource::class,
+            paginator: $paginatedDevices
+        );
     }
 
     public function transfers(Request $request): JsonResource
