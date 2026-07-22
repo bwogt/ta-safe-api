@@ -12,7 +12,6 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\Device\DeviceResource;
 use App\Http\Resources\DeviceTransfer\DeviceTransferResource;
 use App\Http\Resources\Pagination\CursorPaginatedResource;
-use App\Http\Resources\Pagination\PaginatedResource;
 use App\Http\Resources\User\UserPublicResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;

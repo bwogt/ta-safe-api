@@ -42,7 +42,7 @@ class UserDevicesTestSetUp extends TestCase
     protected function route(DeviceValidationStatus $status): string
     {
         return route('api.user.devices', [
-            'status' => $status
+            'status' => $status,
         ]);
     }
 }
