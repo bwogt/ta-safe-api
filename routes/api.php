@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('user', 'update')->name('api.user.update');
         Route::get('user', 'view')->name('api.user.view');
         Route::get('user/search-by-email', 'searchByEmail')->name('api.user.search');
-        Route::get('user/devices', 'devices')->name('api.user.devices');
+        Route::get('user/devices/{status}', 'devices')->name('api.user.devices');
         Route::get('user/devices-transfers', 'transfers')->name('api.user.devices.transfers');
     });
 

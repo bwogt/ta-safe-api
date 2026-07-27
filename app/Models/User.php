@@ -100,19 +100,4 @@ class User extends Authenticatable
             ->orderByDesc('updated_at')
             ->get();
     }
-
-    /**
-     * Get the user's devices sorted by updated_at desc.
-     */
-    public function devicesOrderedByUpdate(): Collection
-    {
-        return Device::with([
-            'transfers',
-            'deviceModel.brand',
-            'attributeValidationLogs',
-        ])
-            ->where('user_id', $this->id)
-            ->orderByDesc('updated_at')
-            ->get();
-    }
 }
