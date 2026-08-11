@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers\UserController\Search;
 
+use App\Utils\Masks;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -17,7 +18,7 @@ class SearchUserByEmailResponseTest extends SearchUserByEmailTestSetUp
                 fn (AssertableJson $json) => $json
                     ->where('id', $this->targetUser->id)
                     ->where('name', $this->targetUser->name)
-                    ->where('cpf', $this->addAsteriskMaskForCpf($this->targetUser->cpf))
+                    ->where('cpf', Masks::maskCpf($this->targetUser->cpf))
                     ->has('created_at')
                     ->missing('password')
             );

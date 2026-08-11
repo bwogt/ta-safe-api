@@ -19,6 +19,8 @@ class ViewUserResponseTest extends ViewUserTestSetUp
                     ->where('name', $this->user->name)
                     ->where('email', $this->user->email)
                     ->where('cpf', $this->user->cpf)
+                    ->has('cpf_masked')
+                     ->has('email_verified_at')
                     ->has('created_at')
                     ->has('updated_at')
                     ->missing('password')

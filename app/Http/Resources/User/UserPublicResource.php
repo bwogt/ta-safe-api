@@ -2,25 +2,18 @@
 
 namespace App\Http\Resources\User;
 
-use App\Traits\StringMasks;
+use App\Utils\Masks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserPublicResource extends JsonResource
+final class UserPublicResource extends JsonResource
 {
-    use StringMasks;
-
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'cpf' => self::addAsteriskMaskForCpf($this->cpf),
+            'cpf' => Masks::maskCpf($this->cpf),
             'created_at' => $this->created_at,
         ];
     }
