@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
 use App\Traits\StringMasks;
+use App\Utils\Masks;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -43,7 +44,7 @@ final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSet
                 fn (AssertableJson $json) => $json
                     ->where('user.id', $this->user->id)
                     ->where('user.name', $this->user->name)
-                    ->where('user.cpf', $this->addAsteriskMaskForCpf($this->user->cpf))
+                    ->where('user.cpf', Masks::maskCpf($this->user->cpf))
                     ->has('user.created_at')
                     ->etc()
             );

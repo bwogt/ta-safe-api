@@ -16,15 +16,4 @@ trait StringMasks
 
         return substr_replace($imei, $asterisks, 3, 9);
     }
-
-    public function addAsteriskMaskForCpf(string $cpf): string
-    {
-        if (strlen($cpf) != 14) {
-            throw new Exception('The cpf must have 14 digits!');
-        }
-
-        $asterisks = str_repeat('*', 10);
-
-        return substr_replace($cpf, $asterisks, 2, 10);
-    }
 }

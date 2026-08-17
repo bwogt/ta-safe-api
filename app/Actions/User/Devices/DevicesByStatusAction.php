@@ -16,7 +16,6 @@ final class DevicesByStatusAction
         return $user->devices()
             ->whereValidationStatus($status->value)
             ->with([
-                'transfers',
                 'deviceModel.brand',
                 'attributeValidationLogs',
             ])
