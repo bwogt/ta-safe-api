@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controllers\DeviceShareController\Create;
 
-use App\Enums\FlashMessage\FlashMessageType;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
@@ -16,9 +15,8 @@ final class CreateDeviceShareCodeResponseTest extends CreateDeviceShareCodeTestS
             ->assertCreated()
             ->assertJson(
                 fn (AssertableJson $json) => $json
-                    ->where('message.type', FlashMessageType::SUCCESS)
-                    ->where('message.text', __('actions.device_share.success.create'))
                     ->has('code')
+                    ->has('expires_at')
             );
     }
 }
