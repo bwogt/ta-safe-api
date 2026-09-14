@@ -9,15 +9,10 @@ use App\Traits\StringMasks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DevicePublicResource extends JsonResource
+final class DevicePublicResource extends JsonResource
 {
     use StringMasks;
 
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
@@ -28,12 +23,23 @@ class DevicePublicResource extends JsonResource
             'validation_status' => $this->validation_status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => new UserPublicResource($this->user),
-            'device_model' => new DeviceModelResource($this->deviceModel),
-            'validated_attributes' => $this->attributeValidationLogs->mapWithKeys(fn ($log) => [
-                $log->attribute_label => $log->validated,
-            ]),
+            'owner' => new UserPublicResource($this->user),
+            'model' => new DeviceModelResource($this->deviceModel),
+            'validated_attributes' => $this->validatedAttributes(),
             'transfers' => DeviceTransferBasicResource::collection($this->transfers),
         ];
+    }
+
+    private function validatedAttributes(): ?array
+    {
+        if ($this->attributeValidationLogs->isEmpty()) {
+            return null;
+        }
+
+        return $this->attributeValidationLogs
+            ->mapWithKeys(fn ($log) => [
+                $log->attribute_label => $log->validated,
+            ])
+            ->toArray();
     }
 }
