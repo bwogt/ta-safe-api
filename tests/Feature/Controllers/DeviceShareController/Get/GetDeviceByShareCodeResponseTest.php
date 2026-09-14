@@ -42,10 +42,10 @@ final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSet
             ->assertOk()
             ->assertJson(
                 fn (AssertableJson $json) => $json
-                    ->where('user.id', $this->user->id)
-                    ->where('user.name', $this->user->name)
-                    ->where('user.cpf', Masks::maskCpf($this->user->cpf))
-                    ->has('user.created_at')
+                    ->where('owner.id', $this->user->id)
+                    ->where('owner.name', $this->user->name)
+                    ->where('owner.cpf', Masks::maskCpf($this->user->cpf))
+                    ->has('owner.created_at')
                     ->etc()
             );
     }
@@ -56,12 +56,12 @@ final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSet
             ->assertOk()
             ->assertJson(
                 fn (AssertableJson $json) => $json
-                    ->where('device_model.id', $this->device->deviceModel->id)
-                    ->where('device_model.name', $this->device->deviceModel->name)
-                    ->where('device_model.ram', $this->device->deviceModel->ram)
-                    ->where('device_model.storage', $this->device->deviceModel->storage)
-                    ->where('device_model.brand.id', $this->device->deviceModel->brand->id)
-                    ->where('device_model.brand.name', $this->device->deviceModel->brand->name)
+                    ->where('model.id', $this->device->deviceModel->id)
+                    ->where('model.name', $this->device->deviceModel->name)
+                    ->where('model.ram', $this->device->deviceModel->ram)
+                    ->where('model.storage', $this->device->deviceModel->storage)
+                    ->where('model.brand.id', $this->device->deviceModel->brand->id)
+                    ->where('model.brand.name', $this->device->deviceModel->brand->name)
                     ->etc()
             );
     }
