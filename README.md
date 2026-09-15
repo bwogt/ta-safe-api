@@ -1,11 +1,21 @@
 # TA-SAFE-API
+
 [![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![Laravel Sanctum](https://img.shields.io/badge/Sanctum-4.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com/docs/sanctum)
+[![Laravel Telescope](https://img.shields.io/badge/Telescope-5.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com/docs/telescope)
+[![Laravel Breeze](https://img.shields.io/badge/Breeze-2.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com/docs/starter-kits)
+[![Laravel Pint](https://img.shields.io/badge/Pint-1.x-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com/docs/pint)
+[![Scramble](https://img.shields.io/badge/Scramble-0.12-4B5563?style=flat&logo=openapiinitiative&logoColor=white)](https://scramble.dedoc.co/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
 [![Grafana](https://img.shields.io/badge/Grafana-Stack-F46800?style=flat&logo=grafana&logoColor=white)](https://grafana.com)
-[![PHPUnit](https://img.shields.io/badge/Tests-PHPUnit-6C2AF2?style=flat&logo=php&logoColor=white)](https://phpunit.de)
+[![PHPUnit](https://img.shields.io/badge/PHPUnit-11.x-6C2AF2?style=flat&logo=php&logoColor=white)](https://phpunit.de)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![CI](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel-pint.yml/badge.svg)](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel-pint.yml)
+[![CI](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel.yml/badge.svg)](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel.yml)
 
 ## Descrição
 
