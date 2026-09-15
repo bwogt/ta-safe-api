@@ -17,28 +17,33 @@
 [![CI](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel-pint.yml/badge.svg)](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel-pint.yml)
 [![CI](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel.yml/badge.svg)](https://github.com/bwogt/ta-safe-api/actions/workflows/laravel.yml)
 
-## Descrição
+### Descrição
 
-No Brasil, **mais de 1 milhão de celulares são roubados ou furtados por ano**. Esse mercado paralelo movimenta cifras significativas e alimenta um ciclo em que aparelhos de procedência duvidosa são repassados a consumidores sem qualquer comprovação de origem.
+No Brasil, estima-se que **mais de 1 milhão de aparelhos celulares** sejam roubados ou furtados anualmente. Esse mercado paralelo movimenta cifras expressivas e sustenta um ciclo no qual dispositivos de procedência incerta são repassados a consumidores sem qualquer comprovação de origem.
 
-Diante desse cenário, o comprador comum dispõe de poucos recursos para verificar a legalidade e a procedência de um aparelho usado. O Tá Safe surge como um protótipo acadêmico que permite o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o gerenciamento da transferência de propriedade entre usuários por meio de um fluxo de solicitação e aceite. A cada transferência concluída, o histórico do dispositivo é atualizado, formando um registro público, verificável e rastreável de propriedade e transferências, auxiliando o usuário na avaliação da procedência do aparelho e promovendo maior transparência sobre sua origem.
+Nesse contexto, o comprador comum dispõe de recursos limitados para verificar a legalidade e a procedência de um aparelho usado.
 
-Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas.
+O Tá Safe propõe-se a mitigar essa lacuna por meio de um protótipo acadêmico que possibilita o registro do dispositivo a partir da Nota Fiscal Eletrônica (NF-e) e o gerenciamento da transferência de propriedade entre usuários, mediante um fluxo de solicitação e aceite.
 
-## 📌 Links úteis
+A cada transferência, o histórico do aparelho é atualizado, formando um registro público, verificável e rastreável de propriedade. Na prática: você passa a ter como avaliar a procedência do celular antes de comprar. E o mercado fica um pouco mais transparente.
 
-- 📄 [Monografia (TCC)](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf)
+Esta API é responsável por orquestrar toda a lógica de negócio do sistema, gerenciando autenticação, persistência de dados, integrações externas e o processamento assíncrono de tarefas por meio de filas e cache.
+
+### 🔗 Links úteis
+
+- 🎓 [Monografia (TCC)](https://tcc.tsi.pro.br/uploads/academic_activity/pdf/268/GP_COINT_2024_1_BRUNO_JOSE_DOS_SANTOS_WOGT_MONOGRAFIA.pdf)
 - 🎯 [Gestão de atividades (Kanban)](https://github.com/users/bwogt/projects/4)
-- 📱 [Frontend mobile (📦 versão legada)](https://github.com/bwogt/ta-safe-mobile-legacy)
-- 📱 [Frontend mobile (🔥 nova versão)](https://github.com/bwogt/ta-safe-mobile)  — em breve
+- 📱 [TA-SAFE-MOBILE (Nova Versão)](https://github.com/bwogt/ta-safe-mobile)  — em construção
+- 📦 [TA-SAFE-MOBILE-LEGACY (Versão Legada)](https://github.com/bwogt/ta-safe-mobile-legacy)
 
 
-## 🚀 Principais Funcionalidades
 
-+ **Autenticação**: Cadastro, login e redefinição de senha;
-+ **Registro de celulares**: Registro do aparelho com validação e extração automática de dados a partir da Nota Fiscal Eletrônica (NF-e);
-+ **Histórico de propriedade**: Consulta ao histórico de proprietários e às transferências registradas do aparelho;
-+ **Transferência de titularidade**: Gerenciamento de solicitações de transferência entre usuários, incluindo criação, cancelamento e aceite.
+### 🚀 Principais Funcionalidades
+
++ 🟢 **Autenticação**: Cadastro, login e redefinição de senha;
++ 🟢 **Registro de celulares**: Registro do aparelho com validação e extração automática de dados a partir da Nota Fiscal Eletrônica (NF-e);
++ 🟢 **Histórico de propriedade**: Consulta ao histórico de proprietários e às transferências registradas do aparelho;
++ 🟢 **Transferência de titularidade**: Gerenciamento de solicitações de transferência entre usuários, incluindo criação, cancelamento e aceite.
 
 ## 🛠️ Stack de Tecnologias
 
@@ -54,7 +59,7 @@ Esta API é responsável por orquestrar toda a lógica de negócio do sistema, g
 | **Documentação** | Swagger/OpenAPI (UI integrada)   |
 
 
-## 🐳 Ambiente de Desenvolvimento (Docker)
+### 🐳 Ambiente de Desenvolvimento (Docker)
 
 ### Pré-Requisitos
 - Git
@@ -107,7 +112,7 @@ docker compose exec app_test php artisan test
 
 As migrations são executadas automaticamente ao subir o container de testes.
 
-## 📊 Observabilidade (Logs)
+### 📊 Observabilidade (Logs)
 O projeto possui uma stack de observabilidade voltada para o pilar de logs, composta por:
  - Grafana Loki para armazenamento de logs
  - Grafana Alloy para coleta automática dos logs dos containers Docker
@@ -123,7 +128,7 @@ docker compose --profile obs up -d
      - usuário: admin
      - senha: admin
 
-## 📘 Documentação
+### 📘 Documentação
 Após iniciar o ambiente de desenvolvimento, a documentação interativa da API estará disponível em:
 http://localhost/docs/api#/
 
