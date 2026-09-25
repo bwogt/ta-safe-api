@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegisterDeviceActionTest extends RegisterDeviceActionTestSetUp
+final class RegisterDeviceActionTest extends RegisterDeviceActionTestSetUp
 {
     public function test_should_return_an_instance_of_the_device_when_the_action_is_successful(): void
     {
@@ -33,9 +33,7 @@ class RegisterDeviceActionTest extends RegisterDeviceActionTestSetUp
             'id' => $device->id,
             'user_id' => $this->user->id,
             'device_model_id' => $this->data->deviceModelId,
-            'color' => $this->data->color,
-            'imei_1' => $this->data->imei1,
-            'imei_2' => $this->data->imei2,
+            'color' => $this->data->color
         ]);
     }
 

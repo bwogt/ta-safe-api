@@ -47,8 +47,6 @@ abstract class RegisterDeviceActionTestSetUp extends TestCase
             deviceModelId: $deviceModel->id,
             accessKey: $this->generateRandomNumber(44),
             color: 'black',
-            imei1: $this->generateRandomNumber(15),
-            imei2: $this->generateRandomNumber(15),
         );
     }
 }

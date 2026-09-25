@@ -64,8 +64,6 @@ class RegisterDeviceTestSetUp extends TestCase
             'device_model_id' => $this->device->deviceModel->id,
             'access_key' => $this->generateRandomNumber(44),
             'color' => 'black',
-            'imei_1' => $this->generateRandomNumber(15),
-            'imei_2' => $this->generateRandomNumber(15),
         ], $overrides);
     }
 
