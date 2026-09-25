@@ -48,8 +48,6 @@ class StartDeviceValidationTestSetUp extends TestCase
         $products = "{$this->device->deviceModel->brand->name} "
             . "{$this->device->deviceModel->name} "
             . "{$this->device->color} "
-            . "{$this->device->imei_1}"
-            . "{$this->device->imei_2}"
             . "{$this->device->ram}"
             . "{$this->device->storage}";
 

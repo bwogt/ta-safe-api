@@ -5,7 +5,7 @@ namespace Tests\Feature\Controllers\DeviceController\View;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
-class ViewDeviceResponseTest extends ViewDeviceTestSetUp
+final class ViewDeviceResponseTest extends ViewDeviceTestSetUp
 {
     public function test_should_return_the_expected_response_data_and_structure(): void
     {
@@ -17,8 +17,6 @@ class ViewDeviceResponseTest extends ViewDeviceTestSetUp
                 fn (AssertableJson $json) => $json
                     ->where('id', $this->device->id)
                     ->where('color', $this->device->color)
-                    ->where('imei_1', $this->device->imei_1)
-                    ->where('imei_2', $this->device->imei_2)
                     ->where('access_key', $this->device->invoice->access_key)
                     ->where('validation_status', $this->device->validation_status->value)
                     ->where('share_code', null)

@@ -14,8 +14,6 @@ final class DeviceResource extends JsonResource
         return [
             'id' => $this->id,
             'color' => $this->color,
-            'imei_1' => $this->imei_1,
-            'imei_2' => $this->imei_2,
             'access_key' => $this->invoice->access_key,
             'validation_status' => $this->validation_status,
             'share_code' => DeviceShareCodeResource::make($this->activeShareCode()),
