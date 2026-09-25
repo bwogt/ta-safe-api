@@ -25,8 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('devices', function (Blueprint $table) {
-            $table->string('imei_1', 15)->unique(); 
-            $table->string('imei_2', 15)->unique();
+            $table->string('imei_1', 15)->nullable()->unique();
+            $table->string('imei_2', 15)->nullable()->unique();
         });
     }
 };
