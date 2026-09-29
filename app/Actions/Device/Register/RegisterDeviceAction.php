@@ -39,7 +39,7 @@ final class RegisterDeviceAction
         return Device::create([
             'user_id' => $user->id,
             'device_model_id' => $data->deviceModelId,
-            'color' => $data->color
+            'color' => $data->color,
         ]);
     }
 

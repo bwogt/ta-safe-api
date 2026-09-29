@@ -33,7 +33,7 @@ final class RegisterDeviceActionTest extends RegisterDeviceActionTestSetUp
             'id' => $device->id,
             'user_id' => $this->user->id,
             'device_model_id' => $this->data->deviceModelId,
-            'color' => $this->data->color
+            'color' => $this->data->color,
         ]);
     }
 

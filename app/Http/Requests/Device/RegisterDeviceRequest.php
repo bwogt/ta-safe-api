@@ -5,7 +5,7 @@ namespace App\Http\Requests\Device;
 use App\Dto\Device\RegisterDeviceDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterDeviceRequest extends FormRequest
+final class RegisterDeviceRequest extends FormRequest
 {
     public function toDto(): RegisterDeviceDTO
     {
@@ -35,7 +35,7 @@ class RegisterDeviceRequest extends FormRequest
                 'bail',
                 'required',
                 'max:255',
-            ]
+            ],
         ];
     }
 }
