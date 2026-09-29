@@ -32,8 +32,6 @@ class DeviceFactoryTest extends TestCase
         $this->assertModelMissing($device);
 
         $this->assertNotNull($device->color);
-        $this->assertNotNull($device->imei_1);
-        $this->assertNotNull($device->imei_2);
     }
 
     public function test_must_correctly_instantiate_a_device_and_persist_in_the_database(): void
@@ -47,7 +45,5 @@ class DeviceFactoryTest extends TestCase
         $this->assertModelExists($device);
 
         $this->assertNotNull($device->color);
-        $this->assertNotNull($device->imei_1);
-        $this->assertNotNull($device->imei_2);
     }
 }

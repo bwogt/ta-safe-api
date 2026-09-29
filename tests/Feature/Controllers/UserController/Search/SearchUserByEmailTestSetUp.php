@@ -3,7 +3,6 @@
 namespace Tests\Feature\Controllers\UserController\Search;
 
 use App\Models\User;
-use App\Traits\StringMasks;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Asserts\AccessAsserts;
@@ -13,7 +12,6 @@ class SearchUserByEmailTestSetUp extends TestCase
 {
     use AccessAsserts;
     use RefreshDatabase;
-    use StringMasks;
 
     protected User $user;
     protected User $targetUser;

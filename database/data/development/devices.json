@@ -2,8 +2,6 @@
     {
         "color": "Preto",
         "validation_status": "VALIDATED",
-        "imei1": "548392761049285",
-        "imei2": "302576918437592",
         "model": {
             "name": "Galaxy S22",
             "ram": "8 GB",
@@ -28,8 +26,6 @@
     {
         "color": "Branco",
         "validation_status": "VALIDATED",
-        "imei1": "654701982374165",
-        "imei2": "193847205619834",
         "model": {
             "name": "Iphone 11",
             "ram": "4 GB",
@@ -54,8 +50,6 @@
     {
         "color": "Azul",
         "validation_status": "VALIDATED",
-        "imei1": "892347106512938",
-        "imei2": "756182904375619",
         "model": {
             "name": "Poco X3 Pro",
             "ram": "6 GB",
@@ -80,8 +74,6 @@
     {
         "color": "Preto",
         "validation_status": "VALIDATED",
-        "imei1": "301928475610923",
-        "imei2": "472985301726495",
         "model": {
             "name": "Edge 30",
             "ram": "8 GB",

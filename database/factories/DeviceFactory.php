@@ -25,9 +25,7 @@ class DeviceFactory extends Factory
 
         return [
             'device_model_id' => DeviceModelFactory::new(),
-            'color' => fake()->randomElement($colors),
-            'imei_1' => self::generateRandomNumber(15),
-            'imei_2' => self::generateRandomNumber(15),
+            'color' => fake()->randomElement($colors)
         ];
     }
 

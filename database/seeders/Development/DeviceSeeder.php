@@ -52,8 +52,6 @@ class DeviceSeeder extends Seeder
             'device_model_id' => $deviceModel->id,
             'validation_status' => DeviceValidationStatus::IN_ANALYSIS,
             'color' => $rawDevice->color,
-            'imei_1' => $rawDevice->imei1,
-            'imei_2' => $rawDevice->imei2,
         ]);
 
         $this->createInvoice($user, $device, $rawDevice);

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class RegisterDeviceAction
+final class RegisterDeviceAction
 {
     public function __invoke(User $user, RegisterDeviceDTO $data): Device
     {
@@ -40,8 +40,6 @@ class RegisterDeviceAction
             'user_id' => $user->id,
             'device_model_id' => $data->deviceModelId,
             'color' => $data->color,
-            'imei_1' => $data->imei1,
-            'imei_2' => $data->imei2,
         ]);
     }
 

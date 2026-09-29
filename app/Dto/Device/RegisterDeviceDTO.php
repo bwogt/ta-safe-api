@@ -8,7 +8,5 @@ final class RegisterDeviceDTO
         public readonly int $deviceModelId,
         public readonly string $accessKey,
         public readonly string $color,
-        public readonly string $imei1,
-        public readonly string $imei2,
     ) {}
 }

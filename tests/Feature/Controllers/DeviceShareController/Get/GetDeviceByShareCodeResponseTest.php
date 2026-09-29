@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Controllers\DeviceShareController\Get;
 
-use App\Traits\StringMasks;
 use App\Utils\Masks;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Laravel\Sanctum\Sanctum;
 
 final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSetUp
 {
-    use StringMasks;
-
     protected function setUp(): void
     {
         parent::SetUp();
@@ -25,8 +22,6 @@ final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSet
                 fn (AssertableJson $json) => $json
                     ->where('id', $this->device->id)
                     ->where('color', $this->device->color)
-                    ->where('imei_1', $this->addAsteriskMaskForImei($this->device->imei_1))
-                    ->where('imei_2', $this->addAsteriskMaskForImei($this->device->imei_2))
                     ->where('validation_status', $this->device->validation_status->value)
                     ->has('created_at')
                     ->has('updated_at')
