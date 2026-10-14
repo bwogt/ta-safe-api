@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', 'view')->name('api.user.view');
         Route::get('user/search-by-email', 'searchByEmail')->name('api.user.search');
         Route::get('user/devices/{status}', 'devices')->name('api.user.devices');
-        Route::get('user/devices-transfers', 'transfers')->name('api.user.devices.transfers');
+        Route::get('user/transfers/{status?}', 'transfers')->name('api.user.devices.transfers');
     });
 
     Route::controller(DeviceController::class)->group(function () {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Actions\User\Devices\DevicesByStatusAction;
+use App\Actions\User\Transfers\UserTransfersAction;
 use App\Actions\User\Update\UpdateUserAction;
+use App\Enums\Device\DeviceTransferStatus;
 use App\Enums\Device\DeviceValidationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Messages\FlashMessage;
@@ -54,8 +56,16 @@ final class UserController extends Controller
         );
     }
 
-    public function transfers(Request $request): JsonResource
-    {
-        return DeviceTransferResource::collection($request->user()->userDevicesTransfers());
+    public function transfers(
+        UserTransfersAction $action,
+        ?DeviceTransferStatus $status = null
+    ): JsonResource {
+        $user = request()->user();
+        $paginatedTransfers = $action($user, $status);
+
+        return CursorPaginatedResource::from(
+            resource: DeviceTransferResource::class,
+            paginator: $paginatedTransfers
+        );
     }
 }

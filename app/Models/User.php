@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -81,23 +80,5 @@ class User extends Authenticatable
     public function deviceAttributeValidationLogs(): HasMany
     {
         return $this->hasMany(DeviceAttributeValidationLog::class);
-    }
-
-    /**
-     * Get user transfers devices.
-     */
-    public function userDevicesTransfers(): Collection
-    {
-        return DeviceTransfer::with([
-            'device',
-            'sourceUser',
-            'targetUser',
-        ])
-            ->where(function ($query) {
-                $query->where('source_user_id', $this->id)
-                    ->orWhere('target_user_id', $this->id);
-            })
-            ->orderByDesc('updated_at')
-            ->get();
     }
 }
