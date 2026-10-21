@@ -21,7 +21,6 @@ final class DeviceResource extends JsonResource
             'updated_at' => $this->updated_at,
             'model' => new DeviceModelResource($this->deviceModel),
             'validated_attributes' => $this->validatedAttributes(),
-            'transfers' => DeviceTransferBasicResource::collection($this->transfers),
         ];
     }
 

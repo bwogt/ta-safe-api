@@ -26,7 +26,6 @@ final class GetDeviceByShareCodeResponseTest extends GetDeviceByShareCodeTestSet
                     ->has('created_at')
                     ->has('updated_at')
                     ->has('validated_attributes')
-                    ->has('transfers')
                     ->etc()
             );
     }
