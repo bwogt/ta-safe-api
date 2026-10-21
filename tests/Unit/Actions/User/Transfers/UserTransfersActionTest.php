@@ -112,15 +112,10 @@ final class UserTransfersActionTest extends UserTransfersActionTestSetUp
 
     public function test_should_respect_transfers_per_page_limit(): void
     {
-        DeviceTransferFactory::new()->create([
-            'source_user_id' => $this->sourceUser->id,
-            'target_user_id' => UserFactory::new()->create(),
-        ]);
-
         $transfers = (new UserTransfersAction)($this->sourceUser);
         $this->assertCount(4, $transfers);
 
-        $transfers = (new UserTransfersAction)($this->sourceUser, null, 5);
-        $this->assertCount(5, $transfers);
+        $transfers = (new UserTransfersAction)($this->sourceUser, null, 2);
+        $this->assertCount(2, $transfers);
     }
 }

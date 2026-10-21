@@ -12,12 +12,11 @@ final class UserTransfersAction
     public function __invoke(
         User $user,
         ?DeviceTransferStatus $status = null,
-        ?int $perPage = 4
+        ?int $perPage = 6
     ): CursorPaginator {
         return DeviceTransfer::with([
             'device.deviceModel.brand',
             'sourceUser',
-            'targetUser',
         ])
             ->where(function ($query) use ($user) {
                 $query->where('source_user_id', $user->id)

@@ -12,7 +12,7 @@ use App\Http\Messages\FlashMessage;
 use App\Http\Requests\User\SearchUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\Device\DeviceSummaryResource;
-use App\Http\Resources\DeviceTransfer\DeviceTransferResource;
+use App\Http\Resources\DeviceTransfer\DeviceTransferSummaryResource;
 use App\Http\Resources\Pagination\CursorPaginatedResource;
 use App\Http\Resources\User\UserPublicResource;
 use App\Http\Resources\User\UserResource;
@@ -64,7 +64,7 @@ final class UserController extends Controller
         $paginatedTransfers = $action($user, $status);
 
         return CursorPaginatedResource::from(
-            resource: DeviceTransferResource::class,
+            resource: DeviceTransferSummaryResource::class,
             paginator: $paginatedTransfers
         );
     }
