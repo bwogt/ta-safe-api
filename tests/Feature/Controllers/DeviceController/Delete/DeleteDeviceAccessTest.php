@@ -4,11 +4,11 @@ namespace Tests\Feature\Controllers\DeviceController\Delete;
 
 use Database\Factories\UserFactory;
 
-class DeleteDeviceAccessTest extends DeleteDeviceTestSetUp
+final class DeleteDeviceAccessTest extends DeleteDeviceTestSetUp
 {
     public function test_an_unauthenticated_user_should_not_be_authorized_to_delete_a_device(): void
     {
-        $this->assertAccessUnauthorizedTo($this->route(), 'post');
+        $this->assertAccessUnauthorizedTo($this->route(), 'delete');
     }
 
     public function test_a_user_should_be_authorized_to_delete_their_invalid_devices(): void
