@@ -13,6 +13,7 @@ final class UserPublicResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'email' => $this->email,
             'cpf' => Masks::maskCpf($this->cpf),
             'created_at' => $this->created_at,
         ];

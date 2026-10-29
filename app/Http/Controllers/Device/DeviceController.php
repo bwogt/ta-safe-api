@@ -18,11 +18,7 @@ final class DeviceController extends Controller
     public function view(Device $device): JsonResource
     {
         $this->authorize('accessAsOwner', $device);
-
-        $device->loadMissing([
-            'attributeValidationLogs',
-            'transfers' => fn ($q) => $q->acceptedAndOrdered(),
-        ]);
+        $device->loadMissing(['attributeValidationLogs']);
 
         return new DeviceResource($device);
     }

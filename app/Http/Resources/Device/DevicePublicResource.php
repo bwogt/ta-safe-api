@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Device;
 
 use App\Http\Resources\DeviceModel\DeviceModelResource;
-use App\Http\Resources\DeviceTransfer\DeviceTransferBasicResource;
 use App\Http\Resources\User\UserPublicResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,7 +20,6 @@ final class DevicePublicResource extends JsonResource
             'owner' => new UserPublicResource($this->user),
             'model' => new DeviceModelResource($this->deviceModel),
             'validated_attributes' => $this->validatedAttributes(),
-            'transfers' => DeviceTransferBasicResource::collection($this->transfers),
         ];
     }
 
