@@ -5,21 +5,21 @@ namespace App\Policies;
 use App\Models\DeviceTransfer;
 use App\Models\User;
 
-class DeviceTransferPolicy
+final class DeviceTransferPolicy
 {
-    /**
-     * Determines whether the user is the target user of the device transfer.
-     */
-    public function accessAsTargetUser(User $user, DeviceTransfer $deviceTransfer): bool
+    public function accessAsTargetUser(User $user, DeviceTransfer $transfer): bool
     {
-        return $user->id == $deviceTransfer->target_user_id;
+        return $user->id == $transfer->target_user_id;
     }
 
-    /**
-     * Determines whether the user is the source user of the device transfer.
-     */
-    public function accessAsSourceUser(User $user, DeviceTransfer $deviceTransfer): bool
+    public function accessAsSourceUser(User $user, DeviceTransfer $transfer): bool
     {
-        return $user->id == $deviceTransfer->source_user_id;
+        return $user->id == $transfer->source_user_id;
+    }
+
+    public function accessAsParticipant(User $user, DeviceTransfer $transfer): bool
+    {
+        return $user->id === $transfer->sourceUser->id
+            || $user->id === $transfer->targetUser->id;
     }
 }

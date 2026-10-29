@@ -18,6 +18,7 @@ class DeviceTransferResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'type' => self::defineType(),
             'status' => $this->status,
             'source_user' => new UserPublicResource($this->sourceUser),
             'target_user' => new UserPublicResource($this->targetUser),
@@ -25,5 +26,10 @@ class DeviceTransferResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    private function defineType(): string
+    {
+        return request()->user()->id === $this->sourceUser->id ? 'sent' : 'received';
     }
 }

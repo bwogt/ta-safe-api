@@ -13,10 +13,18 @@ use App\Http\Resources\DeviceTransfer\DeviceTransferResource;
 use App\Models\Device;
 use App\Models\DeviceTransfer;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
 final class DeviceTransferController extends Controller
 {
+    public function view(DeviceTransfer $transfer): JsonResource
+    {
+        $this->authorize('accessAsParticipant', $transfer);
+
+        return DeviceTransferResource::make($transfer);
+    }
+
     public function create(
         CreateDeviceTransferRequest $request,
         CreateDeviceTransferAction $action,

@@ -74,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('api.device.transfer.')
         ->group(function () {
             Route::post('devices/{device}/transfers', 'create')->name('create');
+            Route::get('transfers/{transfer}', 'view')->name('view');
             Route::post('transfers/{transfer}/accept', 'accept')->name('accept');
             Route::post('transfers/{transfer}/cancel', 'cancel')->name('cancel');
             Route::post('transfers/{transfer}/reject', 'reject')->name('reject');
