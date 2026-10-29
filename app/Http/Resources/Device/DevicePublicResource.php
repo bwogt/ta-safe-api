@@ -19,7 +19,7 @@ final class DevicePublicResource extends JsonResource
             'updated_at' => $this->updated_at,
             'owner' => new UserPublicResource($this->user),
             'model' => new DeviceModelResource($this->deviceModel),
-            'validated_attributes' => $this->validatedAttributes()
+            'validated_attributes' => $this->validatedAttributes(),
         ];
     }
 

@@ -21,7 +21,7 @@ final class UserTransfersActionTest extends UserTransfersActionTestSetUp
     {
         $anotherTransfer = DeviceTransferFactory::new()->create([
             'source_user_id' => $this->sourceUser->id,
-            'target_user_id' => UserFactory::new()->create() 
+            'target_user_id' => UserFactory::new()->create(),
         ]);
 
         $transfers = (new UserTransfersAction)($this->sourceUser, null, 5);
@@ -42,7 +42,7 @@ final class UserTransfersActionTest extends UserTransfersActionTestSetUp
     {
         $anotherTransfer = DeviceTransferFactory::new()->create([
             'source_user_id' => UserFactory::new()->create(),
-            'target_user_id' =>  $this->targetUser->id
+            'target_user_id' => $this->targetUser->id,
         ]);
 
         $transfers = (new UserTransfersAction)($this->targetUser, null, 5);
