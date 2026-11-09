@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Device\DeviceTransferStatus;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,15 +42,6 @@ class DeviceTransfer extends Model
     ];
 
     /**
-     * Scope a query to only include accepted transfers.
-     */
-    public function scopeAcceptedAndOrdered(Builder $query): void
-    {
-        $query->where('status', DeviceTransferStatus::ACCEPTED)
-            ->orderByDesc('updated_at');
-    }
-
-    /**
      * Get the device transfer.
      */
     public function device(): BelongsTo
@@ -71,5 +63,15 @@ class DeviceTransfer extends Model
     public function targetUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'target_user_id');
+    }
+
+    /**
+     * Scope a query to only include accepted transfers.
+     */
+    #[Scope]
+    public function accepted(Builder $query): void
+    {
+        $query->where('status', DeviceTransferStatus::ACCEPTED)
+            ->orderByDesc('updated_at');
     }
 }

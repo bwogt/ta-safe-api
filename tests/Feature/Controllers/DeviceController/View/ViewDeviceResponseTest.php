@@ -27,6 +27,7 @@ final class ViewDeviceResponseTest extends ViewDeviceTestSetUp
                     ->where('model.storage', $this->device->deviceModel->storage)
                     ->where('model.brand.name', $this->device->deviceModel->brand->name)
                     ->has('validated_attributes')
+                    ->has('transfer_history')
                     ->etc()
             );
     }

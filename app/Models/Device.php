@@ -97,6 +97,14 @@ class Device extends Model
     }
 
     /**
+     *  Get only device accepted transfers.
+     */
+    public function acceptedTransfers(): HasMany
+    {
+        return $this->hasMany(DeviceTransfer::class)->accepted();
+    }
+
+    /**
      * Get the last transfer from the device.
      */
     public function lastTransfer(): ?DeviceTransfer
