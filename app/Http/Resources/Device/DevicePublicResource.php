@@ -21,7 +21,7 @@ final class DevicePublicResource extends JsonResource
             'owner' => new UserPublicResource($this->user),
             'model' => new DeviceModelResource($this->deviceModel),
             'validated_attributes' => $this->validatedAttributes(),
-            'transfer_history' => DeviceTransferHistoryResource::collection($this->acceptedTransfers)
+            'transfer_history' => DeviceTransferHistoryResource::collection($this->acceptedTransfers),
         ];
     }
 
